@@ -76,14 +76,14 @@ CREATE TABLE TransactionPoints (
   TypeTransaction VARCHAR(10) NOT NULL,
   IdUser INT NOT NULL,
   PRIMARY KEY (ID),
-  FOREIGN KEY (IDUser) REFERENCES Utilisateur(ID)
+  FOREIGN KEY (IDUser) REFERENCES Utilisateur(Id)
 );
 
 CREATE TABLE UtilisateurObjet (
   IDUser INT NOT NULL,
   Nom VARCHAR(15) NOT NULL,
   EstActif BOOLEAN,
-  CONSTRAINT ck_objetUser PRIMARY KEY (IDUser, Nom),
+  CONSTRAINT ck_objetUser PRIMARY KEY (IDUsers, Nom),
   FOREIGN KEY (IDUser) REFERENCES Utilisateur(ID),
   FOREIGN KEY (Nom) REFERENCES ObjetCosmetique(Nom)
   
