@@ -1,7 +1,6 @@
 # BDD_project
 
 
-
 # Dependences
 FreeSimpleGUI == 4.60.5
 
@@ -18,4 +17,5 @@ source .venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+
 
