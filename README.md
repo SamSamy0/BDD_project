@@ -1,5 +1,13 @@
 # BDD_project
 
+Si MySql Server n'est pas déjà installé , exécuter cette ligne de commande
+
+```bash
+sudo apt install mysql-server
+sudo mysql < src/DB/id.json
+sudo mysql < src/DB/init.json
+
+```
 
 
 # Dependences
@@ -17,5 +25,6 @@ source .venv/bin/activate
 
 ```bash
 pip install -r requirements.txt
+sudo apt install mysql-server
 ```
 
