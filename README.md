@@ -17,5 +17,6 @@ source .venv/bin/activate
 
 ```bash
 pip install -r requirements.txt
+sudo apt install mysql-server
 ```
 
