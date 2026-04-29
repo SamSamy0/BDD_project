@@ -7,6 +7,12 @@ import mysql.connector
 import pandas as pd
 from mysql.connector import Error
 
+from common.protocol import mapping_actions,Message
+from client.manager import Manager
+
+
+
+
 
 class Server:
     def __init__(self):
@@ -86,7 +92,7 @@ class Server:
 
 
 def load_json():
-    with open("../DB/config.json", "r") as jsonfile:
+    with open("DB/config.json", "r") as jsonfile:
         data = json.load(jsonfile)
 
     return data
@@ -110,3 +116,5 @@ if __name__ == "__main__":
     connect_mySql()
     s = Server()
     s.run()
+    action_a_faire = Manager.signin
+    resultat = mapping_actions[Message.SIGNIN]("daniel","daniel","daniel")
