@@ -88,3 +88,6 @@ CREATE TABLE UtilisateurObjet (
   FOREIGN KEY (Nom) REFERENCES ObjetCosmetique(Nom)
 
 );
+
+
+
