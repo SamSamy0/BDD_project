@@ -4,7 +4,8 @@ class LoginView(View):
     def __init__(self, window):
         super().__init__(window)
         self.type = TypeView.LOGIN
+        self.initView()
 
     def initView(self):
-        
-        pass
+        self.window['-LOGIN-'].update(visible=True)
+

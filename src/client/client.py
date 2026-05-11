@@ -12,14 +12,25 @@ class Client:
 
     def createWindow(self):
         # All the stuff inside your window.
+        login_layout = [
+            [sg.Text("Authentification")],
+            [sg.Text("Identifiant"),sg.InputText()],
+            [sg.Text("Mot de passe"),sg.InputText()],
+            [sg.Button("Log in"), sg.Button("Register")]
+        ]
+
+        menu_layout = []
+        profil_layout = []
+        class_layout = []
+        leaderboard_layout = []
         layout = [
-            [sg.Text("Some text on Row 1")],
-            [sg.Text("Enter something on Row 2"), sg.InputText()],
-            [sg.Button("Ok"), sg.Button("Cancel")],
+            [sg.Column(login_layout, key='-LOGIN-',visible=True),sg.Column(menu_layout, key ='-MENU-',visible=False),
+             sg.Column(profil_layout,key ='-PROFIL-',visible=False),sg.Column(leaderboard_layout,key='-LEADERBOARD-',visible=False),
+             sg.Column(class_layout,key='-CLASS-',visible=False),]
 
         ]
         # Create the Window
-        return sg.Window("Window Title", layout)
+        return sg.Window("Window Title", layout,finalize=True)
 
 
     def run (self):
