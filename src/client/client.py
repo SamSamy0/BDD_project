@@ -1,4 +1,5 @@
 import FreeSimpleGUI as sg
+from LoginView import LoginView
 
 
 class Client:
@@ -6,7 +7,7 @@ class Client:
     def __init__(self):
         sg.theme("DarkAmber")  # Add a touch of color
         self.window = self.createWindow()
-        # view = View(window)
+        view = LoginView(self.window)
 
 
     def createWindow(self):

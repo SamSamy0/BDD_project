@@ -1,5 +1,5 @@
 from enum import Enum
-from ABC import ABC, abstractmethod
+from abc import ABC, abstractmethod
 
 
 class TypeView(Enum):
@@ -7,13 +7,13 @@ class TypeView(Enum):
     APP = 1
 
 
-class View:
+class View(ABC):
 
     def __init__(self,window):
         self.window = window
 
     @abstractmethod
-    def initButton():
+    def initView(self):
         pass
         
 
