@@ -1,19 +1,17 @@
 from enum import Enum
 from abc import ABC, abstractmethod
-
+import customtkinter as ctk
 
 class TypeView(Enum):
     LOGIN = 0
     APP = 1
 
-
-class View(ABC):
-
-    def __init__(self,window):
-        self.window = window
+class View(ctk.CTkFrame, ABC):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+        self.initView()
 
     @abstractmethod
     def initView(self):
         pass
-        
-

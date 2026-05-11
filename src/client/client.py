@@ -1,51 +1,42 @@
-import FreeSimpleGUI as sg
+import customtkinter as ctk
 from LoginView import LoginView
+from AppView import AppView
 
-
-class Client:
-
+class Client(ctk.CTk):
     def __init__(self):
-        sg.theme("DarkAmber")  # Add a touch of color
-        self.window = self.createWindow()
-        view = LoginView(self.window)
+        super().__init__()
 
+        self.title("Application Client")
+        self.geometry("400x500")
 
-    def createWindow(self):
-        # All the stuff inside your window.
-        login_layout = [
-            [sg.Text("Authentification")],
-            [sg.Text("Identifiant"),sg.InputText()],
-            [sg.Text("Mot de passe"),sg.InputText()],
-            [sg.Button("Log in"), sg.Button("Register")]
-        ]
+        # Configuration du thème
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("blue")
 
-        menu_layout = []
-        profil_layout = []
-        class_layout = []
-        leaderboard_layout = []
-        layout = [
-            [sg.Column(login_layout, key='-LOGIN-',visible=True),sg.Column(menu_layout, key ='-MENU-',visible=False),
-             sg.Column(profil_layout,key ='-PROFIL-',visible=False),sg.Column(leaderboard_layout,key='-LEADERBOARD-',visible=False),
-             sg.Column(class_layout,key='-CLASS-',visible=False),]
+        # Conteneur pour les différentes vues
+        self.container = ctk.CTkFrame(self)
+        self.container.pack(side="top", fill="both", expand=True)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
-        ]
-        # Create the Window
-        return sg.Window("Window Title", layout,finalize=True)
+        self.frames = {}
+        
+        # Initialisation des vues
+        for F in (LoginView, AppView):
+            page_name = F.__name__.replace("View", "").upper()
+            frame = F(parent=self.container, controller=self)
+            self.frames[page_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
 
+        self.show_view("LOGIN")
 
-    def run (self):
-        # Event Loop to process "events" and get the "values" of the inputs
-        while True:
-            event, values = self.window.read()
-            if (
-                event == sg.WIN_CLOSED or event == "Cancel"
-            ):  # if user closes window or clicks cancel
-                break
-            print("You entered ", values[0])
+    def show_view(self, page_name):
+        """Affiche une vue spécifique en la mettant au premier plan"""
+        frame = self.frames[page_name]
+        frame.tkraise()
 
-        self.window.close()
-
-
+    def run(self):
+        self.mainloop()
 
 if __name__ == "__main__":
     client = Client()
