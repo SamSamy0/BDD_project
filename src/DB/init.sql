@@ -3,7 +3,7 @@ USE projectH303;
 
 CREATE TABLE Utilisateur(
   ID  INT NOT NULL AUTO_INCREMENT,
-  Name VARCHAR(15) NOT NULL,
+  Name VARCHAR(255) NOT NULL,
   Email VARCHAR(255) NOT NULL,
   Inscription DATE NOT NULL,
   Niveau INT NOT NULL,
@@ -12,30 +12,31 @@ CREATE TABLE Utilisateur(
 );
 
 CREATE TABLE Cours(
-  Mnemonique VARCHAR(10) NOT NULL ,
-  Nom VARCHAR(15) NOT NULL,
-  Fac VARCHAR(15) NOT NULL,
-  Annee INT NOT NULL,
+  Mnemonique VARCHAR(255) NOT NULL ,
+  Nom VARCHAR(255) NOT NULL,
+  Fac VARCHAR(255) NOT NULL,
+  Credits INT NOT NULL,
+  Annee INT,
   PRIMARY KEY (Mnemonique)
 );
 
 CREATE TABLE ObjetCosmetique (
-  Nom VARCHAR(15) NOT NULL ,
-  TypeObjet VARCHAR(10) NOT NULL,
+  Nom VARCHAR(255) NOT NULL ,
+  TypeObjet VARCHAR(255) NOT NULL,
   Prix INT NOT NULL,
-  Description VARCHAR(100) NOT NULL,
+  Description VARCHAR(255) NOT NULL,
   PRIMARY KEY (Nom)
 );
 
 CREATE TABLE Resume(
   ID  INT NOT NULL AUTO_INCREMENT,
-  Title VARCHAR(15) NOT NULL,
+  Title VARCHAR(255) NOT NULL,
   Description VARCHAR(255),
   Publication DATE NOT NULL,
   Version INT NOT NULL,
   Visibilite BOOLEAN NOT NULL,
   Moyenne INT,
-  Mnemonique VARCHAR(10) NOT NULL,
+  Mnemonique VARCHAR(255) NOT NULL,
   IdUser INT NOT NULL,
   PRIMARY KEY (ID),
   FOREIGN KEY (Mnemonique) REFERENCES Cours(Mnemonique),
@@ -54,7 +55,7 @@ CREATE TABLE Evaluation (
 );
 
 CREATE TABLE CoursUtilisateur (
-  Mnemonique VARCHAR(10) NOT NULL,
+  Mnemonique VARCHAR(255) NOT NULL,
   IDUser INT NOT NULL,
   CONSTRAINT ck_coursUser PRIMARY KEY (Mnemonique, IDUser),
   FOREIGN KEY(IDUser) REFERENCES Utilisateur(ID)
@@ -62,7 +63,7 @@ CREATE TABLE CoursUtilisateur (
 
 CREATE TABLE HistoriqueClassement (
   Classement INT NOT NULL,
-  Periode VARCHAR (15) NOT NULL,
+  Periode VARCHAR (255) NOT NULL,
   Points INT NOT NULL,
   IDUser INT NOT NULL,
   CONSTRAINT ck_historique PRIMARY KEY(Classement, Periode),
@@ -73,7 +74,7 @@ CREATE TABLE TransactionPoints (
   ID INT NOT NULL  AUTO_INCREMENT,
   Jour DATE,
   Montant INT NOT NULL,
-  TypeTransaction VARCHAR(10) NOT NULL,
+  TypeTransaction VARCHAR(255) NOT NULL,
   IdUser INT NOT NULL,
   PRIMARY KEY (ID),
   FOREIGN KEY (IDUser) REFERENCES Utilisateur(Id)
@@ -81,7 +82,7 @@ CREATE TABLE TransactionPoints (
 
 CREATE TABLE UtilisateurObjet (
   IDUser INT NOT NULL,
-  Nom VARCHAR(15) NOT NULL,
+  Nom VARCHAR(255) NOT NULL,
   EstActif BOOLEAN,
   CONSTRAINT ck_objetUser PRIMARY KEY (IDUser, Nom),
   FOREIGN KEY (IDUser) REFERENCES Utilisateur(ID),

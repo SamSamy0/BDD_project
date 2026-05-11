@@ -23,10 +23,13 @@ def parseUser():
             for resum in resumes_node.findall("resume"):
                 data["resumes"].append(
                     {
-                        "cours": resum.findtext("cours"),
                         "titre": resum.findtext("titre"),
+                        "description": resum.findtext("description"),
                         "datePublication": resum.findtext("datePublication"),
+                        "version": resum.findtext("version"),
+                        "visibilite": resum.findtext("visibilite"),
                         "noteMoyenne": resum.findtext("noteMoyenne"),
+                        "cours": resum.findtext("cours"),
                     }
                 )
         achats = user.find("achats")
