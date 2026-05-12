@@ -1,12 +1,15 @@
 import customtkinter as ctk
 from LoginView import LoginView
-from AppView import AppView
+from MenuView import MenuView
+from ShopView import ShopView
+from LeaderBoardView import LeaderBoardView
+from ClassView import ClassView
 
 class Client(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("Application Client")
+        self.title("BDD")
         self.geometry("400x500")
 
         # Configuration du thème
@@ -22,7 +25,7 @@ class Client(ctk.CTk):
         self.frames = {}
         
         # Initialisation des vues
-        for F in (LoginView, AppView):
+        for F in (LoginView, MenuView, LeaderBoardView,ShopView,ClassView):
             page_name = F.__name__.replace("View", "").upper()
             frame = F(parent=self.container, controller=self)
             self.frames[page_name] = frame

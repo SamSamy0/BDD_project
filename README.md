@@ -2,7 +2,7 @@
 
 
 # Dependences
-FreeSimpleGUI == 4.60.5
+customtkinter==5.2.2
 
 1. Création d'un environnement virtuel
 ```bash
