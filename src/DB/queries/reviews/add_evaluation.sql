@@ -1,1 +1,1 @@
-INSERT INTO Evaluation (Note, Commmentaire, IDUser, IDResume) VALUES (%s,%s,%s,%s)
+INSERT INTO Evaluation (Note, Commentaire, IDUser, IDResume) VALUES (%s,%s,%s,%s)

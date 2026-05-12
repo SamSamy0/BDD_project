@@ -1,4 +1,4 @@
 -- Select all user's courses
 SELECT c.Mnemonique
 FROM CoursUtilisateur c
-WHERE c.ID = %s
+WHERE c.IDUser = %s
