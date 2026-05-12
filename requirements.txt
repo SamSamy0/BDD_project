@@ -1,4 +1,4 @@
-FreeSimpleGUI==5.2.0.post1
+customtkinter==5.2.2
 mysql-connector-python-rf==2.2.2
 numpy==2.4.4
 pandas==3.0.2
