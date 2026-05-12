@@ -27,7 +27,7 @@ class LoginView(View):
 
     def login_action(self):
         print(f"Tentative de connexion : {self.id_entry.get()}")
-        self.controller.show_view("LOGIN")
+        self.controller.show_view("MENU")
 
 
     def register_action(self):

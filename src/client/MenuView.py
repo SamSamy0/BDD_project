@@ -7,17 +7,17 @@ class MenuView(View):
         self.label.pack(padx=20, pady=20)
         
 
-        self.class_button = ctk.CTkButton(self, text="Cours",command=self.shop_action)
-        self.class_button.pack(padx=20, pady=10)
+        self.class_button = ctk.CTkButton(self, text="Cours",command=self.class_action)
+        self.class_button.pack(padx=20, pady=20)
 
         self.leaderboard_button = ctk.CTkButton(self, text="LeaderBoard",command=self.leaderboard_action)
         self.leaderboard_button.pack(padx=20, pady=20)
 
         self.shop_button = ctk.CTkButton(self, text="Boutique",command=self.shop_action)
-        self.shop_button.pack(padx=20, pady=30)
+        self.shop_button.pack(padx=20, pady=20)
 
         self.logout_button = ctk.CTkButton(self, text="Déconnexion", command=self.logout_action)
-        self.logout_button.pack(padx=20, pady=40)
+        self.logout_button.pack(padx=20, pady=20)
 
     def shop_action(self):
         self.controller.show_view("SHOP")
@@ -28,3 +28,5 @@ class MenuView(View):
     def logout_action(self):
         self.controller.show_view("LOGIN")
 
+    def class_action(self):
+        self.controller.show_view("CLASS")
