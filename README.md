@@ -4,8 +4,8 @@ Si MySql Server n'est pas déjà installé , exécuter cette ligne de commande
 
 ```bash
 sudo apt install mysql-server
-sudo mysql < src/DB/id.json
-sudo mysql < src/DB/init.json
+sudo mysql < src/DB/id.sql
+sudo mysql < src/DB/init.sql
 
 ```
 

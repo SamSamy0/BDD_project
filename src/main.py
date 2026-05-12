@@ -20,3 +20,14 @@ while True:
     print("You entered ", values[0])
 
 window.close()
+
+
+#Utiliser des paramètres nommées pour les requêtes
+
+####################################################################################################################################################################
+
+# Ce que tu DOIS indexer avec le mot-clé INDEX
+
+#Tu dois utiliser explicitement CREATE INDEX (ou le mot-clé INDEX dans ton CREATE TABLE) uniquement pour les colonnes qui ne sont ni des clés primaires, ni uniques,
+
+#mais que tu utilises souvent pour chercher ou trier."""
