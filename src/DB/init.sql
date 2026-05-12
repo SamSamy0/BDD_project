@@ -33,8 +33,8 @@ CREATE TABLE Resume(
   Description VARCHAR(255),
   Publication DATE NOT NULL,
   Version INT NOT NULL,
-  Visibilite BOOLEAN NOT NULL, 
-  Moyenne INT, 
+  Visibilite BOOLEAN NOT NULL,
+  Moyenne INT,
   Mnemonique VARCHAR(10) NOT NULL,
   IdUser INT NOT NULL,
   PRIMARY KEY (ID),
@@ -63,7 +63,7 @@ CREATE TABLE CoursUtilisateur (
 CREATE TABLE HistoriqueClassement (
   Classement INT NOT NULL,
   Periode VARCHAR (15) NOT NULL,
-  Points INT NOT NULL, 
+  Points INT NOT NULL,
   IDUser INT NOT NULL,
   CONSTRAINT ck_historique PRIMARY KEY(Classement, Periode),
   FOREIGN KEY (IDUser) REFERENCES Utilisateur(ID)
@@ -72,7 +72,7 @@ CREATE TABLE HistoriqueClassement (
 CREATE TABLE TransactionPoints (
   ID INT NOT NULL  AUTO_INCREMENT,
   Jour DATE,
-  Montant INT NOT NULL, 
+  Montant INT NOT NULL,
   TypeTransaction VARCHAR(10) NOT NULL,
   IdUser INT NOT NULL,
   PRIMARY KEY (ID),
@@ -86,5 +86,5 @@ CREATE TABLE UtilisateurObjet (
   CONSTRAINT ck_objetUser PRIMARY KEY (IDUsers, Nom),
   FOREIGN KEY (IDUser) REFERENCES Utilisateur(ID),
   FOREIGN KEY (Nom) REFERENCES ObjetCosmetique(Nom)
-  
+
 );
