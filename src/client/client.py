@@ -1,76 +1,46 @@
-import selectors
-import socket
-import types
+import customtkinter as ctk
+from LoginView import LoginView
+from MenuView import MenuView
+from ShopView import ShopView
+from LeaderBoardView import LeaderBoardView
+from ClassView import ClassView
 
-message = [b"Message 1 from client.", b"Message 2 from client."]
-
-
-class Client:
+class Client(ctk.CTk):
     def __init__(self):
-        self.host = "127.0.0.1"
-        self.port = 8080
-        self.selector = selectors.DefaultSelector()
+        super().__init__()
 
-    def service_connection(self, key, mask):
-        sock = key.fileobj
-        data = key.data
+        self.title("BDD")
+        self.geometry("400x500")
 
-        if mask & selectors.EVENT_READ:
-            recv_data = sock.recv(1024)
-            if recv_data:
-                print(f"Receive from serv: {recv_data!r}")
-                data.recv_total += len(recv_data)
+        # Configuration du thème
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("blue")
 
-            # NOTE: This is Temporary, just to have a condition to close connexion
-            # If we received all we sent, we close
-            if not recv_data or data.recv_total == data.msg_total:
-                print("End of connexion")
-                self.selector.unregister(sock)
-                sock.close()
+        # Conteneur pour les différentes vues
+        self.container = ctk.CTkFrame(self)
+        self.container.pack(side="top", fill="both", expand=True)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
-        if mask & selectors.EVENT_WRITE:
-            # If we still have messages, we take next
-            if not data.outb and data.messages:
-                data.outb = data.messages.pop(0)
+        self.frames = {}
+        
+        # Initialisation des vues
+        for F in (LoginView, MenuView, LeaderBoardView,ShopView,ClassView):
+            page_name = F.__name__.replace("View", "").upper()
+            frame = F(parent=self.container, controller=self)
+            self.frames[page_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
 
-            if data.outb:
-                print(f"Sending to serv : {data.outb!r}")
-                sent = sock.send(data.outb)
-                data.outb = data.outb[sent:]
+        self.show_view("LOGIN")
+
+    def show_view(self, page_name):
+        """Affiche une vue spécifique en la mettant au premier plan"""
+        frame = self.frames[page_name]
+        frame.tkraise()
 
     def run(self):
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.setblocking(False)
-            s.connect_ex((self.host, self.port))
-            events = selectors.EVENT_READ | selectors.EVENT_WRITE
-            # Data has its own types and attributes
-            data = types.SimpleNamespace(
-                # Length of all sent messages
-                msg_total=sum(len(m) for m in message),
-                # Nb of received messages
-                recv_total=0,
-                # Copy of sent messages
-                messages=message.copy(),
-                outb=b"",
-            )
-            self.selector.register(s, events, data=data)
-
-            try:
-                # Event loop
-                while data.recv_total < data.msg_total:
-                    events = self.selector.select(timeout=1)
-                    # If nothing, break
-                    if not events:
-                        break
-
-                    for key, mask in events:
-                        self.service_connection(key, mask)
-            except KeyboardInterrupt:
-                print("Client stopped manually")
-            finally:
-                self.selector.close()
-
+        self.mainloop()
 
 if __name__ == "__main__":
-    c = Client()
-    c.run()
+    client = Client()
+    client.run()
