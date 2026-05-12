@@ -2,15 +2,12 @@ import json
 
 import mysql.connector
 import pandas as pd
-from initData import initCours, initUser
+from initData import initCours, initEval, initUser
 from mysql.connector import Error
-from xml_parser import parseUser
-
-# from initData import
 
 
 def load_json():
-    with open("../DB/config.json", "r") as jsonfile:
+    with open("../DB/config.json", "r", encoding="utf-8") as jsonfile:
         data = json.load(jsonfile)
 
     return data
@@ -32,6 +29,7 @@ def connect():
 
 if __name__ == "__main__":
     cursor = connect()
-    initUser(cursor.cursor())
     initCours(cursor.cursor())
+    initUser(cursor.cursor())
+    initEval(cursor.cursor())
     cursor.commit()

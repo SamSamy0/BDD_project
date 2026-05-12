@@ -1,12 +1,42 @@
 import csv
 
+from jsonParser import parseEval
 from xml_parser import parseReward, parseUser
 
 utilisateurs = parseUser()
 rew = parseReward()
 
-# for x in utilisateurs:
-#     print(x["points"])
+
+def getUserId(mycursor, auteur):
+    getUserIdSql = """
+    SELECT u.ID 
+    FROM Utilisateur u 
+    WHERE u.Name = %s
+    """
+    mycursor.execute(getUserIdSql, (auteur,))
+    res = mycursor.fetchone()
+    if res:
+        auteur_id = res[0]
+        print(f"L'id de l'auteur est : {auteur_id}")
+        return auteur_id
+    else:
+        print("L'auteur n'est pas dans la bdd")
+
+
+def getResumeId(mycursor, title, mnemo):
+    getResumeId = """
+    SELECT r.ID
+    FROM Resume r
+    WHERE r.Title = %s AND r.Mnemonique = %s
+    """
+    mycursor.execute(getResumeId, (title.strip(), mnemo.strip()))
+    res = mycursor.fetchone()
+    if res:
+        resume_id = res[0]
+        print(f"L'id du résumé est:  {resume_id}")
+        return resume_id
+    else:
+        print("on a pas su fetch")
 
 
 def initCours(myCursor):
@@ -26,7 +56,6 @@ def initCours(myCursor):
             fac = line[2]
             utc = line[3]
             val = (mnemo, nom, fac, utc, annee_academique)
-            print(nom)
             myCursor.execute(insertCourseSql, val)
 
 
@@ -72,3 +101,26 @@ def initUser(mycursor):
                 mycursor.execute(insertResumeSql, val)
             except:
                 continue
+
+
+def initEval(mycursor):
+    raw_eval = parseEval()
+    initEval = """
+    INSERT INTO Evaluation 
+    (Note, Commentaire, IDUser, IDResume)
+    VALUES(%s,%s,%s,%s)
+    """
+    for elem in raw_eval:
+        author = elem["auteur"]
+        course = elem["resume"]["cours"]
+        title = elem["resume"]["titre"]
+        note = elem["note"]
+        comment = elem["commentaire"]
+        auteur_id = getUserId(mycursor, author)
+        resume_id = getResumeId(mycursor, title, course)
+        # try:
+        print("title: ", title)
+        if auteur_id is not None and resume_id is not None:
+            mycursor.execute(initEval, (note, comment, auteur_id, resume_id))
+        else:
+            print(f"Donnée incohérente => ignoré")

@@ -16,7 +16,6 @@ def parseUser():
             "titreActif": user.findtext("titreActif"),
             "resumes": [],
             "achats": [],
-            "evaluationsRecues": [],
         }
         resumes_node = user.find("resumes")
         if resumes_node is not None:
@@ -36,15 +35,8 @@ def parseUser():
         if achats is not None:
             for obj in achats.findall("objet"):
                 data["achats"].append(obj.text)
-        evaluations = user.find("evaluationsRecues")
-        if evaluations is not None:
-            for eval in evaluations.findall("evaluation"):
-                data["evaluationsRecues"].append(
-                    {
-                        "note": eval.findtext("note"),
-                        "commentaire": eval.findtext("commentaire"),
-                    }
-                )
+
+        # We don't parse evalutaions bc they're in commentiares.json
         res.append(data)
     return res
 
