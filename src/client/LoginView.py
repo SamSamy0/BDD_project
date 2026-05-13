@@ -8,16 +8,17 @@ class LoginView(View):
         self.title_label = ctk.CTkLabel(self, text="Authentification", font=ctk.CTkFont(size=20, weight="bold"))
         self.title_label.grid(row=0, column=0, padx=20, pady=20)
 
-        self.id_label = ctk.CTkLabel(self, text="Adresse mail")
-        self.id_label.grid(row=1, column=0, padx=20, pady=(10, 0), sticky="w")
+        self.mail_label = ctk.CTkLabel(self, text="Mail")
+        self.mail_label.grid(row=1, column=0, padx=20, pady=(10, 0), sticky="w")
 
-        self.id_entry = ctk.CTkEntry(self)
-        self.id_entry.grid(row=2, column=0, padx=20, pady=(0, 10), sticky="ew")
+        self.mail_entry = ctk.CTkEntry(self)
+        self.mail_entry.grid(row=2, column=0, padx=20, pady=(0, 10), sticky="ew")
 
-        self.password_label = ctk.CTkLabel(self, text="Nom")
-        self.password_label.grid(row=3, column=0, padx=20, pady=(10, 0), sticky="w")
-        self.password_entry = ctk.CTkEntry(self, show="*")
-        self.password_entry.grid(row=4, column=0, padx=20, pady=(0, 20), sticky="ew")
+        self.userName_label = ctk.CTkLabel(self, text="UserName")
+        self.userName_label.grid(row=3, column=0, padx=20, pady=(10, 0), sticky="w")
+
+        self.userName_entry = ctk.CTkEntry(self, show="*")
+        self.userName_entry.grid(row=4, column=0, padx=20, pady=(0, 20), sticky="ew")
 
         self.login_button = ctk.CTkButton(self, text="Log in", command=self.login_action)
         self.login_button.grid(row=5, column=0, padx=20, pady=10, sticky="ew")
