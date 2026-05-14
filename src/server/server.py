@@ -3,6 +3,11 @@ import selectors
 import socket
 import types
 
+import mysql.connector
+import pandas as pd
+from initData import initCours, initEval, initUser
+from mysql.connector import Error
+
 from client.manager import Manager
 from common.protocol import Message, mapping_actions
 
@@ -82,12 +87,6 @@ class Server:
 
             finally:
                 self.selector.close()
-
-
-import mysql.connector
-import pandas as pd
-from initData import initCours, initEval, initUser
-from mysql.connector import Error
 
 
 def load_json():
