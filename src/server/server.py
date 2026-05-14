@@ -3,10 +3,6 @@ import selectors
 import socket
 import types
 
-import mysql.connector
-import pandas as pd
-from mysql.connector import Error
-
 from client.manager import Manager
 from common.protocol import Message, mapping_actions
 
