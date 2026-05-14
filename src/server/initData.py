@@ -1,0 +1,126 @@
+import csv
+
+from jsonParser import parseEval
+from xml_parser import parseReward, parseUser
+
+utilisateurs = parseUser()
+rew = parseReward()
+
+
+def getUserId(mycursor, auteur):
+    getUserIdSql = """
+    SELECT u.ID 
+    FROM Utilisateur u 
+    WHERE u.Name = %s
+    """
+    mycursor.execute(getUserIdSql, (auteur,))
+    res = mycursor.fetchone()
+    if res:
+        auteur_id = res[0]
+        print(f"L'id de l'auteur est : {auteur_id}")
+        return auteur_id
+    else:
+        print("L'auteur n'est pas dans la bdd")
+
+
+def getResumeId(mycursor, title, mnemo):
+    getResumeId = """
+    SELECT r.ID
+    FROM Resume r
+    WHERE r.Title = %s AND r.Mnemonique = %s
+    """
+    mycursor.execute(getResumeId, (title.strip(), mnemo.strip()))
+    res = mycursor.fetchone()
+    if res:
+        resume_id = res[0]
+        print(f"L'id du résumé est:  {resume_id}")
+        return resume_id
+    else:
+        print("on a pas su fetch")
+
+
+def initCours(myCursor):
+    insertCourseSql = """
+    INSERT INTO Cours
+    (Mnemonique, Nom, Fac, Credits,Annee) 
+    VALUES (%s, %s, %s, %s, %s)
+    """
+    with open("../data/cours.csv", "r") as csv_file:
+        annee_academique = 2025
+        csv_reader = csv.reader(csv_file)
+        next(csv_reader)
+
+        for line in csv_reader:
+            mnemo = line[0]
+            nom = line[1]
+            fac = line[2]
+            utc = line[3]
+            val = (mnemo, nom, fac, utc, annee_academique)
+            myCursor.execute(insertCourseSql, val)
+
+
+def initUser(mycursor):
+    insertUserSql = """INSERT INTO Utilisateur 
+                    (Id, Name, Email, Inscription, Niveau, Points )
+                    VALUES (%s, %s, %s, %s, %s, %s)"""
+
+    insertResumeSql = """INSERT INTO Resume
+                        (Title, Description, Publication, Version, Visibilite, Moyenne, Mnemonique, IdUser)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"""
+    for user in utilisateurs:
+        niveau = user["niveau"] if user["niveau"] else 0
+        points = user["points"] if user["points"] else 0
+        val = (
+            user["id"],
+            user["nomUtilisateur"],
+            user["email"],
+            user["dateInscription"],
+            niveau,
+            points,
+        )
+        print(user["nomUtilisateur"])
+        mycursor.execute(insertUserSql, val)
+
+        for res in user["resumes"]:
+            if not res["cours"]:
+                continue
+            description = res["description"] if res["description"] else None
+            version = res["version"] if res["version"] else 1
+            visibilite = res["visibilite"] if res["visibilite"] else 1
+            val = (
+                res["titre"],
+                description,
+                res["datePublication"],
+                version,
+                visibilite,
+                res["noteMoyenne"],
+                res["cours"],
+                user["id"],
+            )
+            try:
+                mycursor.execute(insertResumeSql, val)
+            except:
+                continue
+
+
+def initEval(mycursor):
+    raw_eval = parseEval()
+    initEval = """
+    INSERT INTO Evaluation 
+    (Note, Commentaire, IDUser, IDResume)
+    VALUES(%s,%s,%s,%s)
+    """
+    for elem in raw_eval:
+        author = elem["auteur"]
+        course = elem["resume"]["cours"]
+        title = elem["resume"]["titre"]
+        note = elem["note"]
+        comment = elem["commentaire"]
+        auteur_id = getUserId(mycursor, author)
+        resume_id = getResumeId(mycursor, title, course)
+        # try:
+        print("title: ", title)
+        if auteur_id is not None and resume_id is not None:
+            mycursor.execute(initEval, (note, comment, auteur_id, resume_id))
+        else:
+            print(f"Donnée incohérente => ignoré")

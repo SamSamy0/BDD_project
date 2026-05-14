@@ -5,13 +5,11 @@ import types
 
 import mysql.connector
 import pandas as pd
+from initData import initCours, initEval, initUser
 from mysql.connector import Error
 
-from common.protocol import mapping_actions,Message
 from client.manager import Manager
-
-
-
+from common.protocol import Message, mapping_actions
 
 
 class Server:
@@ -113,8 +111,12 @@ def connect_mySql():
 
 
 if __name__ == "__main__":
-    connect_mySql()
+    cursor = connect_mySql()
+    initCours(cursor.cursor())
+    initUser(cursor.cursor())
+    initEval(cursor.cursor())
+    cursor.commit()
     s = Server()
     s.run()
     action_a_faire = Manager.signin
-    resultat = mapping_actions[Message.SIGNIN]("daniel","daniel","daniel")
+    resultat = mapping_actions[Message.SIGNIN]("daniel", "daniel", "daniel")
