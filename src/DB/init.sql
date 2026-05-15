@@ -37,55 +37,56 @@ CREATE TABLE Resume(
   Visibilite BOOLEAN NOT NULL,
   Moyenne INT,
   Mnemonique VARCHAR(255) NOT NULL,
-  IdUser INT NOT NULL,
+  IdUtilisateur INT NOT NULL,
   PRIMARY KEY (ID),
   FOREIGN KEY (Mnemonique) REFERENCES Cours(Mnemonique),
-  FOREIGN KEY (IdUser) REFERENCES Utilisateur(ID)
+  FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(ID)
 );
 
 CREATE TABLE Evaluation (
   ID INT NOT NULL  AUTO_INCREMENT,
   Note INT NOT NULL,
   Commentaire VARCHAR(100),
-  IDUser INT NOT NULL,
+  IdUtilisateur INT NOT NULL,
   IDResume INT NOT NULL,
   PRIMARY KEY(ID),
-  FOREIGN KEY(IDUser) REFERENCES Utilisateur(ID),
+  FOREIGN KEY(IdUtilisateur) REFERENCES Utilisateur(ID),
   FOREIGN KEY(IDResume) REFERENCES Resume(ID)
 );
 
 CREATE TABLE CoursUtilisateur (
   Mnemonique VARCHAR(255) NOT NULL,
-  IDUser INT NOT NULL,
+  IdUtilisateur INT NOT NULL,
   CONSTRAINT ck_coursUser PRIMARY KEY (Mnemonique, IDUser),
   FOREIGN KEY(IDUser) REFERENCES Utilisateur(ID)
 );
 
+/*Normalization*/
 CREATE TABLE HistoriqueClassement (
   Classement INT NOT NULL,
   Periode VARCHAR (255) NOT NULL,
-  Points INT NOT NULL,
-  IDUser INT NOT NULL,
+  Gains INT NOT NULL,
+  IdUtilisateur INT NOT NULL,
   CONSTRAINT ck_historique PRIMARY KEY(Classement, Periode),
-  FOREIGN KEY (IDUser) REFERENCES Utilisateur(ID)
+  FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(ID)
 );
 
 CREATE TABLE TransactionPoints (
   ID INT NOT NULL  AUTO_INCREMENT,
-  Jour DATE,
+  Date DATE,
   Montant INT NOT NULL,
   TypeTransaction VARCHAR(255) NOT NULL,
-  IdUser INT NOT NULL,
+  IdUtilisateur INT NOT NULL,
   PRIMARY KEY (ID),
-  FOREIGN KEY (IDUser) REFERENCES Utilisateur(Id)
+  FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(Id)
 );
 
 CREATE TABLE UtilisateurObjet (
-  IDUser INT NOT NULL,
+  IdUtilisateur INT NOT NULL,
   Nom VARCHAR(255) NOT NULL,
   EstActif BOOLEAN,
   CONSTRAINT ck_objetUser PRIMARY KEY (IDUsers, Nom),
-  FOREIGN KEY (IDUser) REFERENCES Utilisateur(ID),
+  FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(ID),
   FOREIGN KEY (Nom) REFERENCES ObjetCosmetique(Nom)
 
 );
