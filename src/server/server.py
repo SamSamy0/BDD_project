@@ -8,7 +8,8 @@ import pandas as pd
 from initData import initCours, initEval, initUser
 from mysql.connector import Error
 
-from client.manager import Manager
+# from client.manager import Manager
+from ServerNetworkManager import ServerNetworkManager
 from common.protocol import Message, mapping_actions
 
 
