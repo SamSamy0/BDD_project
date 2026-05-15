@@ -1,14 +1,14 @@
 import customtkinter as ctk
+from ClassView import ClassView
+from ClientNetworkManager import ClientNetworkManager
+from LeaderBoardView import LeaderBoardView
 from LoginView import LoginView
 from MenuView import MenuView
 from ShopView import ShopView
-from LeaderBoardView import LeaderBoardView
-from ClassView import ClassView
-from ClientNetworkManager import ClientNetworkManager
 
 
 class Gui(ctk.CTk):
-    def __init__(self, manager : ClientNetworkManager):
+    def __init__(self, manager: ClientNetworkManager):
         super().__init__()
 
         self.title("BDD")
@@ -25,9 +25,9 @@ class Gui(ctk.CTk):
         self.container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        
+
         # Initialisation des vues
-        for F in (LoginView, MenuView, LeaderBoardView,ShopView,ClassView):
+        for F in (LoginView, MenuView, LeaderBoardView, ShopView, ClassView):
             page_name = F.__name__.replace("View", "").upper()
             frame = F(parent=self.container, controller=self)
             self.frames[page_name] = frame
@@ -42,4 +42,3 @@ class Gui(ctk.CTk):
 
     def run(self):
         self.mainloop()
-

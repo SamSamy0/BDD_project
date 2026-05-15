@@ -64,7 +64,7 @@ CREATE TABLE CoursUtilisateur (
 CREATE TABLE HistoriqueClassement (
   Classement INT NOT NULL,
   Periode VARCHAR (255) NOT NULL,
-  Points INT NOT NULL,
+  Gains INT NOT NULL,
   IDUser INT NOT NULL,
   CONSTRAINT ck_historique PRIMARY KEY(Classement, Periode),
   FOREIGN KEY (IDUser) REFERENCES Utilisateur(ID)
