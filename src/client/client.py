@@ -5,6 +5,7 @@ from ShopView import ShopView
 from LeaderBoardView import LeaderBoardView
 from ClassView import ClassView
 from ProfilView import ProfilView
+from SummaryView import SummaryView
 
 class Client(ctk.CTk):
     def __init__(self):
@@ -23,10 +24,12 @@ class Client(ctk.CTk):
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
 
+        self.current_user = None #contiendra les informations de l'utilisateur connecté
+        self.current_cours = None #contiendra le mnemonique du cours sélectionné
         self.frames = {}
         
         # Initialisation des vues
-        for F in (LoginView, MenuView, LeaderBoardView,ShopView,ClassView,ProfilView):
+        for F in (LoginView, MenuView, LeaderBoardView, ShopView, ClassView, ProfilView, SummaryView):
             page_name = F.__name__.replace("View", "").upper()
             frame = F(parent=self.container, controller=self)
             self.frames[page_name] = frame
