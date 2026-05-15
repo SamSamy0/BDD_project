@@ -1,3 +1,3 @@
 -- Add object to users
-INSERT INTO UtilisateurObjet (IDUser, Nom, EstActif)
+INSERT INTO UtilisateurObjet (IdUtilisateur, Nom, EstActif)
 VALUES (%s, %s, False)

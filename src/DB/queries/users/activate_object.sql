@@ -1,1 +1,1 @@
-UPDATE UtilisateurObjet SET EstActif = %s WHERE IDUser = %s AND Nom = %s
+UPDATE UtilisateurObjet SET EstActif = %s WHERE IdUtilisateur = %s AND Nom = %s
