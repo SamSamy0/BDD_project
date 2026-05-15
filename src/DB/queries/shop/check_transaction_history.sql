@@ -1,3 +1,3 @@
-SELECT t.ID, t.Jour, t.Montant, t.TypeTransaction
+SELECT t.ID, t.Date, t.Montant, t.TypeTransaction
 FROM TransactionPoints t
-WHERE t.IdUser = %s
+WHERE t.IdUtilisateur = %s

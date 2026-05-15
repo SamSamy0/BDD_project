@@ -3,7 +3,7 @@ USE projectH303;
 
 CREATE TABLE Utilisateur(
   ID  INT NOT NULL AUTO_INCREMENT,
-  Name VARCHAR(255) NOT NULL,
+  Nom VARCHAR(255) NOT NULL,
   Email VARCHAR(255) NOT NULL,
   Inscription DATE NOT NULL,
   Niveau INT NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE ObjetCosmetique (
 
 CREATE TABLE Resume(
   ID  INT NOT NULL AUTO_INCREMENT,
-  Title VARCHAR(255) NOT NULL,
+  Titre VARCHAR(255) NOT NULL,
   Description VARCHAR(255),
   Publication DATE NOT NULL,
   Version INT NOT NULL,
@@ -48,17 +48,17 @@ CREATE TABLE Evaluation (
   Note INT NOT NULL,
   Commentaire VARCHAR(100),
   IdUtilisateur INT NOT NULL,
-  IDResume INT NOT NULL,
+  IdResume INT NOT NULL,
   PRIMARY KEY(ID),
   FOREIGN KEY(IdUtilisateur) REFERENCES Utilisateur(ID),
-  FOREIGN KEY(IDResume) REFERENCES Resume(ID)
+  FOREIGN KEY(IdResume) REFERENCES Resume(ID)
 );
 
 CREATE TABLE CoursUtilisateur (
   Mnemonique VARCHAR(255) NOT NULL,
   IdUtilisateur INT NOT NULL,
-  CONSTRAINT ck_coursUser PRIMARY KEY (Mnemonique, IDUser),
-  FOREIGN KEY(IDUser) REFERENCES Utilisateur(ID)
+  CONSTRAINT ck_coursUser PRIMARY KEY (Mnemonique, IdUtilisateur),
+  FOREIGN KEY(IdUtilisateur) REFERENCES Utilisateur(ID)
 );
 
 /*Normalization*/
@@ -78,7 +78,7 @@ CREATE TABLE TransactionPoints (
   TypeTransaction VARCHAR(255) NOT NULL,
   IdUtilisateur INT NOT NULL,
   PRIMARY KEY (ID),
-  FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(Id)
+  FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(ID)
 );
 
 CREATE TABLE UtilisateurObjet (
