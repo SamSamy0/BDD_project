@@ -45,7 +45,7 @@ def initCours(myCursor):
     (Mnemonique, Nom, Fac, Credits,Annee) 
     VALUES (%s, %s, %s, %s, %s)
     """
-    with open("../data/cours.csv", "r") as csv_file:
+    with open("data/cours.csv", "r") as csv_file:
         annee_academique = 2025
         csv_reader = csv.reader(csv_file)
         next(csv_reader)

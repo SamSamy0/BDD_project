@@ -10,6 +10,8 @@ from mysql.connector import Error
 
 # from client.manager import Manager
 from ServerNetworkManager import ServerNetworkManager
+
+from client.ClientNetworkManager import ClientNetworkManager
 from common.protocol import Message, mapping_actions
 
 
@@ -113,11 +115,11 @@ def connect_mySql():
 
 if __name__ == "__main__":
     cursor = connect_mySql()
-    initCours(cursor.cursor())
-    initUser(cursor.cursor())
-    initEval(cursor.cursor())
+    # initCours(cursor.cursor())
+    # initUser(cursor.cursor())
+    # initEval(cursor.cursor())
     cursor.commit()
     s = Server()
     s.run()
-    action_a_faire = Manager.signin
-    resultat = mapping_actions[Message.SIGNIN]("daniel", "daniel", "daniel")
+    action_a_faire = ClientNetworkManager.signin
+    # resultat = mapping_actions[Message.SIGNIN]("daniel", "daniel", "daniel")

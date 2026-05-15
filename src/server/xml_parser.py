@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 
 def parseUser():
     res = []
-    tree = ET.parse("../data/utilisateurs")
+    tree = ET.parse("data/utilisateurs")
     root = tree.getroot()
     for user in root.findall("utilisateur"):
         data = {
@@ -43,7 +43,7 @@ def parseUser():
 
 def parseReward():
     catalogue = []
-    tree = ET.parse("../data/recompenses.xml")
+    tree = ET.parse("data/recompenses.xml")
     root = tree.getroot()
 
     for cosmetics in root.findall("objet"):
