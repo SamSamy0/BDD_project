@@ -85,7 +85,7 @@ CREATE TABLE UtilisateurObjet (
   IdUtilisateur INT NOT NULL,
   Nom VARCHAR(255) NOT NULL,
   EstActif BOOLEAN,
-  CONSTRAINT ck_objetUser PRIMARY KEY (IDUsers, Nom),
+  CONSTRAINT ck_objetUser PRIMARY KEY (IdUtilisateur, Nom),
   FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(ID),
   FOREIGN KEY (Nom) REFERENCES ObjetCosmetique(Nom)
 
