@@ -47,9 +47,9 @@ class Server:
                     print(f"Requete recu : {request_dict}")
 
                     reponse_dict = self.manager.handle_request(request_dict)
-                    
 
-                    
+
+
 
                     data.outb += json.dumps(reponse_dict).encode('utf-8')
                 else:

@@ -32,8 +32,9 @@ class ClientNetworkManager:
                 reponse = self.sock.recv(1024)
                 if not reponse:
                     break
-                data = json.loads(reponse.decode('utf-8'))
-                self.handle_reponse(data)
+                print(reponse)
+                #data = json.loads(reponse.decode('utf-8'))
+                #self.handle_reponse(data)
             except Exception as e:
                 print(f"Erreur : Connexion interrompue : {e}")
                 break
@@ -41,8 +42,11 @@ class ClientNetworkManager:
 
 
     def handle_reponse(self,rep_dict):
-        protocol = rep_dict.get("protocol")
-        data = rep_dict.get("data")
+        print("handler")
+        protocol = rep_dict["protocol"]
+        data = rep_dict["data"]
+        print(data)
+        print("pass")
 
         match protocol:
             case Protocol.SIGNIN.value:

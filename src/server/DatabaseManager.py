@@ -4,28 +4,34 @@ import mysql.connector
 
 class DatabaseManager:
     def __init__(self,cursor):
-        self.cursor = cursor
-        self.path_signin = "../DB/queries/users/signin.sql"
-        self.path_signup = "../DB/queries/users/signup.sql"
+        self.cursor = cursor.cursor()
+        self.db_c2 = cursor
+        self.path_signin = "DB/queries/users/signin.sql"
+        self.path_signup = "DB/queries/users/signup.sql"
 
     def reader_query(self,path,params=None):
         with open(path, 'r', encoding='utf-8') as fichier:
 
             script_sql = fichier.read()
-            if params:
-                script_sql = script_sql.format(**params)
+            #if params:
+            #   script_sql = script_sql.format(**params)
             try:
-                # Exécution des requêtes multiples
-                iterator = self.cursor.execute(script_sql, multi=True)
-
+                """iterator = self.cursor.execute(script_sql,params)
                 results = []
-
-                #  Parcourir l'itérateur pour vider le flux MySQL
-                for statement in iterator:
-                    if statement.with_rows:
-                        results.append(statement.fetchall())
+                results.append(iterator.fetchall())
                 self.cursor.connection.commit() #valider les modification
-                return results
+                return results"""
+                self.cursor.execute(script_sql, params)
+
+                # Récupérer les résultats directement depuis le curseur
+                results = self.cursor.fetchall()
+                print(results)
+
+                # Valider les modifications (utile seulement pour INSERT/UPDATE/DELETE)
+                self.db_c2.commit()
+
+                # Retourne sous forme de liste de liste si c'est ce qu'attendait le reste du code
+                return [results]
 
             except mysql.connector.Error as erreur:
                 print(f"Erreur d'exécution : {erreur}")
@@ -33,8 +39,8 @@ class DatabaseManager:
 
 
     def signin(self,data):
-
-       return self.reader_query(self.path_signin,params=data)
+        print("DM")
+        return self.reader_query(self.path_signin,params=data)
 
 
     def signup(self,data):

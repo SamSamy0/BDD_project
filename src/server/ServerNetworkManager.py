@@ -11,7 +11,7 @@ class ServerNetworkManager:
 
     def __init__(self,cursor):
         self.db = DatabaseManager(cursor)
-        
+
 
 
 
@@ -26,7 +26,7 @@ class ServerNetworkManager:
                 return self.signin(data)
             case Protocol.SIGNUP.value:
                 return self.signup(data)
-            
+
 
 
     def signin(self,data):

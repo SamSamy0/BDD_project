@@ -1,3 +1,3 @@
 SELECT u.ID
 FROM Utilisateur u
-WHERE u.Nom = %s and u.Email = %s
+WHERE u.Nom = %(username)s and u.Email = %(email)s;
