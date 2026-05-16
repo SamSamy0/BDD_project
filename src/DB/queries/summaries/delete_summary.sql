@@ -1,2 +1,2 @@
 -- TODO: Il y a aussi modifier ses résumés ? qu'est-ce que cela implique ?
--- Delete or MOdify our OWN summary
+-- Delete or Modify our OWN summary

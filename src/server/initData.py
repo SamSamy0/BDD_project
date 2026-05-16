@@ -4,14 +4,13 @@ from jsonParser import parseEval
 from xml_parser import parseReward, parseUser
 
 utilisateurs = parseUser()
-rew = parseReward()
 
 
 def getUserId(mycursor, auteur):
     getUserIdSql = """
-    SELECT u.ID 
-    FROM Utilisateur u 
-    WHERE u.Name = %s
+    SELECT u.ID
+    FROM Utilisateur u
+    WHERE u.Nom = %s
     """
     mycursor.execute(getUserIdSql, (auteur,))
     res = mycursor.fetchone()
@@ -27,7 +26,7 @@ def getResumeId(mycursor, title, mnemo):
     getResumeId = """
     SELECT r.ID
     FROM Resume r
-    WHERE r.Title = %s AND r.Mnemonique = %s
+    WHERE r.Titre = %s AND r.Mnemonique = %s
     """
     mycursor.execute(getResumeId, (title.strip(), mnemo.strip()))
     res = mycursor.fetchone()
@@ -42,7 +41,7 @@ def getResumeId(mycursor, title, mnemo):
 def initCours(myCursor):
     insertCourseSql = """
     INSERT INTO Cours
-    (Mnemonique, Nom, Fac, Credits,Annee) 
+    (Mnemonique, Nom, Fac, Credits,Annee)
     VALUES (%s, %s, %s, %s, %s)
     """
     with open("data/cours.csv", "r") as csv_file:
@@ -60,12 +59,12 @@ def initCours(myCursor):
 
 
 def initUser(mycursor):
-    insertUserSql = """INSERT INTO Utilisateur 
-                    (Id, Name, Email, Inscription, Niveau, Points )
+    insertUserSql = """INSERT INTO Utilisateur
+                    (ID, Nom, Email, Inscription, Niveau, Points )
                     VALUES (%s, %s, %s, %s, %s, %s)"""
 
     insertResumeSql = """INSERT INTO Resume
-                        (Title, Description, Publication, Version, Visibilite, Moyenne, Mnemonique, IdUser)
+                        (Titre, Description, Publication, Version, Visibilite, Moyenne, Mnemonique, IdUtilisateur)
                         VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"""
     for user in utilisateurs:
         niveau = user["niveau"] if user["niveau"] else 0
@@ -106,8 +105,8 @@ def initUser(mycursor):
 def initEval(mycursor):
     raw_eval = parseEval()
     initEval = """
-    INSERT INTO Evaluation 
-    (Note, Commentaire, IDUser, IDResume)
+    INSERT INTO Evaluation
+    (Note, Commentaire, IdUtilisateur, IdResume)
     VALUES(%s,%s,%s,%s)
     """
     for elem in raw_eval:
@@ -124,3 +123,22 @@ def initEval(mycursor):
             mycursor.execute(initEval, (note, comment, auteur_id, resume_id))
         else:
             print(f"Donnée incohérente => ignoré")
+
+
+def initRew(myCursor):
+    rew = parseReward()
+    initRew = """
+    INSERT INTO ObjetCosmetique
+    (ID, Nom, TypeObjet, Prix, Description)
+    VALUES(%s, %s, %s, %s, %s)
+    """
+    for r in rew:
+        id = r["id"]
+        name = r["nom"]
+        typeObj = r["type"]
+        prix = r["prix"]
+        desc = r["description"]
+        try:
+            myCursor.execute(initRew, (id, name, typeObj, prix, desc))
+        except:
+            print("SOMETHING WRONG")
