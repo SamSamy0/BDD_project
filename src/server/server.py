@@ -1,25 +1,24 @@
 import json
-import selectors
 import socket
 import types
+import selectors
 
 import mysql.connector
-import pandas as pd
-from initData import initCours, initEval, initUser
-from mysql.connector import Error
+# import pandas as pd
+# from initData import initCours, initEval, initUser
+# from mysql.connector import Error
 
-# from client.manager import Manager
-# from ServerNetworkManager import ServerNetworkManager
+from ServerNetworkManager import ServerNetworkManager
 
-from client.ClientNetworkManager import ClientNetworkManager
-from common.protocol import Message, mapping_actions
 
 
 class Server:
     def __init__(self):
         self.host = "127.0.0.1"
         self.port = 8080
+        self.manager = ServerNetworkManager()
         self.selector = selectors.DefaultSelector()
+
 
     def accept(self, sock):
         conn, addr = sock.accept()
@@ -45,6 +44,7 @@ class Server:
                     # So it can be sent later
                     data.outb += receive_data
                     print(f"Receiving {data.outb!r}")
+                    
 
                 else:
                     # Client has closed their socket
@@ -64,6 +64,10 @@ class Server:
 
                 # nb of bytes sent is used as slice to delete what's sent
                 data.outb = data.outb[sent:]
+
+
+
+
 
     def run(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as lsock:
@@ -92,34 +96,33 @@ class Server:
                 self.selector.close()
 
 
-def load_json():
-    with open("DB/config.json", "r") as jsonfile:
-        data = json.load(jsonfile)
+    def load_json(self):
+        with open("DB/config.json", "r") as jsonfile:
+            data = json.load(jsonfile)
 
-    return data
+        return data
 
 
-def connect_mySql():
-    connection = None
-    init = load_json()
-    connection = mysql.connector.connect(
-        host=init["host"],
-        port=init["port"],
-        user=init["user"],
-        password=init["password"],
-        database=init["database"],
-    )
-    print("MySQL Database connection successful")
-    return connection
+    def connect_mySql(self):
+        connection = None
+        init = self.load_json()
+        connection = mysql.connector.connect(
+            host=init["host"],
+            port=init["port"],
+            user=init["user"],
+            password=init["password"],
+            database=init["database"],
+        )
+        print("MySQL Database connection successful")
+        return connection
 
 
 if __name__ == "__main__":
-    cursor = connect_mySql()
     # initCours(cursor.cursor())
     # initUser(cursor.cursor())
     # initEval(cursor.cursor())
-    cursor.commit()
     s = Server()
+    cursor = s.connect_mySql()
+    cursor.commit()
     s.run()
-    # action_a_faire = ClientNetworkManager.signin
     # resultat = mapping_actions[Message.SIGNIN]("daniel", "daniel", "daniel")
