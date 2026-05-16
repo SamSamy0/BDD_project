@@ -5,9 +5,8 @@ import types
 
 import mysql.connector
 import pandas as pd
-from initData import initCours, initEval, initUser
+from initData import initCours, initEval, initRew, initUser
 from mysql.connector import Error
-
 # from client.manager import Manager
 # from ServerNetworkManager import ServerNetworkManager
 
@@ -118,6 +117,7 @@ if __name__ == "__main__":
     initCours(cursor.cursor())
     initUser(cursor.cursor())
     initEval(cursor.cursor())
+    initRew(cursor.cursor())
     cursor.commit()
     s = Server()
     s.run()
