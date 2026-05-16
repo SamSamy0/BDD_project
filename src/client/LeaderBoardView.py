@@ -4,11 +4,37 @@ import customtkinter as ctk
 class LeaderBoardView(View):
 
     def initView(self):
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+
         self.title_label = ctk.CTkLabel(self, text="LeaderBoard", font=ctk.CTkFont(size=20, weight="bold"))
         self.title_label.grid(row=0, column=0, padx=20, pady=20)
 
+        self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Classement")
+        self.scroll_frame.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
+        self.scroll_frame.grid_columnconfigure((0, 1, 2), weight=1)
+
+        # En-têtes
+        ctk.CTkLabel(self.scroll_frame, text="Rang", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, padx=10, pady=5)
+        ctk.CTkLabel(self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")).grid(row=0, column=1, padx=10, pady=5)
+        ctk.CTkLabel(self.scroll_frame, text="Points", font=ctk.CTkFont(weight="bold")).grid(row=0, column=2, padx=10, pady=5)
+
+        # Données fictives
+        users_fictifs = [
+            (1, "Alice", 850),
+            (2, "Bob", 720),
+            (3, "Charlie", 610),
+            (4, "Diana", 540),
+            (5, "Eve", 430),
+        ]
+
+        for rang, nom, points in users_fictifs:
+            ctk.CTkLabel(self.scroll_frame, text=str(rang)).grid(row=rang, column=0, padx=10, pady=5)
+            ctk.CTkLabel(self.scroll_frame, text=nom).grid(row=rang, column=1, padx=10, pady=5)
+            ctk.CTkLabel(self.scroll_frame, text=str(points)).grid(row=rang, column=2, padx=10, pady=5)
+
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)
-        self.back_button.grid(row=1, column=0, padx=20, pady=20)
+        self.back_button.grid(row=2, column=0, padx=20, pady=20)
 
     def back_action(self):
         self.controller.show_view("MENU")
