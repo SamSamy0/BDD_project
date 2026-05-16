@@ -79,18 +79,12 @@ class ClientNetworkManager:
 
 
 
-    # TODO: Ferme le socket du client
-    def disconnection(self, id):
-        pass
-
-
-
-
-    def close(self):
-        print("Deconnexion au server...")
+    def close(self, sig=None, frame=None):
+        """Ferme proprement le socket du client."""
+        print("\nDéconnexion du serveur...")
         try:
             self.sock.close()
-            print("Déconnexion Reussi !")
-        except Exception:
-            print("Erreur : Deconnexion échoué")
+            print("Déconnexion réussie !")
+        except Exception as e:
+            print(f"Erreur lors de la déconnexion : {e}")
 

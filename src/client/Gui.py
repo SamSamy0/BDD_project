@@ -11,6 +11,7 @@ from IpView import IpView
 class Gui(ctk.CTk):
     def __init__(self, manager: ClientNetworkManager):
         super().__init__()
+        self.manager = manager
 
         self.title("BDD")
         self.geometry("400x500")
@@ -30,11 +31,19 @@ class Gui(ctk.CTk):
         # Initialisation des vues
         for F in (IpView,LoginView, MenuView, LeaderBoardView, ShopView, ClassView):
             page_name = F.__name__.replace("View", "").upper()
-            frame = F(parent=self.container, controller=self,manager=manager)
+            frame = F(parent=self.container, controller=self,manager=self.manager)
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_view("IP")
+        
+        # Gérer la fermeture de la fenêtre
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+    def on_closing(self):
+        """Action effectuée à la fermeture de la fenêtre."""
+        self.manager.close()
+        self.destroy()
 
     def show_view(self, page_name):
         """Affiche une vue spécifique en la mettant au premier plan"""

@@ -2,6 +2,7 @@ import threading
 
 from ClientNetworkManager import ClientNetworkManager
 from Gui import Gui
+import signal
 
 
 class Client:
@@ -21,3 +22,6 @@ class Client:
 
 if __name__ == "__main__":
     client = Client()
+    signal.signal(signal.SIGINT, client.manager.close)
+
+
