@@ -1,5 +1,6 @@
 import socket
 import json
+import threading
 
 from common.Protocol import Protocol
 
@@ -17,9 +18,34 @@ class ClientNetworkManager:
         try:
             self.sock.connect((self.ip,self.port))
             print("Connexion établie")
+            threading.Thread(target=self.receive_message,daemon=True).start()
         except ConnectionRefusedError:
             print("Erreur : Connexion au server échoué")
 
+
+
+
+    def receive_message(self):
+        while True:
+            try:
+                reponse = self.sock.recv(1024)
+                if not reponse:
+                    break
+                data = json.loads(reponse.decode('utf-8'))
+                self.handle_reponse(data)
+            except Exception as e:
+                print(f"Erreur : Connexion interrompue : {e}")
+                break
+
+
+
+    def handle_reponse(self,rep_dict):
+        protocol = rep_dict.get("protocol")
+        data = rep_dict.get("data")
+
+        match protocol:
+            case Protocol.SIGNIN.value:
+                pass
 
 
 
