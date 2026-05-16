@@ -35,7 +35,7 @@ class Server:
         # Mask contains the events that are ready (0 if not ready, 1 else)
         if mask & selectors.EVENT_READ:
             try:
-                receive_data = sock.recv(1024)
+                receive_data = sock.recv(65536)
                 if receive_data:
                     # Any data that is read is append to data.outb
                     # So it can be sent later

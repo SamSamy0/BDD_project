@@ -7,8 +7,9 @@ class DatabaseManager:
         self.conn = cursor
         self.path_signin = "DB/queries/users/signin.sql"
         self.path_signup = "DB/queries/users/signup.sql"
+        self.path_getAllCourses = "DB/queries/courses/list_courses.sql"
 
-    def reader_query(self, path, params=None):
+    def reader_query(self, path, fetch="all", insert=False, params=None):
         with open(path, "r", encoding="utf-8") as fichier:
 
             script_sql = fichier.read()
@@ -22,12 +23,16 @@ class DatabaseManager:
                 return results"""
                 self.cursor.execute(script_sql, params)
 
-                # Récupérer les résultats directement depuis le curseur
-                results = self.cursor.fetchone()
-                print("results in DM", results)
-
                 # Valider les modifications (utile seulement pour INSERT/UPDATE/DELETE)
-                # self.conn.commit()
+                if insert:
+                    self.conn.commit()
+
+                # Récupérer les résultats directement depuis le curseur
+                if fetch == "one":
+                    results = self.cursor.fetchone()
+                elif fetch == "all":
+                    results = self.cursor.fetchall()
+                print("results in DM", results)
 
                 # Retourne sous forme de liste de liste si c'est ce qu'attendait le reste du code
                 return results
@@ -37,7 +42,10 @@ class DatabaseManager:
 
     def signin(self, data):
         print("DM")
-        return self.reader_query(self.path_signin, params=data)
+        return self.reader_query(self.path_signin, "one", False, params=data)
 
     def signup(self, data):
-        return self.reader_query(self.path_signup, params=data)
+        return self.reader_query(self.path_signup, "one", True, params=data)
+
+    def getAllCourses(self, data):
+        return self.reader_query(self.path_getAllCourses, "all", False, params=data)
