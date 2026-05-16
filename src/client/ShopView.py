@@ -94,4 +94,3 @@ class ShopView(View):
             state["btn"].configure(text="Désactiver", fg_color="gray", hover_color="darkgray")
             print(f"{nom} activé")
 
-

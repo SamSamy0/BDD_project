@@ -34,7 +34,7 @@ class ClassView(View):
         self.add_button.grid(row=2, column=0, padx=20, pady=10)
 
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)
-        self.back_button.grid(row=1, column=0, padx=20, pady=20)
+        self.back_button.grid(row=3, column=0, padx=20, pady=20)
 
     def select_course(self, mnemonique):
         self.controller.current_cours = mnemonique
