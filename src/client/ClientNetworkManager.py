@@ -33,8 +33,8 @@ class ClientNetworkManager:
                 if not reponse:
                     break
                 print(reponse)
-                #data = json.loads(reponse.decode('utf-8'))
-                #self.handle_reponse(data)
+                data = json.loads(reponse.decode('utf-8'))
+                self.handle_reponse(data)
             except Exception as e:
                 print(f"Erreur : Connexion interrompue : {e}")
                 break

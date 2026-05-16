@@ -23,7 +23,8 @@ class ServerNetworkManager:
 
         match protocol:
             case Protocol.SIGNIN.value:
-                return self.signin(data)
+                result = self.signin(data)
+                return {"protocol": protocol, "data": result}
             case Protocol.SIGNUP.value:
                 return self.signup(data)
 

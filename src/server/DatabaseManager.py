@@ -24,14 +24,14 @@ class DatabaseManager:
                 self.cursor.execute(script_sql, params)
 
                 # Récupérer les résultats directement depuis le curseur
-                results = self.cursor.fetchall()
+                results = self.cursor.fetchone()
                 print(results)
 
                 # Valider les modifications (utile seulement pour INSERT/UPDATE/DELETE)
                 self.db_c2.commit()
 
                 # Retourne sous forme de liste de liste si c'est ce qu'attendait le reste du code
-                return [results]
+                return results
 
             except mysql.connector.Error as erreur:
                 print(f"Erreur d'exécution : {erreur}")
