@@ -1,5 +1,6 @@
 import socket
 import json
+import datetime
 
 from common.Protocol import Protocol
 
@@ -41,7 +42,8 @@ class ClientNetworkManager:
 
 
     def signup(self,username,email):
-        self.send_request(Protocol.SIGNUP.value,{"username":username,"email":email})
+        date = datetime.date.today()
+        self.send_request(Protocol.SIGNUP.value,{"username":username,"email":email,"date":date})
 
 
 

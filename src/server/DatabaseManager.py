@@ -24,7 +24,7 @@ class DatabaseManager:
                 for statement in iterator:
                     if statement.with_rows:
                         results.append(statement.fetchall())
-                self.connection.commit() #valider les modification
+                self.cursor.connection.commit() #valider les modification
                 return results
 
             except mysql.connector.Error as erreur:
@@ -34,11 +34,11 @@ class DatabaseManager:
 
     def signin(self,data):
 
-        self.reader_query(self.path_signin,params=data)
+       return self.reader_query(self.path_signin,params=data)
 
 
     def signup(self,data):
-        self.reader_query(self.path_signup,params=data)
+        return self.reader_query(self.path_signup,params=data)
 
 
 

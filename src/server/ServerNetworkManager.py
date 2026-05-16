@@ -30,10 +30,8 @@ class ServerNetworkManager:
 
 
     def signin(self,data):
-        username = data.get("username")
-        email = data.get("email")
+        return self.db.signin(data)
 
 
     def signup(self,data):
-        username = data.get("username")
-        email = data.get("email")
+        return self.db.signup(data)
