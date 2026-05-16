@@ -1,2 +1,1 @@
--- TODO: Il y a aussi modifier ses résumés ? qu'est-ce que cela implique ?
--- Delete or Modify our OWN summary
+ DELETE FROM Resumé WHERE ID = %s
