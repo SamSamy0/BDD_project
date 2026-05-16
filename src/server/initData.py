@@ -138,4 +138,7 @@ def initRew(myCursor):
         typeObj = r["type"]
         prix = r["prix"]
         desc = r["description"]
-        myCursor.execute(initRew, (id, name, typeObj, prix, desc))
+        try:
+            myCursor.execute(initRew, (id, name, typeObj, prix, desc))
+        except:
+            print("SOMETHING WRONG")
