@@ -1,24 +1,21 @@
 import json
+import selectors
 import socket
 import types
-import selectors
 
 import mysql.connector
-# import pandas as pd
-# from initData import initCours, initEval, initUser
-# from mysql.connector import Error
-
 from ServerNetworkManager import ServerNetworkManager
 
+# import pandas as pd
+# from mysql.connector import Error
 
 
 class Server:
-    def __init__(self,cursor):
+    def __init__(self, cursor):
         self.host = "127.0.0.1"
         self.port = 8080
         self.manager = ServerNetworkManager(cursor)
         self.selector = selectors.DefaultSelector()
-
 
     def accept(self, sock):
         conn, addr = sock.accept()
@@ -42,16 +39,13 @@ class Server:
                 if receive_data:
                     # Any data that is read is append to data.outb
                     # So it can be sent later
-                    request_str = receive_data.decode('utf-8')
+                    request_str = receive_data.decode("utf-8")
                     request_dict = json.loads(request_str)
                     print(f"Requete recu : {request_dict}")
 
                     reponse_dict = self.manager.handle_request(request_dict)
 
-
-
-
-                    data.outb += json.dumps(reponse_dict).encode('utf-8')
+                    data.outb += json.dumps(reponse_dict).encode("utf-8")
                 else:
                     # Client has closed their socket
                     self.selector.unregister(sock)
@@ -72,10 +66,6 @@ class Server:
 
                 # nb of bytes sent is used as slice to delete what's sent
                 data.outb = data.outb[sent:]
-
-
-
-
 
     def run(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as lsock:
@@ -126,9 +116,6 @@ def connect_mySql():
 
 
 if __name__ == "__main__":
-    # initCours(cursor.cursor())
-    # initUser(cursor.cursor())
-    # initEval(cursor.cursor())
     cursor = connect_mySql()
     cursor.commit()
     s = Server(cursor)
