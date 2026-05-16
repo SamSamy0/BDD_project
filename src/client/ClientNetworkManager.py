@@ -1,6 +1,7 @@
 import socket
+import json
 
-# from common import protocol
+from common.Protocol import Protocol
 
 
 # Intermédiaire entre client et serveur
@@ -20,6 +21,43 @@ class ClientNetworkManager:
             print("Erreur : Connexion au server échoué")
 
 
+
+
+
+    def send_request(self,protocol,data = None):
+        if data is None:
+            data = {}
+
+        request = json.dumps({"protocol" : protocol, "data" : data})
+        try:
+            self.sock.send(request.encode('utf-8'))
+        except Exception as e:
+            print(f"Erreur : le message {protocol} n'a pas pu etre envoyé : {e}")
+
+
+    def signin(self,username,email):
+        self.send_request(Protocol.SIGNIN.value,{"username" : username,"email" : email})
+
+
+
+    def signup(self,username,email):
+        self.send_request(Protocol.SIGNUP.value,{"username":username,"email":email})
+
+
+
+
+
+
+
+
+
+    # TODO: Ferme le socket du client
+    def disconnection(self, id):
+        pass
+
+
+
+
     def close(self):
         print("Deconnexion au server...")
         try:
@@ -28,17 +66,3 @@ class ClientNetworkManager:
         except Exception:
             print("Erreur : Deconnexion échoué")
 
-
-    # TODO: Chercher dans la database
-    @staticmethod
-    def signin(self, username, email):
-        print("OK")
-
-    # TODO: Générer un id unique + rajouter dans la database + date_inscription
-    def signup(self, username, email):
-        pass
-
-
-    # TODO: Ferme le socket du client
-    def disconnection(self, id):
-        pass
