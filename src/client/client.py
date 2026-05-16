@@ -26,6 +26,7 @@ class Client(ctk.CTk):
 
         self.current_user = None #contiendra les informations de l'utilisateur connecté
         self.current_cours = None #contiendra le mnemonique du cours sélectionné
+        self.current_resume = None #contiendra l'id du résumé sélectionné
         self.frames = {}
         
         # Initialisation des vues
