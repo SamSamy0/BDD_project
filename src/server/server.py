@@ -115,9 +115,9 @@ def connect_mySql():
 
 if __name__ == "__main__":
     cursor = connect_mySql()
-    # initCours(cursor.cursor())
-    # initUser(cursor.cursor())
-    # initEval(cursor.cursor())
+    initCours(cursor.cursor())
+    initUser(cursor.cursor())
+    initEval(cursor.cursor())
     cursor.commit()
     s = Server()
     s.run()
