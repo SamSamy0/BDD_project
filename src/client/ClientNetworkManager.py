@@ -38,6 +38,7 @@ class ClientNetworkManager:
     def signup(self, username, email):
         pass
 
+
     # TODO: Ferme le socket du client
     def disconnection(self, id):
         pass
