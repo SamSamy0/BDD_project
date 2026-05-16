@@ -9,8 +9,8 @@ from common.Protocol import Protocol
 
 class ServerNetworkManager:
 
-    def __init__(self):
-        self.db = DatabaseManager()
+    def __init__(self,cursor):
+        self.db = DatabaseManager(cursor)
         
 
 
@@ -23,9 +23,17 @@ class ServerNetworkManager:
 
         match protocol:
             case Protocol.SIGNIN.value:
-                pass
+                return self.signin(data)
             case Protocol.SIGNUP.value:
-                pass
+                return self.signup(data)
             
 
 
+    def signin(self,data):
+        username = data.get("username")
+        email = data.get("email")
+
+
+    def signup(self,data):
+        username = data.get("username")
+        email = data.get("email")

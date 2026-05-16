@@ -13,10 +13,10 @@ from ServerNetworkManager import ServerNetworkManager
 
 
 class Server:
-    def __init__(self):
+    def __init__(self,cursor):
         self.host = "127.0.0.1"
         self.port = 8080
-        self.manager = ServerNetworkManager()
+        self.manager = ServerNetworkManager(cursor)
         self.selector = selectors.DefaultSelector()
 
 
@@ -42,14 +42,22 @@ class Server:
                 if receive_data:
                     # Any data that is read is append to data.outb
                     # So it can be sent later
-                    data.outb += receive_data
-                    print(f"Receiving {data.outb!r}")
+                    request_str = receive_data.decode('utf-8')
+                    request_dict = json.loads(request_str)
+                    print(f"Requete recu : {request_dict}")
+
+                    reponse_dict = self.manager.handle_request(request_dict)
                     
 
+                    
+
+                    data.outb += json.dumps(reponse_dict).encode('utf-8')
                 else:
                     # Client has closed their socket
                     self.selector.unregister(sock)
                     sock.close()
+            except json.JSONDecodeError:
+                print("Erreur : Le message reçu n'est pas un JSON valide.")
             except ConnectionResetError:
                 # Handles the case where the client closes the connection suddenly
                 self.selector.unregister(sock)
@@ -96,33 +104,33 @@ class Server:
                 self.selector.close()
 
 
-    def load_json(self):
-        with open("DB/config.json", "r") as jsonfile:
-            data = json.load(jsonfile)
+def load_json():
+    with open("DB/config.json", "r") as jsonfile:
+        data = json.load(jsonfile)
 
-        return data
+    return data
 
 
-    def connect_mySql(self):
-        connection = None
-        init = self.load_json()
-        connection = mysql.connector.connect(
-            host=init["host"],
-            port=init["port"],
-            user=init["user"],
-            password=init["password"],
-            database=init["database"],
-        )
-        print("MySQL Database connection successful")
-        return connection
+def connect_mySql():
+    connection = None
+    init = load_json()
+    connection = mysql.connector.connect(
+        host=init["host"],
+        port=init["port"],
+        user=init["user"],
+        password=init["password"],
+        database=init["database"],
+    )
+    print("MySQL Database connection successful")
+    return connection
 
 
 if __name__ == "__main__":
     # initCours(cursor.cursor())
     # initUser(cursor.cursor())
     # initEval(cursor.cursor())
-    s = Server()
-    cursor = s.connect_mySql()
+    cursor = connect_mySql()
     cursor.commit()
+    s = Server(cursor)
     s.run()
     # resultat = mapping_actions[Message.SIGNIN]("daniel", "daniel", "daniel")
