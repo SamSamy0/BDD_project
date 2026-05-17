@@ -3,5 +3,5 @@ FROM UtilisateurObjet uo
 JOIN ObjetCosmetique o ON uo.IdObjet = o.ID
 GROUP BY o.Nom
 ORDER BY compteur DESC
-LIMIT 5;
+LIMIT 1;
 
