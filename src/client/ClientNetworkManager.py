@@ -56,7 +56,6 @@ class ClientNetworkManager:
         print("pass")
         match protocol:
             case Protocol.SIGNIN.value:
-                # No need to verify because if Not
                 self.receiver.isAcceptedLogin(
                     connect=True if data is not None else False
                 )
@@ -66,6 +65,15 @@ class ClientNetworkManager:
                 )
             case Protocol.GET_ALL_COURSES.value:
                 self.receiver.setAllCourse(data)
+
+            case Protocol.GET_STORE.value:
+                self.receiver.displayStore(data)
+
+            case Protocol.GET_COURSES_MOST_RESUMES.value:
+                self.receiver.mostSummCours(data)
+
+            case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
+                self.receiver.SumInAtLeastThree(data)
 
             # case Protocol.
 
@@ -139,6 +147,9 @@ class ClientNetworkManager:
 
     def getObjetInfo(self, idObjet: int):
         self.send_request(Protocol.CHECK_ITEM.value, {"idObjet": idObjet})
+
+    def checkCatalogue(self):
+        self.send_request(Protocol.GET_STORE.value)
 
     """Summaries Queries"""
 

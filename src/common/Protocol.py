@@ -15,6 +15,7 @@ class Protocol(Enum):
     CHECK_ITEM = 8
     CHECK_TRANSACTION_HISTORY = 9
     CHANGE_STATE_OBJ = 10
+
     # Profile
     GET_PROFILE = 11
     GET_POINT = 12  # In case we want to just display the points

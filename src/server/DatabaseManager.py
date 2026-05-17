@@ -21,6 +21,7 @@ class DatabaseManager:
         self.path_getTransactionHistory = (
             "DB/queries/shop/check_transaction_history.sql"
         )
+        self.path_getStore = "DB/queries/shop/check_catalogue.sql"
         self.path_getObjectInfo = "DB/queries/shop/inspect_object.sql"
         # Summaries
         self.path_addSummary = "DB/queries/summaries/add_summary.sql"
@@ -35,7 +36,9 @@ class DatabaseManager:
         self.path_getObRanking = "DB/queries/stats/ranking_object.sql"
         self.path_getSpenderRanking = "DB/queries/stats/ranking_spender.sql"
         self.path_getMostSummCours = "DB/queries/stats/most_summarize_course.sql"
-        self.path_getSummInAtLeastThreeCours = "DB/queries/stats/at_least_three_differents.sql"
+        self.path_getSummInAtLeastThreeCours = (
+            "DB/queries/stats/at_least_three_differents.sql"
+        )
         self.path_getBestTenUsers = "DB/queries/stats/ranking_ten_users_points.sql"
 
     def reader_query(self, path, fetch="all", insert=False, params=None):
@@ -69,7 +72,7 @@ class DatabaseManager:
     def signup(self, data):
         return self.reader_query(self.path_signup, "one", True, params=data)
 
-    #Courses
+    # Courses
     def getAllCourses(self, data):
         return self.reader_query(self.path_getAllCourses, "all", False, params=data)
 
@@ -102,6 +105,9 @@ class DatabaseManager:
     def getObjectInfo(self, data):
         return self.reader_query(self.path_getObjectInfo, "all", False, params=data)
 
+    def getStore(self, data):
+        return self.reader_query(self.path_getStore, "all", False, params=data)
+
     # Summaries
     def addSummary(self, data):
         return self.reader_query(self.path_addSummary, "one", True, params=data)
@@ -119,24 +125,26 @@ class DatabaseManager:
     def changeStateObj(self, data):
         return self.reader_query(self.path_changeStateObj, "one", False, params=data)
 
-    def getProfile(self,data):
-        return self.reader_query(self.path_getProfile,"one",False,params=data)
+    def getProfile(self, data):
+        return self.reader_query(self.path_getProfile, "one", False, params=data)
 
-    #Statistic
-    def checkLeaderBoard(self,data):
-        self.reader_query(self.path_checkLeaderBoard,"all",False,params=data)
+    # Statistic
+    def checkLeaderBoard(self, data):
+        self.reader_query(self.path_checkLeaderBoard, "all", False, params=data)
 
-    def getObRanking(self,data):
-        return self.reader_query(self.path_getObRanking,"all",False,params=data)
+    def getObRanking(self, data):
+        return self.reader_query(self.path_getObRanking, "all", False, params=data)
 
-    def getSpenderRanking(self,data):
-        return self.reader_query(self.path_getSpenderRanking,"all",False,params=data)
+    def getSpenderRanking(self, data):
+        return self.reader_query(self.path_getSpenderRanking, "all", False, params=data)
 
-    def getMostSummCours(self,data):
-        return self.reader_query(self.path_getMostSummCours,"one",False,params=data)
+    def getMostSummCours(self, data):
+        return self.reader_query(self.path_getMostSummCours, "all", False, params=data)
 
-    def getSummInAtLeastThreeCourse(self,data):
-        return self.reader_query(self.path_getSummInAtLeastThreeCours,"all",False,params=data)
+    def getSummInAtLeastThreeCourse(self, data):
+        return self.reader_query(
+            self.path_getSummInAtLeastThreeCours, "all", False, params=data
+        )
 
-    def getBestTenUsers(self,data):
-        return self.reader_query(self.path_getBestTenUsers,"all",False,params=data)
+    def getBestTenUsers(self, data):
+        return self.reader_query(self.path_getBestTenUsers, "all", False, params=data)

@@ -37,12 +37,12 @@ class ServerNetworkManager:
                 result = self.db.getUserCourse(data)
                 return {"protocol": protocol, "data": result}
 
-            #REVIEW
+            # REVIEW
             case Protocol.ADD_EVAL.value:
                 result = self.db.addReview(data)
                 return {"protocol": protocol, "data": result}
 
-            #SHOP
+            # SHOP
             case Protocol.BUY.value:
                 result = self.db.buyObject(data)
                 return {"protocol": protocol, "data": result}
@@ -59,7 +59,10 @@ class ServerNetworkManager:
                 result = self.db.getObjectInfo(data)
                 return {"protocol": protocol, "data": result}
 
-            #SUMMARIES
+            # SUMMARIES
+            case Protocol.GET_STORE.value:
+                result = self.db.getStore(data)
+                return {"protocol": protocol, "data": result}
             case Protocol.ADD_SUMMARY.value:
                 result = self.db.addSummary(data)
                 return {"protocol": protocol, "data": result}
@@ -75,8 +78,7 @@ class ServerNetworkManager:
             case Protocol.GET_SUMMARY_AVERAGE.value:
                 result = self.db.getSummAverage(data)
                 return {"protocol": protocol, "data": result}
-
-            #User
+            # User
             case Protocol.CHANGE_STATE_OBJ.value:
                 result = self.db.changeStateObj(data)
                 return {"protocol": protocol, "data": result}
@@ -85,7 +87,7 @@ class ServerNetworkManager:
                 result = self.db.getProfile(data)
                 return {"protocol": protocol, "data": result}
 
-            #Statistic
+            # Statistic
             case Protocol.GET_LEADERBOARD.value:
                 result = self.db.checkLeaderBoard(data)
                 return {"protocol": protocol, "data": result}
@@ -96,16 +98,16 @@ class ServerNetworkManager:
 
             case Protocol.GET_RANKING_SPENDER.value:
                 result = self.db.getSpenderRanking(data)
-                return {"protocol" : protocol, "data" : result}
+                return {"protocol": protocol, "data": result}
 
             case Protocol.GET_COURSES_MOST_RESUMES.value:
                 result = self.db.getMostSummCours(data)
-                return {"protocol" : protocol, "data" : result}
+                return {"protocol": protocol, "data": result}
 
             case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
                 result = self.db.getSummInAtLeastThreeCourse(data)
-                return {"protocol" : protocol, "data": result}
+                return {"protocol": protocol, "data": result}
 
             case Protocol.GET_BEST_TEN_USERS.value:
                 result = self.db.getBestTenUsers(data)
-                return {"protocol" : protocol, "data": result}
+                return {"protocol": protocol, "data": result}

@@ -25,3 +25,23 @@ class ReceiverInWindow:
         self.app.show_view("CLASS")
         classView = self.app.frames["CLASS"]
         classView.displayCourses(courses)
+
+    def displayStore(self, store: dict):
+        self.app.show_view("SHOP")
+        shopView = self.app.frames["SHOP"]
+        shopView.displayStore(store)
+
+    def bestTenUser(self, top: dict):
+        self.app.show_view("LEADERBOARD")
+        leaderView = self.app.frames["LEADERBOARD"]
+        leaderView.displayTop10(top)
+
+    def mostSummCours(self, best: dict):
+        self.app.show_view("LEADERBOARD")
+        leaderView = self.app.frames["LEADERBOARD"]
+        leaderView.displayMostSumCours(best)
+
+    def SumInAtLeastThree(self, data: dict):
+        self.app.show_view("LEADERBOARD")
+        leaderView = self.app.frames["LEADERBOARD"]
+        leaderView.SumInMoreThanThree(data)

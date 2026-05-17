@@ -2,4 +2,4 @@
 SELECT Nom
 FROM Utilisateur
 ORDER BY Points DESC
-LIMIT 10
+LIMIT 10;

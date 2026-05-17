@@ -28,10 +28,12 @@ class MenuView(View):
         self.logout_button.pack(padx=20, pady=20)
 
     def shop_action(self):
-        self.controller.show_view("SHOP")
+        if self.manager.checkCatalogue():
+            self.controller.show_view("SHOP")
 
     def leaderboard_action(self):
-        self.controller.show_view("LEADERBOARD")
+        if self.manager.getSummInAtLeastThreeCourse():
+            self.controller.show_view("LEADERBOARD")
 
     def logout_action(self):
         self.controller.show_view("LOGIN")
