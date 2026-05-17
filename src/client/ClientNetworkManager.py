@@ -89,6 +89,9 @@ class ClientNetworkManager:
             case Protocol.BUY.value:
                 self.receiver.isBought(data)
 
+            case Protocol.ADD_COURSE.value:
+                self.receiver.addCourse(data)
+
             # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
@@ -120,9 +123,10 @@ class ClientNetworkManager:
         self.send_request(Protocol.GET_ALL_COURSES.value)
 
     def addCourse(self, mnemo: str, name: str, fac: str, utc: int, year: int):
+        print("yessssssssssssssssss")
         self.send_request(
             Protocol.ADD_COURSE.value,
-            {"mnemo": mnemo, "name": name, "fact": fac, utc: "utc", "year": year},
+            {"mnemo": mnemo, "name": name, "fact": fac, "utc": utc, "year": year},
         )
 
     def deleteCourse(self, mnemo: str):

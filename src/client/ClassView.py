@@ -16,8 +16,9 @@ class ClassView(View):
         # liste des cours
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Liste des cours")
         self.scroll_frame.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
+
         # données de test fictives
-        cours_fictifs = [
+        """cours_fictifs = [
             ("INFO-H303", "Base de données"),
             ("INFO-H301", "Algorithmes et structures de données"),
             ("MATH-H201", "Analyse"),
@@ -31,7 +32,10 @@ class ClassView(View):
                     m
                 ),  # m=mnemonique capture la valeur
             )
-            btn.pack(padx=10, pady=5, fill="x")
+            btn.pack(padx=10, pady=5, fill="x")"""
+
+        self.courses = list()
+
         # btn ajouter cours
         self.add_button = ctk.CTkButton(
             self, text="Ajouter un cours", command=self.add_course_action
@@ -45,15 +49,31 @@ class ClassView(View):
         self.controller.current_cours = mnemonique
         self.controller.show_view("SUMMARY")
 
-    def add_course_action(self):
-        # Ajouter plus tard
+    def add_course_action(self,courses=None):
+        # TODO: Implémenter un pop up pour récupérer les valeurs
+        if courses is None:
+            courses = [{
+                "Mnemonique": "TEST-123",
+                "Nom": "Nouveau Cours",
+                "Fac": "Sciences",
+                "Credits": 5,
+                "Annee": 1
+            }]
+        for course in courses:
+            self.courses.append(course)
+        self.displayCourses()
+
         print("Ajouter un cours -test")
 
     def back_action(self):
         self.controller.show_view("MENU")
 
-    def displayCourses(self, dictCours: list[dict]):
-        for cours in dictCours:
+    def displayCourses(self):
+        #Vide la liste
+        for widget in self.scroll_frame.winfo_children():
+            widget.destroy()
+
+        for cours in self.courses:
             mnemo = cours.get("Mnemonique", "Inconnu")
             name = cours.get("Nom", "Sans Nom")
             fac = cours.get("Fac", "Sans Fac")

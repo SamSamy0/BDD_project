@@ -14,10 +14,12 @@ class ReceiverInWindow:
             # app.showLoginError("Identifiants incorrect")
             pass
 
-    def setAllCourse(self, courses: dict):
+    def setAllCourse(self, courses: list[dict]):
         self.app.show_view("CLASS")
         classView = self.app.frames["CLASS"]
-        classView.displayCourses(courses)
+        classView.add_course_action(courses)
+
+
 
     def displayStore(self, store: dict):
         self.app.show_view("SHOP")
@@ -47,3 +49,10 @@ class ReceiverInWindow:
     def isBought(self, data: dict):
         shopView = self.app.frames["SHOP"]
         shopView.buy(data)
+
+    def addCourse(self, courses: list[dict]):
+        self.app.show_view("CLASS")
+        classView = self.app.frames["CLASS"]
+        classView.add_course_action(courses)
+
+
