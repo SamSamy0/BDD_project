@@ -25,3 +25,4 @@ class IpView(View):
     def connectAction(self): 
         #NOTE: IL Y A AUCUNE VERIFICATION SUR L'ENTREE DE L'IP NSM C'EST PAS LE BUT DU COURS
         self.manager.connect(self.ip_entry.get())
+        self.controller.show_view("LOGIN")
