@@ -178,7 +178,8 @@ class ClientNetworkManager:
 
     def actObject(self, idUser: int, idObject: int):
         self.send_request(
-            Protocol.ACTIVATE_OBJECT.value, {"idUser": idUser, "idObject": idObject}
+            Protocol.CHANGE_STATE_OBJ.value,
+            {"State": 1, "idUser": idUser, "idObject": idObject},
         )
 
     def getProfile(self, idUser: int):

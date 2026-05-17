@@ -5,41 +5,68 @@ from common.Protocol import Protocol
 
 class ServerNetworkManager:
 
-    def __init__(self,cursor):
+    def __init__(self, cursor):
         self.db = DatabaseManager(cursor)
 
-
-
-
-
-
-    def handle_request(self,dict_request):
+    def handle_request(self, dict_request):
         protocol = dict_request.get("protocol")
         data = dict_request.get("data")
         print(f"[{protocol}] avec : {data}")
 
         match protocol:
             case Protocol.SIGNIN.value:
-                result = self.signin(data)
+                result = self.db.signin(data)
                 return {"protocol": protocol, "data": result}
             case Protocol.SIGNUP.value:
-                return self.signup(data)
+                return self.db.signup(data)
 
             case Protocol.GET_ALL_COURSES.value:
-                result = self.getAllCourses(data)
+                result = self.db.getAllCourses(data)
                 return {"protocol": protocol, "data": result}
 
+            case Protocol.ADD_COURSE.value:
+                result = self.db.addCourse(data)
+                return {"protocol": protocol, "data": result}
 
-    
+            case Protocol.DELETE_COURSE.value:
+                result = self.db.deleteUserCourse(data)
+                return {"protocol": protocol, "data": result}
+            case Protocol.GET_USER_COURSES.value:
+                result = self.db.getUserCourse(data)
+                return {"protocol": protocol, "data": result}
 
-    def signin(self,data):
-        return self.db.signin(data)
+            case Protocol.BUY.value:
+                result = self.db.buyObject(data)
+                return {"protocol": protocol, "data": result}
 
+            case Protocol.GET_POINT.value:
+                result = self.db.getPoints(data)
+                return {"protocol": protocol, "data": result}
 
-    def signup(self,data):
-        return self.db.signup(data)
+            case Protocol.CHECK_TRANSACTION_HISTORY.value:
+                result = self.db.getTransactionHistory(data)
+                return {"protocol": protocol, "data": result}
 
-    def getAllCourses(self, data):
-        return self.db.getAllCourses(data)
+            case Protocol.CHECK_ITEM.value:
+                result = self.db.getObjectInfo(data)
+                return {"protocol": protocol, "data": result}
 
-    
+            case Protocol.ADD_SUMMARY.value:
+                result = self.db.addSummary(data)
+                return {"protocol": protocol, "data": result}
+
+            case Protocol.READ_SUMMARY.value:
+                result = self.db.checkSummary(data)
+                return {"protocol": protocol, "data": result}
+
+            case Protocol.DELETE_SUMMARY.value:
+                result = self.db.deleteSummary(data)
+                return {"protocol": protocol, "data": result}
+
+            case Protocol.GET_SUMMARY_AVERAGE.value:
+                result = self.db.getSummAverage(data)
+                return {"protocol": protocol, "data": result}
+
+            case Protocol.CHANGE_STATE_OBJ.value:
+                result = self.db.changeStateObj(data)
+                return {"protocol": protocol, "data": result}
