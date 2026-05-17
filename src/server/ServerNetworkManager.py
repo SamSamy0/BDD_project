@@ -28,6 +28,8 @@ class ServerNetworkManager:
             case Protocol.GET_ALL_COURSES.value:
                 result = self.getAllCourses(data)
                 return {"protocol": protocol, "data": result}
+            case Protocol.GET_BEST_TEN_USERS.value:
+                result = self.getBestTenUsers(data)
 
 
     
@@ -35,11 +37,13 @@ class ServerNetworkManager:
     def signin(self,data):
         return self.db.signin(data)
 
-
     def signup(self,data):
         return self.db.signup(data)
 
     def getAllCourses(self, data):
         return self.db.getAllCourses(data)
+    
+    def getBestTenUsers(self,data):
+        return self.db.getBestTenUsers(data)
 
     

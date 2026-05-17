@@ -8,6 +8,7 @@ class DatabaseManager:
         self.path_signin = "DB/queries/users/signin.sql"
         self.path_signup = "DB/queries/users/signup.sql"
         self.path_getAllCourses = "DB/queries/courses/list_courses.sql"
+        self.path_getBestTenUsers = "DB/queries/stats/ranking_ten_users_points.sql"
 
     def reader_query(self, path, fetch="all", insert=False, params=None):
         with open(path, "r", encoding="utf-8") as fichier:
@@ -49,3 +50,7 @@ class DatabaseManager:
 
     def getAllCourses(self, data):
         return self.reader_query(self.path_getAllCourses, "all", False, params=data)
+
+    def getBestTenUsers(self,data):
+        return self.reader_query(self.path_getBestTenUsers,"all",False,params=data)
+    
