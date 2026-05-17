@@ -43,11 +43,3 @@ class Protocol(Enum):
     GET_SUMMARY_AVERAGE = 32
 
 
-# Manager
-# mapping_actions = {
-#     Protocol.SIGNIN: ClientNetworkManager.signin,
-#     Protocol.SIGNUP: ClientNetworkManager.signup,
-#     Protocol.DISCONNECTION: ClientNetworkManager.disconnection,
-# }
-
-# Handler

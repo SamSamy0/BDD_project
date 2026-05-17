@@ -42,14 +42,7 @@ class DatabaseManager:
         with open(path, "r", encoding="utf-8") as fichier:
 
             script_sql = fichier.read()
-            # if params:
-            #   script_sql = script_sql.format(**params)
             try:
-                """iterator = self.cursor.execute(script_sql,params)
-                results = []
-                results.append(iterator.fetchall())
-                self.cursor.connection.commit() #valider les modification
-                return results"""
                 self.cursor.execute(script_sql, params)
 
                 # Valider les modifications (utile seulement pour INSERT/UPDATE/DELETE)
