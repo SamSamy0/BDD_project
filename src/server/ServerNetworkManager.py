@@ -31,7 +31,9 @@ class ServerNetworkManager:
             
 
 
-
+            case Protocol.GET_RANKING_OBJECT.value:
+                result = self.getObRanking(data)
+                return {"protocol": protocol, "data": result}
 
             case Protocol.GET_RANKING_SPENDER.value:
                 result = self.getSpenderRanking(data)
@@ -65,6 +67,8 @@ class ServerNetworkManager:
 
 
 
+    def getObRanking(self,data):
+        return self.db.getObRanking(data)
 
     def getSpenderRanking(self,data):
         return self.db.getSpenderRanking(data)

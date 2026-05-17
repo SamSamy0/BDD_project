@@ -12,6 +12,7 @@ class DatabaseManager:
         self.path_getSummInAtLeastThreeCours = "DB/queries/stats/at_least_three_differents.sql"
         self.path_getMostSummCours = "DB/queries/stats/most_summarize_course.sql"
         self.path_getSpenderRanking = "DB/queries/stats/ranking_spender.sql"
+        self.path_getObRanking = "DB/queries/stats/ranking_object.sql"
 
 
     def reader_query(self, path, fetch="all", insert=False, params=None):
@@ -56,6 +57,8 @@ class DatabaseManager:
         return self.reader_query(self.path_getAllCourses, "all", False, params=data)
     
 
+    def getObRanking(self,data):
+        return self.reader_query(self.path_getObRanking,"all",False,params=data)
 
     def getSpenderRanking(self,data):
         return self.reader_query(self.path_getSpenderRanking,"all",False,params=data)
