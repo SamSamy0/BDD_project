@@ -22,7 +22,6 @@ class ServerNetworkManager:
                 return self.db.signup(data)
 
             # Courses
-
             case Protocol.GET_ALL_COURSES.value:
                 result = self.db.getAllCourses(data)
                 return {"protocol": protocol, "data": result}
@@ -42,8 +41,8 @@ class ServerNetworkManager:
             case Protocol.ADD_EVAL.value:
                 result = self.db.addReview(data)
                 return {"protocol": protocol, "data": result}
-            #SHOP
 
+            #SHOP
             case Protocol.BUY.value:
                 result = self.db.buyObject(data)
                 return {"protocol": protocol, "data": result}
@@ -59,8 +58,8 @@ class ServerNetworkManager:
             case Protocol.CHECK_ITEM.value:
                 result = self.db.getObjectInfo(data)
                 return {"protocol": protocol, "data": result}
-            #SUMMARIES
 
+            #SUMMARIES
             case Protocol.ADD_SUMMARY.value:
                 result = self.db.addSummary(data)
                 return {"protocol": protocol, "data": result}
@@ -76,8 +75,8 @@ class ServerNetworkManager:
             case Protocol.GET_SUMMARY_AVERAGE.value:
                 result = self.db.getSummAverage(data)
                 return {"protocol": protocol, "data": result}
-            #User
 
+            #User
             case Protocol.CHANGE_STATE_OBJ.value:
                 result = self.db.changeStateObj(data)
                 return {"protocol": protocol, "data": result}

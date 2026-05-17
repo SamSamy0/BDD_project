@@ -77,7 +77,6 @@ class DatabaseManager:
         return self.reader_query(self.path_signup, "one", True, params=data)
 
     #Courses
-
     def getAllCourses(self, data):
         return self.reader_query(self.path_getAllCourses, "all", False, params=data)
 
