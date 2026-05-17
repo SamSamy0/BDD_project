@@ -3,7 +3,7 @@ USE projectH303;
 
 CREATE TABLE Utilisateur(
   ID  INT NOT NULL AUTO_INCREMENT,
-  Name VARCHAR(15) NOT NULL,
+  Nom VARCHAR(255) NOT NULL,
   Email VARCHAR(255) NOT NULL,
   Inscription DATE NOT NULL,
   Niveau INT NOT NULL,
@@ -12,79 +12,85 @@ CREATE TABLE Utilisateur(
 );
 
 CREATE TABLE Cours(
-  Mnemonique VARCHAR(10) NOT NULL ,
-  Nom VARCHAR(15) NOT NULL,
-  Fac VARCHAR(15) NOT NULL,
-  Annee INT NOT NULL,
+  Mnemonique VARCHAR(255) NOT NULL ,
+  Nom VARCHAR(255) NOT NULL,
+  Fac VARCHAR(255) NOT NULL,
+  Credits INT NOT NULL,
+  Annee INT,
   PRIMARY KEY (Mnemonique)
 );
 
 CREATE TABLE ObjetCosmetique (
-  Nom VARCHAR(15) NOT NULL ,
-  TypeObjet VARCHAR(10) NOT NULL,
+  ID INT NOT NULL AUTO_INCREMENT,
+  Nom VARCHAR(255) NOT NULL ,
+  TypeObjet VARCHAR(255) NOT NULL,
   Prix INT NOT NULL,
-  Description VARCHAR(100) NOT NULL,
-  PRIMARY KEY (Nom)
+  Description VARCHAR(255) NOT NULL,
+  PRIMARY KEY (ID)
 );
 
 CREATE TABLE Resume(
   ID  INT NOT NULL AUTO_INCREMENT,
-  Title VARCHAR(15) NOT NULL,
+  Titre VARCHAR(255) NOT NULL,
   Description VARCHAR(255),
   Publication DATE NOT NULL,
   Version INT NOT NULL,
   Visibilite BOOLEAN NOT NULL,
   Moyenne INT,
-  Mnemonique VARCHAR(10) NOT NULL,
-  IdUser INT NOT NULL,
+  Mnemonique VARCHAR(255) NOT NULL,
+  IdUtilisateur INT NOT NULL,
   PRIMARY KEY (ID),
   FOREIGN KEY (Mnemonique) REFERENCES Cours(Mnemonique),
-  FOREIGN KEY (IdUser) REFERENCES Utilisateur(ID)
+  FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(ID)
 );
 
 CREATE TABLE Evaluation (
   ID INT NOT NULL  AUTO_INCREMENT,
   Note INT NOT NULL,
   Commentaire VARCHAR(100),
-  IDUser INT NOT NULL,
-  IDResume INT NOT NULL,
+  IdUtilisateur INT NOT NULL,
+  IdResume INT NOT NULL,
   PRIMARY KEY(ID),
-  FOREIGN KEY(IDUser) REFERENCES Utilisateur(ID),
-  FOREIGN KEY(IDResume) REFERENCES Resume(ID)
+  FOREIGN KEY(IdUtilisateur) REFERENCES Utilisateur(ID),
+  FOREIGN KEY(IdResume) REFERENCES Resume(ID)
 );
 
 CREATE TABLE CoursUtilisateur (
-  Mnemonique VARCHAR(10) NOT NULL,
-  IDUser INT NOT NULL,
-  CONSTRAINT ck_coursUser PRIMARY KEY (Mnemonique, IDUser),
-  FOREIGN KEY(IDUser) REFERENCES Utilisateur(ID)
+  Mnemonique VARCHAR(255) NOT NULL,
+  IdUtilisateur INT NOT NULL,
+  CONSTRAINT ck_coursUser PRIMARY KEY (Mnemonique, IdUtilisateur),
+  FOREIGN KEY(IdUtilisateur) REFERENCES Utilisateur(ID)
 );
 
+/*Normalization*/
 CREATE TABLE HistoriqueClassement (
   Classement INT NOT NULL,
-  Periode VARCHAR (15) NOT NULL,
-  Points INT NOT NULL,
-  IDUser INT NOT NULL,
+  Periode VARCHAR (255) NOT NULL,
+  Gains INT NOT NULL,
+  IdUtilisateur INT NOT NULL,
   CONSTRAINT ck_historique PRIMARY KEY(Classement, Periode),
-  FOREIGN KEY (IDUser) REFERENCES Utilisateur(ID)
+  FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(ID)
 );
 
 CREATE TABLE TransactionPoints (
   ID INT NOT NULL  AUTO_INCREMENT,
-  Jour DATE,
+  Date DATE,
   Montant INT NOT NULL,
-  TypeTransaction VARCHAR(10) NOT NULL,
-  IdUser INT NOT NULL,
+  TypeTransaction VARCHAR(255) NOT NULL,
+  IdUtilisateur INT NOT NULL,
   PRIMARY KEY (ID),
-  FOREIGN KEY (IDUser) REFERENCES Utilisateur(Id)
+  FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(ID)
 );
 
 CREATE TABLE UtilisateurObjet (
-  IDUser INT NOT NULL,
-  Nom VARCHAR(15) NOT NULL,
+  IdUtilisateur INT NOT NULL,
+  IdObjet INT NOT NULL,
   EstActif BOOLEAN,
-  CONSTRAINT ck_objetUser PRIMARY KEY (IDUsers, Nom),
-  FOREIGN KEY (IDUser) REFERENCES Utilisateur(ID),
-  FOREIGN KEY (Nom) REFERENCES ObjetCosmetique(Nom)
+  CONSTRAINT ck_objetUser PRIMARY KEY (IdUtilisateur, IdObjet),
+  FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(ID),
+  FOREIGN KEY (IdObjet) REFERENCES ObjetCosmetique(ID)
 
 );
+
+
+

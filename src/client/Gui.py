@@ -1,18 +1,19 @@
 import customtkinter as ctk
+from ClassView import ClassView
+from ClientNetworkManager import ClientNetworkManager
+from LeaderBoardView import LeaderBoardView
 from LoginView import LoginView
 from MenuView import MenuView
 from ShopView import ShopView
-from LeaderBoardView import LeaderBoardView
-from ClassView import ClassView
-from ProfilView import ProfilView
-from SummaryView import SummaryView
+from IpView import IpView
 
-class Client(ctk.CTk):
-    def __init__(self):
+
+class Gui(ctk.CTk):
+    def __init__(self, manager: ClientNetworkManager):
         super().__init__()
 
         self.title("BDD")
-        self.geometry("1200x800")
+        self.geometry("400x500")
 
         # Configuration du thème
         ctk.set_appearance_mode("dark")
@@ -24,19 +25,16 @@ class Client(ctk.CTk):
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
 
-        self.current_user = None #contiendra les informations de l'utilisateur connecté
-        self.current_cours = None #contiendra le mnemonique du cours sélectionné
-        self.current_resume = None #contiendra l'id du résumé sélectionné
         self.frames = {}
-        
+
         # Initialisation des vues
-        for F in (LoginView, MenuView, LeaderBoardView, ShopView, ClassView, ProfilView, SummaryView):
+        for F in (IpView,LoginView, MenuView, LeaderBoardView, ShopView, ClassView):
             page_name = F.__name__.replace("View", "").upper()
-            frame = F(parent=self.container, controller=self)
+            frame = F(parent=self.container, controller=self,manager=manager)
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_view("LOGIN")
+        self.show_view("IP")
 
     def show_view(self, page_name):
         """Affiche une vue spécifique en la mettant au premier plan"""
@@ -45,7 +43,3 @@ class Client(ctk.CTk):
 
     def run(self):
         self.mainloop()
-
-if __name__ == "__main__":
-    client = Client()
-    client.run()
