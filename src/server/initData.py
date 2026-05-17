@@ -125,6 +125,7 @@ def initEval(mycursor):
             print(f"Donnée incohérente => ignoré")
 
 
+
 def initRew(myCursor):
     rew = parseReward()
     initRew = """
@@ -142,3 +143,64 @@ def initRew(myCursor):
             myCursor.execute(initRew, (id, name, typeObj, prix, desc))
         except:
             print("SOMETHING WRONG")
+
+def initCoursUtilisateur(mycursor):
+    insertCoursUtilisateur = """
+    INSERT IGNORE INTO CoursUtilisateur
+    (Mnemonique, IdUtilisateur)
+    VALUES(%s,%s)
+    """
+    with open("data/cours.csv", "r") as csv_file:
+        csv_reader = csv.reader(csv_file)
+        next(csv_reader)
+        for line in csv_reader:
+            mnemo = line[0]
+            for user in utilisateurs:
+                iduser = user["id"]
+                for res in user["resumes"]:
+                    if not res["cours"]:
+                        continue
+                    try:
+                        if res["cours"] == mnemo:
+                            val = (mnemo,iduser)
+                            mycursor.execute(insertCoursUtilisateur, val)
+                    except:
+                        continue
+
+def initUtilisateurObjet(mycursor):
+    rew = parseReward()
+
+    mapping_object = dict()
+    for r in rew:
+        mapping_object[r["nom"]] = r["id"]
+
+    insertUtilisateurObjet = """
+    INSERT IGNORE INTO UtilisateurObjet
+    (Idutilisateur, IdObjet, EstActif)
+    VALUES(%s,%s,%s)
+    """
+    for user in utilisateurs:
+        iduser = user["id"]
+        title_activate = user["titreActif"]
+        objects = user["achats"]
+
+        if not objects:
+            continue
+
+        for obj in objects:
+            if obj not in mapping_object:
+                continue
+
+            if title_activate and title_activate == obj:
+                is_active = True
+            else:
+                is_active = False
+            val = (iduser, mapping_object[obj], is_active)
+            try:
+                mycursor.execute(insertUtilisateurObjet, val)
+            except Exception as e:
+                print(f"Erreur lors de l'insertion de l'objet {obj} pour l'utilisateur {iduser} : {e}")
+
+
+
+
