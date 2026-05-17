@@ -40,7 +40,7 @@ class ShopView(View):
                 command=lambda n=nom, p=prix: self.buy_action(n, p)
             ).grid(row=i, column=2, padx=10, pady=5)
 
-        # --- Colonne droite : Mes objets ---
+        # --- Colonne droite:Mes objets ---
         self.inventory_frame = ctk.CTkScrollableFrame(self, label_text="Mes objets")
         self.inventory_frame.grid(row=2, column=1, padx=(10, 20), pady=10, sticky="nsew")
         self.inventory_frame.grid_columnconfigure((0, 1), weight=1)
