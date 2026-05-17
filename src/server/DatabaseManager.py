@@ -9,6 +9,7 @@ class DatabaseManager:
         self.path_signup = "DB/queries/users/signup.sql"
         self.path_getAllCourses = "DB/queries/courses/list_courses.sql"
         self.path_checkLeaderBoard = "DB/queries/stats/check_leaderboard.sql"
+        self.path_getProfile = "DB/queries/check_profile"
         self.path_getObRanking = "DB/queries/stats/ranking_object.sql"
         self.path_getSpenderRanking = "DB/queries/stats/ranking_spender.sql"
         self.path_getMostSummCours = "DB/queries/stats/most_summarize_course.sql"
@@ -56,6 +57,9 @@ class DatabaseManager:
 
     def getAllCourses(self, data):
         return self.reader_query(self.path_getAllCourses, "all", False, params=data)
+
+    def getProfile(self,data):
+        return self.reader_query(self.path_getProfile,"one",False,params=data)
     
     def checkLeaderBoard(self,data):
         self.reader_query(self.path_checkLeaderBoard,"all",False,params=data)

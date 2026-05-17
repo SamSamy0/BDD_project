@@ -26,6 +26,10 @@ class ServerNetworkManager:
             case Protocol.GET_ALL_COURSES.value:
                 result = self.db.getAllCourses(data)
                 return {"protocol": protocol, "data": result}
+
+            case Protocol.GET_PROFILE.value:
+                result = self.db.getProfile(data)
+                return {"protocol": protocol, "data": result}
             
             case Protocol.GET_LEADERBOARD.value:
                 result = self.db.checkLeaderBoard(data)
