@@ -28,10 +28,28 @@ class ServerNetworkManager:
             case Protocol.GET_ALL_COURSES.value:
                 result = self.getAllCourses(data)
                 return {"protocol": protocol, "data": result}
-            case Protocol.GET_BEST_TEN_USERS.value:
-                result = self.getBestTenUsers(data)
+            
+
+
+
+
+            case Protocol.GET_RANKING_SPENDER.value:
+                result = self.getSpenderRanking(data)
+                return {"protocol" : protocol, "data" : result}
+
+            case Protocol.GET_COURSES_MOST_RESUMES.value:
+                result = self.getMostSummCours(data)
+                return {"protocol" : protocol, "data" : result}
+
             case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
                 result = self.getSummInAtLeastThreeCourse(data)
+                return {"protocol" : protocol, "data": result}
+
+            case Protocol.GET_BEST_TEN_USERS.value:
+                result = self.getBestTenUsers(data)
+                return {"protocol" : protocol, "data": result}
+
+
 
 
     
@@ -45,11 +63,17 @@ class ServerNetworkManager:
     def getAllCourses(self, data):
         return self.db.getAllCourses(data)
 
+
+
+
+    def getSpenderRanking(self,data):
+        return self.db.getSpenderRanking(data)
+
     def getMostSummCours(self,data):
-        self.db.getMostSummCours(data)
+        return self.db.getMostSummCours(data)
     
     def getSummInAtLeastThreeCourse(self,data):
-        self.db.getSummInAtLeastThreeCourse(data)
+        return self.db.getSummInAtLeastThreeCourse(data)
 
     def getBestTenUsers(self,data):
         return self.db.getBestTenUsers(data)
