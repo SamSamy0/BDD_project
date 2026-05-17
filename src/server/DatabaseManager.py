@@ -8,11 +8,12 @@ class DatabaseManager:
         self.path_signin = "DB/queries/users/signin.sql"
         self.path_signup = "DB/queries/users/signup.sql"
         self.path_getAllCourses = "DB/queries/courses/list_courses.sql"
-        self.path_getBestTenUsers = "DB/queries/stats/ranking_ten_users_points.sql"
-        self.path_getSummInAtLeastThreeCours = "DB/queries/stats/at_least_three_differents.sql"
-        self.path_getMostSummCours = "DB/queries/stats/most_summarize_course.sql"
-        self.path_getSpenderRanking = "DB/queries/stats/ranking_spender.sql"
+        self.path_checkLeaderBoard = "DB/queries/stats/check_leaderboard.sql"
         self.path_getObRanking = "DB/queries/stats/ranking_object.sql"
+        self.path_getSpenderRanking = "DB/queries/stats/ranking_spender.sql"
+        self.path_getMostSummCours = "DB/queries/stats/most_summarize_course.sql"
+        self.path_getSummInAtLeastThreeCours = "DB/queries/stats/at_least_three_differents.sql"
+        self.path_getBestTenUsers = "DB/queries/stats/ranking_ten_users_points.sql"
 
 
     def reader_query(self, path, fetch="all", insert=False, params=None):
@@ -56,6 +57,8 @@ class DatabaseManager:
     def getAllCourses(self, data):
         return self.reader_query(self.path_getAllCourses, "all", False, params=data)
     
+    def checkLeaderBoard(self,data):
+        self.reader_query(self.path_checkLeaderBoard,"all",False,params=data)
 
     def getObRanking(self,data):
         return self.reader_query(self.path_getObRanking,"all",False,params=data)

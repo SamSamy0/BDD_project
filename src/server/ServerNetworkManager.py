@@ -11,8 +11,6 @@ class ServerNetworkManager:
 
 
 
-
-
     def handle_request(self,dict_request):
         protocol = dict_request.get("protocol")
         data = dict_request.get("data")
@@ -20,35 +18,37 @@ class ServerNetworkManager:
 
         match protocol:
             case Protocol.SIGNIN.value:
-                result = self.signin(data)
+                result = self.db.signin(data)
                 return {"protocol": protocol, "data": result}
             case Protocol.SIGNUP.value:
-                return self.signup(data)
+                return self.db.signup(data)
 
             case Protocol.GET_ALL_COURSES.value:
-                result = self.getAllCourses(data)
+                result = self.db.getAllCourses(data)
                 return {"protocol": protocol, "data": result}
             
-
+            case Protocol.GET_LEADERBOARD.value:
+                result = self.db.checkLeaderBoard(data)
+                return {"protocol": protocol, "data": result}
 
             case Protocol.GET_RANKING_OBJECT.value:
-                result = self.getObRanking(data)
+                result = self.db.getObRanking(data)
                 return {"protocol": protocol, "data": result}
 
             case Protocol.GET_RANKING_SPENDER.value:
-                result = self.getSpenderRanking(data)
+                result = self.db.getSpenderRanking(data)
                 return {"protocol" : protocol, "data" : result}
 
             case Protocol.GET_COURSES_MOST_RESUMES.value:
-                result = self.getMostSummCours(data)
+                result = self.db.getMostSummCours(data)
                 return {"protocol" : protocol, "data" : result}
 
             case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
-                result = self.getSummInAtLeastThreeCourse(data)
+                result = self.db.getSummInAtLeastThreeCourse(data)
                 return {"protocol" : protocol, "data": result}
 
             case Protocol.GET_BEST_TEN_USERS.value:
-                result = self.getBestTenUsers(data)
+                result = self.db.getBestTenUsers(data)
                 return {"protocol" : protocol, "data": result}
 
 
@@ -56,29 +56,3 @@ class ServerNetworkManager:
 
     
 
-    def signin(self,data):
-        return self.db.signin(data)
-
-    def signup(self,data):
-        return self.db.signup(data)
-
-    def getAllCourses(self, data):
-        return self.db.getAllCourses(data)
-
-
-
-    def getObRanking(self,data):
-        return self.db.getObRanking(data)
-
-    def getSpenderRanking(self,data):
-        return self.db.getSpenderRanking(data)
-
-    def getMostSummCours(self,data):
-        return self.db.getMostSummCours(data)
-    
-    def getSummInAtLeastThreeCourse(self,data):
-        return self.db.getSummInAtLeastThreeCourse(data)
-
-    def getBestTenUsers(self,data):
-        return self.db.getBestTenUsers(data)
-    
