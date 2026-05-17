@@ -5,6 +5,7 @@ from LeaderBoardView import LeaderBoardView
 from LoginView import LoginView
 from MenuView import MenuView
 from ShopView import ShopView
+from IpView import IpView
 
 
 class Gui(ctk.CTk):
@@ -27,13 +28,13 @@ class Gui(ctk.CTk):
         self.frames = {}
 
         # Initialisation des vues
-        for F in (LoginView, MenuView, LeaderBoardView, ShopView, ClassView):
+        for F in (IpView,LoginView, MenuView, LeaderBoardView, ShopView, ClassView):
             page_name = F.__name__.replace("View", "").upper()
-            frame = F(parent=self.container, controller=self)
+            frame = F(parent=self.container, controller=self,manager=manager)
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_view("LOGIN")
+        self.show_view("IP")
 
     def show_view(self, page_name):
         """Affiche une vue spécifique en la mettant au premier plan"""

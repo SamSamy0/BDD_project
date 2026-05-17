@@ -4,7 +4,6 @@ from jsonParser import parseEval
 from xml_parser import parseReward, parseUser
 
 utilisateurs = parseUser()
-rew = parseReward()
 
 
 def getUserId(mycursor, auteur):
@@ -124,3 +123,22 @@ def initEval(mycursor):
             mycursor.execute(initEval, (note, comment, auteur_id, resume_id))
         else:
             print(f"Donnée incohérente => ignoré")
+
+
+def initRew(myCursor):
+    rew = parseReward()
+    initRew = """
+    INSERT INTO ObjetCosmetique
+    (ID, Nom, TypeObjet, Prix, Description)
+    VALUES(%s, %s, %s, %s, %s)
+    """
+    for r in rew:
+        id = r["id"]
+        name = r["nom"]
+        typeObj = r["type"]
+        prix = r["prix"]
+        desc = r["description"]
+        try:
+            myCursor.execute(initRew, (id, name, typeObj, prix, desc))
+        except:
+            print("SOMETHING WRONG")

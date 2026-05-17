@@ -5,11 +5,10 @@ import types
 
 import mysql.connector
 import pandas as pd
-from initData import initCours, initEval, initUser
+from initData import initCours, initEval, initRew, initUser
 from mysql.connector import Error
-
 # from client.manager import Manager
-from ServerNetworkManager import ServerNetworkManager
+# from ServerNetworkManager import ServerNetworkManager
 
 from client.ClientNetworkManager import ClientNetworkManager
 from common.protocol import Message, mapping_actions
@@ -118,8 +117,9 @@ if __name__ == "__main__":
     initCours(cursor.cursor())
     initUser(cursor.cursor())
     initEval(cursor.cursor())
+    initRew(cursor.cursor())
     cursor.commit()
     s = Server()
     s.run()
-    action_a_faire = ClientNetworkManager.signin
+    # action_a_faire = ClientNetworkManager.signin
     # resultat = mapping_actions[Message.SIGNIN]("daniel", "daniel", "daniel")

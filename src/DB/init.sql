@@ -21,11 +21,12 @@ CREATE TABLE Cours(
 );
 
 CREATE TABLE ObjetCosmetique (
+  ID INT NOT NULL AUTO_INCREMENT,
   Nom VARCHAR(255) NOT NULL ,
   TypeObjet VARCHAR(255) NOT NULL,
   Prix INT NOT NULL,
   Description VARCHAR(255) NOT NULL,
-  PRIMARY KEY (Nom)
+  PRIMARY KEY (ID)
 );
 
 CREATE TABLE Resume(
@@ -83,11 +84,11 @@ CREATE TABLE TransactionPoints (
 
 CREATE TABLE UtilisateurObjet (
   IdUtilisateur INT NOT NULL,
-  Nom VARCHAR(255) NOT NULL,
+  IdObjet INT NOT NULL,
   EstActif BOOLEAN,
-  CONSTRAINT ck_objetUser PRIMARY KEY (IdUtilisateur, Nom),
+  CONSTRAINT ck_objetUser PRIMARY KEY (IdUtilisateur, IdObjet),
   FOREIGN KEY (IdUtilisateur) REFERENCES Utilisateur(ID),
-  FOREIGN KEY (Nom) REFERENCES ObjetCosmetique(Nom)
+  FOREIGN KEY (IdObjet) REFERENCES ObjetCosmetique(ID)
 
 );
 
