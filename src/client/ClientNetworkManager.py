@@ -24,6 +24,17 @@ class ClientNetworkManager:
         except ConnectionRefusedError:
             print("Erreur : Connexion au server échoué")
 
+    def close(self, sig=None, frame=None):
+        """Ferme proprement le socket du client."""
+        print("\nDéconnexion du serveur...")
+        try:
+            self.sock.close()
+            print("Déconnexion réussie !")
+        except Exception as e:
+            print(f"Erreur lors de la déconnexion : {e}")
+
+    """Functions to Receive messages from ServerNetworkManager"""
+
     def receive_message(self):
         while True:
             try:
@@ -58,6 +69,8 @@ class ClientNetworkManager:
 
             # case Protocol.
 
+    """Functions to send messages to ServerNetworkManager"""
+
     def send_request(self, protocol, data=None):
         if data is None:
             data = {}
@@ -68,6 +81,8 @@ class ClientNetworkManager:
         except Exception as e:
             print(f"Erreur : le message {protocol} n'a pas pu etre envoyé : {e}")
 
+    """User connexion queries"""
+
     def signin(self, username, email):
         self.send_request(Protocol.SIGNIN.value, {"username": username, "email": email})
 
@@ -77,14 +92,114 @@ class ClientNetworkManager:
             Protocol.SIGNUP.value, {"username": username, "email": email, "date": date}
         )
 
-    def getAllCourse(self):
-        self.send_request(Protocol.GET_ALL_COURSES.value, {})
+    """Courses queries"""
 
-    def close(self, sig=None, frame=None):
-        """Ferme proprement le socket du client."""
-        print("\nDéconnexion du serveur...")
-        try:
-            self.sock.close()
-            print("Déconnexion réussie !")
-        except Exception as e:
-            print(f"Erreur lors de la déconnexion : {e}")
+    def getAllCourse(self):
+        self.send_request(Protocol.GET_ALL_COURSES.value)
+
+    def addCourse(self, mnemo: str, name: str, fac: str, utc: int, year: int):
+        self.send_request(
+            Protocol.ADD_COURSE.value,
+            {"mnemo": mnemo, "name": name, "fact": fac, utc: "utc", "year": year},
+        )
+
+    def deleteCourse(self, mnemo: str):
+        self.send_request(Protocol.DELETE_COURSE, {"mnemo": mnemo})
+
+    def getUserCourse(self, userId: int, mnemo: int):
+        self.send_request(
+            Protocol.GET_USER_COURSES.value, {"userId": userId, "mnemo": mnemo}
+        )
+
+    """Reviews queries"""
+
+    def addReview(self, note: str, comment: str, idAuthor: int, idSummary: int):
+        self.send_request(
+            Protocol.ADD_EVAL.value,
+            {
+                "note": note,
+                "comment": comment,
+                "idAuthor": idAuthor,
+                "idSummary": idSummary,
+            },
+        )
+
+    """Shop Queries"""
+
+    def buyObject(self, idUser: int, objId: int, cost: int):
+        self.send_request(
+            Protocol.BUY.value, {"idUser": idUser, "objId": objId, "cost": cost}
+        )
+
+    def getPoints(self, idUser: int):
+        self.send_request(Protocol.GET_POINT.value, {"idUser": idUser})
+
+    def getTransactionHistory(self, idUser: int):
+        self.send_request(Protocol.CHECK_TRANSACTION_HISTORY.value, {"idUser": idUser})
+
+    def getObjetInfo(self, idObjet: int):
+        self.send_request(Protocol.CHECK_ITEM.value, {"idObjet": idObjet})
+
+    """Summaries Queries"""
+
+    def addSummary(
+        self,
+        title: str,
+        desc: str,
+        date: int,
+        version: int,
+        visible: bool,
+        mnemo: str,
+        idAuthor: int,
+    ):
+        self.send_request(
+            Protocol.ADD_SUMMARY.value,
+            {
+                "title": title,
+                "desc": desc,
+                "date": date,
+                "version": version,
+                "visible": visible,
+                "mnemo": mnemo,
+                "idAuthor": idAuthor,
+            },
+        )
+
+    def checkSummary(self, idSumm: int):
+        self.send_request(Protocol.READ_SUMMARY.value, {"idSumm": idSumm})
+
+    def deleteSummary(self, idSumm: int):
+        self.send_request(Protocol.DELETE_SUMMARY.value, {"idSumm": idSumm})
+
+    def getSummAverage(self, idSumm: int):
+        self.send_request(Protocol.GET_SUMMARY_AVERAGE.value, {"idSumm": idSumm})
+
+    """Users Queries"""
+
+    def actObject(self, idUser: int, idObject: int):
+        self.send_request(
+            Protocol.ACTIVATE_OBJECT.value, {"idUser": idUser, "idObject": idObject}
+        )
+
+    def getProfile(self, idUser: int):
+        self.send_request(Protocol.GET_PROFILE.value, {"idUser": idUser})
+
+    """Statistic Queries"""
+
+    def checkLeaderBoard(self):
+        self.send_request(Protocol.GET_LEADERBOARD.value)
+
+    def getObRanking(self):
+        self.send_request(Protocol.GET_RANKING_OBJECT.value)
+
+    def getSpenderRanking(self):
+        self.send_request(Protocol.GET_RANKING_SPENDER.value)
+
+    def getMostSummCours(self):
+        self.send_request(Protocol.GET_COURSES_MOST_RESUMES.value)
+
+    def getSummInAtLeastThreeCourse(self):
+        self.send_request(Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value)
+
+    def getBestTenUsers(self):
+        self.send_request(Protocol.GET_BEST_TEN_USERS.value)
