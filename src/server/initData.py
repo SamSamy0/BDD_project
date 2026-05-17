@@ -1,9 +1,9 @@
 import csv
+import json
 
+import mysql.connector
 from jsonParser import parseEval
 from xml_parser import parseReward, parseUser
-
-utilisateurs = parseUser()
 
 
 def getUserId(mycursor, auteur):
@@ -59,6 +59,7 @@ def initCours(myCursor):
 
 
 def initUser(mycursor):
+    utilisateurs = parseUser()
     insertUserSql = """INSERT INTO Utilisateur
                     (ID, Nom, Email, Inscription, Niveau, Points )
                     VALUES (%s, %s, %s, %s, %s, %s)"""
@@ -142,3 +143,34 @@ def initRew(myCursor):
             myCursor.execute(initRew, (id, name, typeObj, prix, desc))
         except:
             print("SOMETHING WRONG")
+
+
+def load_json():
+    with open("DB/config.json", "r") as jsonfile:
+        data = json.load(jsonfile)
+
+    return data
+
+
+def connect_mySql():
+    connection = None
+    init = load_json()
+    connection = mysql.connector.connect(
+        host=init["host"],
+        port=init["port"],
+        user=init["user"],
+        password=init["password"],
+        database=init["database"],
+    )
+    print("MySQL Database connection successful")
+    return connection
+
+
+if __name__ == "__main__":
+    cursor = connect_mySql()
+    initCours(cursor.cursor())
+    initUser(cursor.cursor())
+    initEval(cursor.cursor())
+    cursor.commit()
+    cursor.cursor.close
+    cursor.close()

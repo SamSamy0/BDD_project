@@ -1,5 +1,5 @@
 customtkinter==5.2.2
-mysql-connector-python-rf==2.2.2
+mysql-connector-python==8.0.33
 numpy==2.4.4
 pandas==3.0.2
 python-dateutil==2.9.0.post0
