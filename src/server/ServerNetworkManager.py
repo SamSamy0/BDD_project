@@ -30,6 +30,8 @@ class ServerNetworkManager:
                 return {"protocol": protocol, "data": result}
             case Protocol.GET_BEST_TEN_USERS.value:
                 result = self.getBestTenUsers(data)
+            case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
+                result = self.getSummInAtLeastThreeCourse(data)
 
 
     
@@ -45,5 +47,8 @@ class ServerNetworkManager:
     
     def getBestTenUsers(self,data):
         return self.db.getBestTenUsers(data)
+    
+    def getSummInAtLeastThreeCourse(self,data):
+        self.db.getSummInAtLeastThreeCourse(data)
 
     
