@@ -14,13 +14,6 @@ class ReceiverInWindow:
             # app.showLoginError("Identifiants incorrect")
             pass
 
-    def showProfile(self, connect: bool, data: dict):
-        if connect:
-            self.app.show_view("MENU")
-        else:
-            # app.showLoginError("Identifiants incorrect")
-            pass
-
     def setAllCourse(self, courses: dict):
         self.app.show_view("CLASS")
         classView = self.app.frames["CLASS"]
@@ -45,3 +38,12 @@ class ReceiverInWindow:
         self.app.show_view("LEADERBOARD")
         leaderView = self.app.frames["LEADERBOARD"]
         leaderView.SumInMoreThanThree(data)
+
+    def showProfile(self, data: dict):
+        self.app.show_view("PROFIL")
+        profilView = self.app.frames["PROFIL"]
+        profilView.displayStats(data)
+
+    def isBought(self, data: dict):
+        shopView = self.app.frames["SHOP"]
+        shopView.buy(data)

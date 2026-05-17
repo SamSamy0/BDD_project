@@ -4,10 +4,14 @@ from View import View
 
 class MenuView(View):
     def initView(self):
-        self.label = ctk.CTkLabel(self, text="Menu Principal", font=ctk.CTkFont(size=20, weight="bold"))
+        self.label = ctk.CTkLabel(
+            self, text="Menu Principal", font=ctk.CTkFont(size=20, weight="bold")
+        )
         self.label.pack(padx=20, pady=20)
-        
-        self.profil_button = ctk.CTkButton(self, text="Profil",command=self.profil_action)
+
+        self.profil_button = ctk.CTkButton(
+            self, text="Profil", command=self.profil_action
+        )
         self.profil_button.pack(padx=100, pady=20)
 
         self.class_button = ctk.CTkButton(self, text="Cours", command=self.class_action)
@@ -44,5 +48,5 @@ class MenuView(View):
             self.controller.show_view("CLASS")
 
     def profil_action(self):
-        self.controller.show_view("PROFIL")
-        
+        if self.manager.getProfile(self.manager.current_user):
+            self.controller.show_view("PROFIL")

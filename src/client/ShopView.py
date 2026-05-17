@@ -1,10 +1,14 @@
 import customtkinter as ctk
+from object import Object
 from View import View
 
 
 class ShopView(View):
 
     def initView(self):
+        self.allobj = []
+        self.buy_buttons = {}
+        self.buying = None
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)  # deux colonnes de taille identique
         self.grid_rowconfigure(2, weight=1)
@@ -34,27 +38,13 @@ class ShopView(View):
             text="",
         ).grid(row=0, column=2, padx=10, pady=5)
         # données fictives du catalogue
-        catalog_fictif = [
-            ("Badge Or", 500),
-            ("Titre Maître", 300),
-            ("Badge Argent", 200),
-            ("Titre Expert", 150),
-            ("Badge Bronze", 100),
-        ]
-
-        for i, (nom, prix) in enumerate(catalog_fictif, start=1):
-            ctk.CTkLabel(self.catalog_frame, text=nom).grid(
-                row=i, column=0, padx=10, pady=5
-            )
-            ctk.CTkLabel(self.catalog_frame, text=f"{prix} pts").grid(
-                row=i, column=1, padx=10, pady=5
-            )
-            ctk.CTkButton(
-                self.catalog_frame,
-                text="Acheter",
-                width=80,
-                command=lambda n=nom, p=prix: self.buy_action(n, p),
-            ).grid(row=i, column=2, padx=10, pady=5)
+        # catalog_fictif = [
+        #     ("Badge Or", 500),
+        #     ("Titre Maître", 300),
+        #     ("Badge Argent", 200),
+        #     ("Titre Expert", 150),
+        #     ("Badge Bronze", 100),
+        # ]
 
         # --- Colonne droite:Mes objets ---
         self.inventory_frame = ctk.CTkScrollableFrame(self, label_text="Mes objets")
@@ -104,8 +94,9 @@ class ShopView(View):
     def back_action(self):
         self.controller.show_view("MENU")
 
-    def buy_action(self, nom, prix):
-        # Acheter l'objet (à implémenter plus tard)
+    def buy_action(self, o_id, prix, nom):
+        self.buying = o_id
+        self.manager.buyObject(self.manager.current_user, o_id, prix)
         print(f"Acheter {nom} pour {prix} points - test")
 
     def toggle_activate(self, nom):
@@ -125,11 +116,51 @@ class ShopView(View):
             print(f"{nom} activé")
 
     def displayStore(self, obj: dict):
+        row = 1
         for elem in obj:
-            nom = elem.get("Nom")
-            id = elem.get("ID")
+            name = elem.get("Nom")
+            objId = elem.get("ID")
             typeObj = elem.get("TypeObjet")
             price = elem.get("Prix")
             desc = elem.get("Desc")
-            print(f"{nom} || {id} || {typeObj} || {price} || {desc}")
-            print()
+            obj = Object(name, id, typeObj, price, desc)
+            self.allobj.append(obj)
+            ctk.CTkLabel(self.catalog_frame, text=name).grid(
+                row=row, column=0, padx=10, pady=5
+            )
+            ctk.CTkLabel(self.catalog_frame, text=f"{price} pts").grid(
+                row=row, column=1, padx=10, pady=5
+            )
+            btn = ctk.CTkButton(
+                self.catalog_frame,
+                text="Acheter",
+                width=80,
+                command=lambda o=objId, p=price, n=name: self.buy_action(o, p, n),
+            )
+            btn.grid(row=row, column=2, padx=10, pady=5)
+
+            self.buy_buttons[objId] = btn
+            if objId in self.manager.objBought:
+                btn.configure(text="Acheté", fg_color="gray", state="disabled")
+            row += 1
+
+    def buy(self, data: dict):
+        if data.get("success"):
+            print(f"!!!! {data.get("msg")}")
+            if self.buying is not None:
+                btn = self.buy_buttons.get(self.buying)
+
+                if btn:
+                    # Change Button
+                    btn.configure(
+                        text="Acheté",
+                        fg_color="gray",
+                        state="disabled",
+                    )
+                # TODO: OK pcq on retient les objets acheté pdt que l'appli est toujours ouvert
+                # mais si on la ferme et l'ouvre, il faut faire une Requete sql pour recup ceux déja acheté
+                if self.buying not in self.manager.objBought:
+                    self.manager.objBought.append(self.buying)
+                self.buying = None
+        else:
+            print(f"xxxx{data.get("msg")}xxxx")

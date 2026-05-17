@@ -64,7 +64,7 @@ class LeaderBoardView(View):
     def displayMostSumCours(self, best: dict):
         for elem in best:
             mnemo = elem.get("Mnemonique")
-            num = elem.get("COUNT(r.Mnemonique)")
+            num = elem.get("Number")
             print(f"{mnemo} || {num}")
 
     def SumInMoreThanThree(self, data: dict):

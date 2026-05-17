@@ -12,6 +12,8 @@ class ClientNetworkManager:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.receiver: Any = None
+        self.currentUser: Any = None
+        self.objBought = []
 
     def connect(self, ip="127.0.0.1", port=8080):
         self.ip = ip
@@ -56,9 +58,13 @@ class ClientNetworkManager:
         print("pass")
         match protocol:
             case Protocol.SIGNIN.value:
-                self.receiver.isAcceptedLogin(
-                    connect=True if data is not None else False
-                )
+                if data is not None:
+                    self.current_user = data.get("ID")
+                    self.receiver.isAcceptedLogin(connect=True)
+                else:
+                    self.current_user = None
+                    self.receiver.isAcceptedLogin(connect=False)
+
             case Protocol.SIGNUP.value:
                 self.receiver.isAcceptedLogin(
                     connect=True if data is not None else False
@@ -66,14 +72,22 @@ class ClientNetworkManager:
             case Protocol.GET_ALL_COURSES.value:
                 self.receiver.setAllCourse(data)
 
+            case Protocol.GET_PROFILE.value:
+                self.receiver.showProfile(data)
+
+            # Shop
             case Protocol.GET_STORE.value:
                 self.receiver.displayStore(data)
 
+            # Stats
             case Protocol.GET_COURSES_MOST_RESUMES.value:
                 self.receiver.mostSummCours(data)
 
             case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
                 self.receiver.SumInAtLeastThree(data)
+
+            case Protocol.BUY.value:
+                self.receiver.isBought(data)
 
             # case Protocol.
 
@@ -135,8 +149,16 @@ class ClientNetworkManager:
     """Shop Queries"""
 
     def buyObject(self, idUser: int, objId: int, cost: int):
+        jour = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.send_request(
-            Protocol.BUY.value, {"idUser": idUser, "objId": objId, "cost": cost}
+            Protocol.BUY.value,
+            {
+                "idUser": idUser,
+                "objId": objId,
+                "cost": cost,
+                "typ": "dépense",
+                "jour": jour,
+            },
         )
 
     def getPoints(self, idUser: int):

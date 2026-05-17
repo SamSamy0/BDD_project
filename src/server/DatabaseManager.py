@@ -23,6 +23,8 @@ class DatabaseManager:
         )
         self.path_getStore = "DB/queries/shop/check_catalogue.sql"
         self.path_getObjectInfo = "DB/queries/shop/inspect_object.sql"
+        self.path_debitPoints = "DB/queries/shop/debit_users_points.sql"
+        self.path_addTransaction = "DB/queries/shop/add_transaction.sql"
         # Summaries
         self.path_addSummary = "DB/queries/summaries/add_summary.sql"
         self.path_checkSummary = "DB/queries/summaries/check_summary.sql"
@@ -30,7 +32,7 @@ class DatabaseManager:
         self.path_getSummAverage = "DB/queries/stats/summary_average.sql"
         # User
         self.path_changeStateObj = "DB/queries/users/changeStataeObj"
-        self.path_getProfile = "DB/queries/check_profile"
+        self.path_getProfile = "DB/queries/users/check_profile.sql"
         # Statistic
         self.path_checkLeaderBoard = "DB/queries/stats/check_leaderboard.sql"
         self.path_getObRanking = "DB/queries/stats/ranking_object.sql"
@@ -92,7 +94,34 @@ class DatabaseManager:
 
     # Shop
     def buyObject(self, data):
-        return self.reader_query(self.path_buyObjet, "one", True, params=data)
+        userPoints = int(self.getPoints(data).get("Points"))
+        cout = int(data.get("cost"))
+        if userPoints < cout:
+            print("Solde Insuffisant")
+            return {"success": False, "msg": "Solde Insuffisant"}
+
+        try:
+            # Adding objet to users list
+            with open(self.path_buyObjet, "r", encoding="utf-8") as fichier:
+                sql_addObject = fichier.read()
+
+            # debit points
+            with open(self.path_debitPoints, "r", encoding="utf-8") as f:
+                sql_debitPoints = f.read()
+
+            with open(self.path_addTransaction, "r", encoding="utf-8") as f:
+                sql_addTransaction = f.read()
+
+            self.cursor.execute(sql_addObject, data)
+            self.cursor.execute(sql_debitPoints, data)
+            self.cursor.execute(sql_addTransaction, data)
+            self.conn.commit()
+            return {"success": True, "msg": "Achat Réussi!"}
+        except Exception as e:
+            print(e)
+            return {"success": False, "msg": "Erreur lors de l'achat."}
+
+        # return self.reader_query(self.path_buyObjet, "one", True, params=data)
 
     def getPoints(self, data):
         return self.reader_query(self.path_getPoints, "one", False, params=data)
