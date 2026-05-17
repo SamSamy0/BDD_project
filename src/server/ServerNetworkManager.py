@@ -44,11 +44,13 @@ class ServerNetworkManager:
 
     def getAllCourses(self, data):
         return self.db.getAllCourses(data)
-    
-    def getBestTenUsers(self,data):
-        return self.db.getBestTenUsers(data)
+
+    def getMostSummCours(self,data):
+        self.db.getMostSummCours(data)
     
     def getSummInAtLeastThreeCourse(self,data):
         self.db.getSummInAtLeastThreeCourse(data)
 
+    def getBestTenUsers(self,data):
+        return self.db.getBestTenUsers(data)
     
