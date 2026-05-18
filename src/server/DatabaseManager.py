@@ -11,6 +11,7 @@ class DatabaseManager:
 
         self.path_getAllCourses = "DB/queries/courses/list_courses.sql"
         self.path_addCourse = "DB/queries/courses/add_course.sql"
+        self.path_addUserCourse = "DB/queries/users/add_usercourse.sql"
         self.path_deleteUserCourse = "DB/queries/users/delete_user_course.sql"
         self.path_getUserCourse = "DB/queries/courses/list_user_cours.sql"
         # Review
@@ -86,8 +87,12 @@ class DatabaseManager:
     def addCourse(self, data):
         return self.reader_query(self.path_addCourse, "None", True, params=data)
 
+    def addUserCourse(self, data):
+
+        return self.reader_query(self.path_addUserCourse, "None", True, params=data)
+
     def deleteUserCourse(self, data):
-        return self.reader_query(self.path_deleteUserCourse, "one", True, params=data)
+        return self.reader_query(self.path_deleteUserCourse, "None", True, params=data)
 
     def getUserCourse(self, data):
         return self.reader_query(self.path_getUserCourse, "all", False, params=data)

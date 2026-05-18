@@ -17,9 +17,7 @@ class ReceiverInWindow:
     def setAllCourse(self, courses: list[dict]):
         self.app.show_view("CLASS")
         classView = self.app.frames["CLASS"]
-        classView.displayCourses(courses)
-
-
+        classView.after(0, lambda: classView.displayCourses(courses))
 
     def displayStore(self, store: dict):
         self.app.show_view("SHOP")
@@ -50,14 +48,6 @@ class ReceiverInWindow:
         shopView = self.app.frames["SHOP"]
         shopView.buy(data)
 
-    def addCourse(self, data: dict):
-        if data is not None:
-           print("Cours enregistré avec succès: ",data)
-        else:
-            #TODO: Pop-up cours existe déjà
-            classView = self.app.frames["CLASS"]
-            classView.rollback_course()
-
 
     def checkLeaderboard(self, data: list[dict]):
         leaderView = self.app.frames["LEADERBOARD"]
@@ -67,13 +57,36 @@ class ReceiverInWindow:
         self.app.show_view("LEADERBOARD")
         leaderView.displayLeaderboard()
 
-    def deleteCourse(self,data,iduser):
+    def addCourse(self, data: dict):
+        classView = self.app.frames["CLASS"]
         if data is not None:
+           classView.after(0, lambda: classView.confirmedAdd(data))
+           print("Cours enregistré avec succès: ",data)
+        else:
+            #TODO: Pop-up cours existe déjà
             classView = self.app.frames["CLASS"]
-            classView.deleteCourse(data,iduser)
-            classView.after(0, classView.refresh)
+            classView.after(0, lambda: classView.refusedAdd(data))
+
 
     def getUserCourse(self,data):
-        pass
+        if data is not None:
+            self.app.show_view("MYCLASS")
+            myClassView = self.app.frames["MYCLASS"]
+            myClassView.after(0, lambda: myClassView.displayCourses(data))
+
+
+    def addUserCourse(self,data):
+        self.app.show_view("MYCLASS")
+        myClassView = self.app.frames["MYCLASS"]
+        if data is not None:
+            myClassView.after(0, lambda: myClassView.confirmedAdd(data))
+        else:
+            myClassView.after(0, lambda: myClassView.refusedAdd(data))
+
+    def deleteUserCourse(self,data):
+        self.app.show_view("MYCLASS")
+        myClassView = self.app.frames["MYCLASS"]
+        if data is not None:
+            myClassView.after(0, lambda: myClassView.confirmedDelete(data))
 
 

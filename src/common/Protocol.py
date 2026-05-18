@@ -22,11 +22,12 @@ class Protocol(Enum):
     CHECK_RANKING = 13
     # Course
     ADD_COURSE = 14
-    DELETE_COURSE = 15
+    DELETE_USER_COURSE = 15
     CHECK_COURSE = 16
     GET_ALL_COURSES = 17
     GET_USER_COURSES = 18
     GET_RESUME_OF_COURSE = 19
+    ADD_USER_COURSE = 33
     # Summary
     ADD_SUMMARY = 20
     READ_SUMMARY = 21
