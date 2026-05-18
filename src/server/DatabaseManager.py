@@ -21,7 +21,10 @@ class DatabaseManager:
         self.path_getTransactionHistory = (
             "DB/queries/shop/check_transaction_history.sql"
         )
+        self.path_getStore = "DB/queries/shop/check_catalogue.sql"
         self.path_getObjectInfo = "DB/queries/shop/inspect_object.sql"
+        self.path_debitPoints = "DB/queries/shop/debit_users_points.sql"
+        self.path_addTransaction = "DB/queries/shop/add_transaction.sql"
         # Summaries
         self.path_addSummary = "DB/queries/summaries/add_summary.sql"
         self.path_checkSummary = "DB/queries/summaries/check_summary.sql"
@@ -29,13 +32,15 @@ class DatabaseManager:
         self.path_getSummAverage = "DB/queries/stats/summary_average.sql"
         # User
         self.path_changeStateObj = "DB/queries/users/changeStataeObj"
-        self.path_getProfile = "DB/queries/check_profile"
+        self.path_getProfile = "DB/queries/users/check_profile.sql"
         # Statistic
         self.path_checkLeaderBoard = "DB/queries/stats/check_leaderboard.sql"
         self.path_getObRanking = "DB/queries/stats/ranking_object.sql"
         self.path_getSpenderRanking = "DB/queries/stats/ranking_spender.sql"
         self.path_getMostSummCours = "DB/queries/stats/most_summarize_course.sql"
-        self.path_getSummInAtLeastThreeCours = "DB/queries/stats/at_least_three_differents.sql"
+        self.path_getSummInAtLeastThreeCours = (
+            "DB/queries/stats/at_least_three_differents.sql"
+        )
         self.path_getBestTenUsers = "DB/queries/stats/ranking_ten_users_points.sql"
 
     def reader_query(self, path, fetch="all", insert=False, params=None):
@@ -52,15 +57,19 @@ class DatabaseManager:
                 # Récupérer les résultats directement depuis le curseur
                 if fetch == "one":
                     results = self.cursor.fetchone()
+                    print("results in DM", results)
                 elif fetch == "all":
                     results = self.cursor.fetchall()
-                print("results in DM", results)
+                    print("results in DM", results)
+                else:
+                    results = params
 
                 # Retourne sous forme de liste de liste si c'est ce qu'attendait le reste du code
                 return results
 
             except mysql.connector.Error as erreur:
                 print(f"Erreur d'exécution : {erreur}")
+                return None
 
     def signin(self, data):
         print("DM")
@@ -69,13 +78,13 @@ class DatabaseManager:
     def signup(self, data):
         return self.reader_query(self.path_signup, "one", True, params=data)
 
-    #Courses
+    # Courses
     def getAllCourses(self, data):
         return self.reader_query(self.path_getAllCourses, "all", False, params=data)
 
     # Courses
     def addCourse(self, data):
-        return self.reader_query(self.path_addCourse, "one", True, params=data)
+        return self.reader_query(self.path_addCourse, "NOne", True, params=data)
 
     def deleteUserCourse(self, data):
         return self.reader_query(self.path_deleteUserCourse, "one", True, params=data)
@@ -89,7 +98,34 @@ class DatabaseManager:
 
     # Shop
     def buyObject(self, data):
-        return self.reader_query(self.path_buyObjet, "one", True, params=data)
+        userPoints = int(self.getPoints(data).get("Points"))
+        cout = int(data.get("cost"))
+        if userPoints < cout:
+            print("Solde Insuffisant")
+            return {"success": False, "msg": "Solde Insuffisant"}
+
+        try:
+            # Adding objet to users list
+            with open(self.path_buyObjet, "r", encoding="utf-8") as fichier:
+                sql_addObject = fichier.read()
+
+            # debit points
+            with open(self.path_debitPoints, "r", encoding="utf-8") as f:
+                sql_debitPoints = f.read()
+
+            with open(self.path_addTransaction, "r", encoding="utf-8") as f:
+                sql_addTransaction = f.read()
+
+            self.cursor.execute(sql_addObject, data)
+            self.cursor.execute(sql_debitPoints, data)
+            self.cursor.execute(sql_addTransaction, data)
+            self.conn.commit()
+            return {"success": True, "msg": "Achat Réussi!"}
+        except Exception as e:
+            print(e)
+            return {"success": False, "msg": "Erreur lors de l'achat."}
+
+        # return self.reader_query(self.path_buyObjet, "one", True, params=data)
 
     def getPoints(self, data):
         return self.reader_query(self.path_getPoints, "one", False, params=data)
@@ -101,6 +137,9 @@ class DatabaseManager:
 
     def getObjectInfo(self, data):
         return self.reader_query(self.path_getObjectInfo, "all", False, params=data)
+
+    def getStore(self, data):
+        return self.reader_query(self.path_getStore, "all", False, params=data)
 
     # Summaries
     def addSummary(self, data):
@@ -119,24 +158,26 @@ class DatabaseManager:
     def changeStateObj(self, data):
         return self.reader_query(self.path_changeStateObj, "one", False, params=data)
 
-    def getProfile(self,data):
-        return self.reader_query(self.path_getProfile,"one",False,params=data)
+    def getProfile(self, data):
+        return self.reader_query(self.path_getProfile, "one", False, params=data)
 
-    #Statistic
-    def checkLeaderBoard(self,data):
-        self.reader_query(self.path_checkLeaderBoard,"all",False,params=data)
+    # Statistic
+    def checkLeaderBoard(self, data):
+        return self.reader_query(self.path_checkLeaderBoard, "all", False, params=data)
 
-    def getObRanking(self,data):
-        return self.reader_query(self.path_getObRanking,"all",False,params=data)
+    def getObRanking(self, data):
+        return self.reader_query(self.path_getObRanking, "all", False, params=data)
 
-    def getSpenderRanking(self,data):
-        return self.reader_query(self.path_getSpenderRanking,"all",False,params=data)
+    def getSpenderRanking(self, data):
+        return self.reader_query(self.path_getSpenderRanking, "all", False, params=data)
 
-    def getMostSummCours(self,data):
-        return self.reader_query(self.path_getMostSummCours,"one",False,params=data)
+    def getMostSummCours(self, data):
+        return self.reader_query(self.path_getMostSummCours, "all", False, params=data)
 
-    def getSummInAtLeastThreeCourse(self,data):
-        return self.reader_query(self.path_getSummInAtLeastThreeCours,"all",False,params=data)
+    def getSummInAtLeastThreeCourse(self, data):
+        return self.reader_query(
+            self.path_getSummInAtLeastThreeCours, "all", False, params=data
+        )
 
-    def getBestTenUsers(self,data):
-        return self.reader_query(self.path_getBestTenUsers,"all",False,params=data)
+    def getBestTenUsers(self, data):
+        return self.reader_query(self.path_getBestTenUsers, "all", False, params=data)

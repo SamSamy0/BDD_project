@@ -12,6 +12,8 @@ class ClientNetworkManager:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.receiver: Any = None
+        self.currentUser: Any = None
+        self.objBought = []
 
     def connect(self, ip="127.0.0.1", port=8080):
         self.ip = ip
@@ -51,21 +53,47 @@ class ClientNetworkManager:
         print("handler")
         protocol = rep_dict["protocol"]
         data = rep_dict["data"]
-        print("dict = ", rep_dict)
-        print(data)
+        # print("dict = ", rep_dict)
+        # print(data)
         print("pass")
         match protocol:
             case Protocol.SIGNIN.value:
-                # No need to verify because if Not
-                self.receiver.isAcceptedLogin(
-                    connect=True if data is not None else False
-                )
+                if data is not None:
+                    self.current_user = data.get("ID")
+                    self.receiver.isAcceptedLogin(connect=True)
+                else:
+                    self.current_user = None
+                    self.receiver.isAcceptedLogin(connect=False)
+
             case Protocol.SIGNUP.value:
                 self.receiver.isAcceptedLogin(
                     connect=True if data is not None else False
                 )
             case Protocol.GET_ALL_COURSES.value:
                 self.receiver.setAllCourse(data)
+
+            case Protocol.GET_PROFILE.value:
+                self.receiver.showProfile(data)
+
+            # Shop
+            case Protocol.GET_STORE.value:
+                self.receiver.displayStore(data)
+
+            case Protocol.GET_LEADERBOARD.value:
+                self.receiver.checkLeaderboard(data)
+
+            # Stats
+            case Protocol.GET_COURSES_MOST_RESUMES.value:
+                self.receiver.mostSummCours(data)
+
+            case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
+                self.receiver.SumInAtLeastThree(data)
+
+            case Protocol.BUY.value:
+                self.receiver.isBought(data)
+
+            case Protocol.ADD_COURSE.value:
+                self.receiver.addCourse(data)
 
             # case Protocol.
 
@@ -100,7 +128,7 @@ class ClientNetworkManager:
     def addCourse(self, mnemo: str, name: str, fac: str, utc: int, year: int):
         self.send_request(
             Protocol.ADD_COURSE.value,
-            {"mnemo": mnemo, "name": name, "fac": fac, "utc": utc, "year": year},
+            {"Mnemonique": mnemo, "Nom": name, "Fac": fac, "Credits": utc, "Annee": year},
         )
 
     def deleteCourse(self, mnemo: str):
@@ -127,8 +155,16 @@ class ClientNetworkManager:
     """Shop Queries"""
 
     def buyObject(self, idUser: int, objId: int, cost: int):
+        jour = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.send_request(
-            Protocol.BUY.value, {"idUser": idUser, "objId": objId, "cost": cost}
+            Protocol.BUY.value,
+            {
+                "idUser": idUser,
+                "objId": objId,
+                "cost": cost,
+                "typ": "dépense",
+                "jour": jour,
+            },
         )
 
     def getPoints(self, idUser: int):
@@ -139,6 +175,9 @@ class ClientNetworkManager:
 
     def getObjetInfo(self, idObjet: int):
         self.send_request(Protocol.CHECK_ITEM.value, {"idObjet": idObjet})
+
+    def checkCatalogue(self):
+        self.send_request(Protocol.GET_STORE.value)
 
     """Summaries Queries"""
 
