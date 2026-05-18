@@ -100,7 +100,7 @@ class ClientNetworkManager:
     def addCourse(self, mnemo: str, name: str, fac: str, utc: int, year: int):
         self.send_request(
             Protocol.ADD_COURSE.value,
-            {"mnemo": mnemo, "name": name, "fact": fac, "utc": utc, "year": year},
+            {"mnemo": mnemo, "name": name, "fac": fac, "utc": utc, "year": year},
         )
 
     def deleteCourse(self, mnemo: str):
