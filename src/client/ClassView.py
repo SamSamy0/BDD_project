@@ -98,4 +98,4 @@ class ClassView(View):
     def rollback_course(self):
         if len(self.courses) > 0:
             self.courses.pop()
-            self.refresh
+            self.after(0, self.refresh)

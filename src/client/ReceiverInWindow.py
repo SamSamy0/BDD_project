@@ -54,6 +54,7 @@ class ReceiverInWindow:
         if data is not None:
            print("Cours enregistré avec succès: ",data)
         else:
+            #TODO: Pop-up cours existe déjà
             classView = self.app.frames["CLASS"]
             classView.rollback_course()
 
