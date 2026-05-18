@@ -36,7 +36,7 @@ class SummaryView(View):
             #btn modfication
             btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda f=frame, t=title: self.toggle_eval(f, t))#pour l'instant, réutilise le même formulaire que pour voir, à différencier plus tard
             btn_edit.grid(row=0, column=3, padx=5, pady=8)
-        
+
         #Sep vis
         self.separator = ctk.CTkLabel(self, text="---Publier un résumé---", font=ctk.CTkFont(size=16, weight="bold"))
         self.separator.grid(row=2, column=0, padx=20, pady=(20,5))
@@ -53,7 +53,8 @@ class SummaryView(View):
         self.back_button.grid(row=6, column=0, padx=20, pady=20)
 
     def back_action(self):
-        self.controller.show_view("CLASS")#c'est l'objet Client qui appelle la méthode show_view pour afficher la vue "CLASS" lorsque le bouton "Retour" est cliqué
+        previous = getattr(self.controller, 'previous_view', 'CLASS')
+        self.controller.show_view(previous)
 
     def publish_action(self):
         title = self.title_entry.get()
@@ -62,7 +63,7 @@ class SummaryView(View):
             print("Le titre est requis pour publier un résumé.")
             return
         print(f"Publier résumé : {title} - {content} pour le cours {self.controller.current_cours}")
-    
+
     def delete_action(self, frame):
         print("Supprimer résumé - test")
         frame.destroy()
@@ -103,7 +104,7 @@ class SummaryView(View):
             command=lambda: self.send_eval(title, int(slider.get()), comment_entry.get())
         )
         btn_submit.pack(padx=10, pady=5, fill="x")
-    
+
     def send_eval(self, title, note, comment):
         print(f"Evaluer résumé {title} avec note {note} et commentaire : {comment}")
         #plus tard appel au manager pour envoyer l'évaluation à la BDD

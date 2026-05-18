@@ -30,6 +30,7 @@ class ClassView(View):
 
     def select_course(self, mnemonique):
         self.controller.current_cours = mnemonique
+        self.controller.previous_view = "CLASS"
         self.controller.show_view("SUMMARY")
 
     def add_course_action(self,course=None):
