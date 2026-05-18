@@ -118,4 +118,3 @@ if __name__ == "__main__":
     cursor.commit()
     s = Server(cursor)
     s.run()
-    # resultat = mapping_actions[Message.SIGNIN]("daniel", "daniel", "daniel")

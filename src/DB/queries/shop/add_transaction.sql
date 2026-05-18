@@ -1,3 +1,3 @@
 INSERT INTO TransactionPoints
 (Date, Montant, TypeTransaction, IdUtilisateur)
-VALUES (%s, %s, %s, %s)
+VALUES (%(date)s, %(cost)s, %(type)s, %(idAuthor)s)

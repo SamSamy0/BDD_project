@@ -1,1 +1,1 @@
- DELETE FROM Resumé WHERE ID = %s
+ DELETE FROM Resume WHERE ID = %(idSumm)s
