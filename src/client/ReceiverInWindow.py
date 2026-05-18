@@ -54,5 +54,12 @@ class ReceiverInWindow:
         self.app.show_view("CLASS")
         classView = self.app.frames["CLASS"]
         classView.add_course_action(courses)
+    def checkLeaderboard(self, data: list[dict]):
+        leaderView = self.app.frames["LEADERBOARD"]
+        leaderView.leaderboard = []
+        for user in data:
+            leaderView.leaderboard.append(tuple(user.values()))
+        self.app.show_view("LEADERBOARD")
+        leaderView.displayLeaderboard()
 
 

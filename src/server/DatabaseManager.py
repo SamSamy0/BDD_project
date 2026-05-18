@@ -159,7 +159,7 @@ class DatabaseManager:
 
     # Statistic
     def checkLeaderBoard(self, data):
-        self.reader_query(self.path_checkLeaderBoard, "all", False, params=data)
+        return self.reader_query(self.path_checkLeaderBoard, "all", False, params=data)
 
     def getObRanking(self, data):
         return self.reader_query(self.path_getObRanking, "all", False, params=data)
