@@ -1,3 +1,3 @@
 SELECT *
 FROM ObjetCosmetique o
-WHERE o.Nom = %s
+WHERE o.ID = %(idObjet)s

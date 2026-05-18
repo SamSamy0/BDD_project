@@ -38,8 +38,8 @@ class MenuView(View):
 
     def leaderboard_action(self):
         self.manager.checkLeaderBoard()
-        if self.manager.getSummInAtLeastThreeCourse():
-            self.controller.show_view("LEADERBOARD")
+        # if self.manager.getSummInAtLeastThreeCourse():
+            # self.controller.show_view("LEADERBOARD")
 
     def logout_action(self):
         self.controller.show_view("LOGIN")
