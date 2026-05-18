@@ -4,6 +4,8 @@ import socket
 import threading
 from typing import Any
 
+from Profil import Profile
+
 from common.Protocol import Protocol
 
 
@@ -12,6 +14,7 @@ class ClientNetworkManager:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.receiver: Any = None
+        self.user = Profile()
         self.currentUser: Any = None
         self.objBought = []
 
@@ -59,10 +62,10 @@ class ClientNetworkManager:
         match protocol:
             case Protocol.SIGNIN.value:
                 if data is not None:
+                    self.user.initData(data)
                     self.current_user = data.get("ID")
                     self.receiver.isAcceptedLogin(connect=True)
                 else:
-                    self.current_user = None
                     self.receiver.isAcceptedLogin(connect=False)
 
             case Protocol.SIGNUP.value:
@@ -94,6 +97,9 @@ class ClientNetworkManager:
 
             case Protocol.ADD_COURSE.value:
                 self.receiver.addCourse(data)
+
+            case Protocol.GET_USER_OBJECT.value:
+                self.receiver.showUserObject(data)
 
             # case Protocol.
 
@@ -128,7 +134,13 @@ class ClientNetworkManager:
     def addCourse(self, mnemo: str, name: str, fac: str, utc: int, year: int):
         self.send_request(
             Protocol.ADD_COURSE.value,
-            {"Mnemonique": mnemo, "Nom": name, "Fac": fac, "Credits": utc, "Annee": year},
+            {
+                "Mnemonique": mnemo,
+                "Nom": name,
+                "Fac": fac,
+                "Credits": utc,
+                "Annee": year,
+            },
         )
 
     def deleteCourse(self, mnemo: str):
@@ -215,14 +227,17 @@ class ClientNetworkManager:
 
     """Users Queries"""
 
-    def actObject(self, idUser: int, idObject: int):
+    def actObject(self, idUser: int, idObject: int, state_val: int):
         self.send_request(
             Protocol.CHANGE_STATE_OBJ.value,
-            {"State": 1, "idUser": idUser, "idObject": idObject},
+            {"State": state_val, "idUser": idUser, "idObject": idObject},
         )
 
     def getProfile(self, idUser: int):
         self.send_request(Protocol.GET_PROFILE.value, {"idUser": idUser})
+
+    def getUserObject(self, idUser: int):
+        self.send_request(Protocol.GET_USER_OBJECT.value, {"idUser": idUser})
 
     """Statistic Queries"""
 

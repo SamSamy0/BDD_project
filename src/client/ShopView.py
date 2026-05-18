@@ -18,8 +18,13 @@ class ShopView(View):
         )
         self.title_label.grid(row=0, column=0, padx=20, pady=20)
 
+        print("poiiiiint", self.manager.user.points)
+        print()
+        print()
         self.points_label = ctk.CTkLabel(
-            self, text="Points disponibles : 350", font=ctk.CTkFont(size=14)
+            self,
+            text=f"Points disponibles :...",
+            font=ctk.CTkFont(size=14),
         )  # remplacer plus tard par une variable dynamique
         self.points_label.grid(row=1, column=0, columnspan=2, padx=20, pady=(0, 10))
         # gauche: catalogue
@@ -53,32 +58,7 @@ class ShopView(View):
             self.inventory_frame,
             text="",
         ).grid(row=0, column=1, padx=10, pady=5)
-        # données fictives de l'inventaire
-        inventory_fictif = [
-            "Badge Argent",
-            "Titre Expert",
-        ]
         self.actif_states = {}  # garde l'état de chaque objet
-
-        for i, nom in enumerate(inventory_fictif, start=1):
-            ctk.CTkLabel(self.inventory_frame, text=nom).grid(
-                row=i, column=0, padx=10, pady=5
-            )
-            self.actif_states[nom] = False  # inactif par défaut
-
-            btn = ctk.CTkButton(
-                self.inventory_frame,
-                text="Activer",
-                width=80,
-                fg_color="green",
-                hover_color="darkgreen",
-                command=lambda n=nom: self.toggle_activate(n),
-            )
-            btn.grid(row=i, column=1, padx=10, pady=5)
-            self.actif_states[nom] = {
-                "actif": False,
-                "btn": btn,
-            }  # stocke le bouton pour pouvoir le mettre à jour
 
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)
         self.back_button.grid(row=3, column=0, columnspan=2, padx=20, pady=20)
@@ -88,26 +68,39 @@ class ShopView(View):
 
     def buy_action(self, o_id, prix, nom):
         self.buying = o_id
-        self.manager.buyObject(self.manager.current_user, o_id, prix)
+        self.manager.buyObject(self.manager.user.idUser, o_id, prix)
+        self.manager.getUserObject(self.manager.user.idUser)
         print(f"Acheter {nom} pour {prix} points - test")
 
-    def toggle_activate(self, nom):
+    def toggle_activate(self, typ):
         # Activer l'objet (à implémenter plus tard)
-        state = self.actif_states[nom]
+        state = self.actif_states[typ]
+        target = state["typ"]
         if state["actif"]:
             state["actif"] = False
             state["btn"].configure(
                 text="Activer", fg_color="green", hover_color="darkgreen"
             )
-            print(f"{nom} désactivé")
+            self.manager.actObject(self.manager.user.idUser, state["o_id"], 0)
+            print(f"{typ} désactivé")
         else:
+            for otherName, otherState in self.actif_states.items():
+                if otherState["actif"] and otherState["typ"] == target:
+                    otherState["actif"] = False
+                    otherState["btn"].configure(
+                        text="Activer", fg_color="green", hover_color="darkgreen"
+                    )
             state["actif"] = True
             state["btn"].configure(
                 text="Désactiver", fg_color="gray", hover_color="darkgray"
             )
-            print(f"{nom} activé")
+            self.manager.actObject(self.manager.user.idUser, state["o_id"], 1)
+            print(f"{typ} activé")
 
     def displayStore(self, obj: dict):
+        self.points_label.configure(
+            text=f"Points disponibles : {self.manager.user.points}"
+        )
         row = 1
         for elem in obj:
             name = elem.get("Nom")
@@ -115,8 +108,8 @@ class ShopView(View):
             typeObj = elem.get("TypeObjet")
             price = elem.get("Prix")
             desc = elem.get("Desc")
-            obj = Object(name, id, typeObj, price, desc)
-            self.allobj.append(obj)
+            obj_instance = Object(name, objId, typeObj, price, desc)
+            self.allobj.append(obj_instance)
             ctk.CTkLabel(self.catalog_frame, text=name).grid(
                 row=row, column=0, padx=10, pady=5
             )
@@ -156,3 +149,55 @@ class ShopView(View):
                 self.buying = None
         else:
             print(f"xxxx{data.get("msg")}xxxx")
+
+    def showUserObject(self, data: dict):
+        self.actif_states = {}  # garde l'état de chaque objet
+        row = 1
+        for elem in data:
+            name = elem.get("Nom")
+            o_id = elem.get("ID")
+            typ = elem.get("TypeObjet")
+            state = elem.get("EstActif")
+            print("STATETATE", state)
+            ctk.CTkLabel(self.inventory_frame, text=name).grid(
+                row=row, column=0, padx=10, pady=5
+            )
+            self.actif_states[name] = True if state else False
+
+            if state:
+                text = "Désactiver"
+                fg_color = "gray"
+                hover_color = "darkgray"
+
+            else:
+                text = "Activer"
+                fg_color = "green"
+                hover_color = "darkgreen"
+
+            btn = ctk.CTkButton(
+                self.inventory_frame,
+                text=text,
+                width=80,
+                fg_color=fg_color,
+                hover_color=hover_color,
+                command=lambda n=name: self.toggle_activate(n),
+            )
+
+            btn.grid(row=row, column=1, padx=10, pady=5)
+            self.actif_states[name] = {
+                "actif": True if state else False,
+                "btn": btn,
+                "typ": typ,
+                "o_id": o_id,
+            }  # stocke le bouton pour pouvoir le mettre à jour
+            row += 1
+
+    def saveBoughtObject(self, data):
+        print("in save Bought")
+        for elem in data:
+            o_id = elem.get("ID")
+            if not o_id in self.manager.objBought:
+                print("elem not saved", elem)
+                print("appending : ", o_id)
+                self.manager.objBought.append(o_id)
+                print("objbought", self.manager.objBought)

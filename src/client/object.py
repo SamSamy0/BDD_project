@@ -5,6 +5,6 @@ from dataclasses import dataclass
 class Object:
     name: str
     id: int
-    price: int
     typ: str
+    price: int
     desc: str

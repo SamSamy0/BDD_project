@@ -33,21 +33,25 @@ class MenuView(View):
         self.logout_button.pack(padx=20, pady=20)
 
     def shop_action(self):
-        if self.manager.checkCatalogue():
-            self.controller.show_view("SHOP")
+        self.manager.getUserObject(self.manager.user.idUser)
+        self.manager.checkCatalogue()
+        print("ici")
+        print()
+        print("passing")
+        # self.controller.show_view("SHOP")
 
     def leaderboard_action(self):
         self.manager.checkLeaderBoard()
         # if self.manager.getSummInAtLeastThreeCourse():
-            # self.controller.show_view("LEADERBOARD")
+        # self.controller.show_view("LEADERBOARD")
 
     def logout_action(self):
         self.controller.show_view("LOGIN")
 
     def class_action(self):
-        if self.manager.getAllCourse():
-            self.controller.show_view("CLASS")
+        self.manager.getAllCourse()
+        # self.controller.show_view("CLASS")
 
     def profil_action(self):
-        if self.manager.getProfile(self.manager.current_user):
-            self.controller.show_view("PROFIL")
+        self.manager.getProfile(self.manager.user.idUser)
+        # self.controller.show_view("PROFIL")

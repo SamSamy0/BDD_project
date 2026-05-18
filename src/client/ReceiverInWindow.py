@@ -19,8 +19,6 @@ class ReceiverInWindow:
         classView = self.app.frames["CLASS"]
         classView.displayCourses(courses)
 
-
-
     def displayStore(self, store: dict):
         self.app.show_view("SHOP")
         shopView = self.app.frames["SHOP"]
@@ -46,18 +44,23 @@ class ReceiverInWindow:
         profilView = self.app.frames["PROFIL"]
         profilView.displayStats(data)
 
+    def showUserObject(self, data: dict):
+        # self.app.show_view("SHOP")
+        shopView = self.app.frames["SHOP"]
+        shopView.saveBoughtObject(data)
+        shopView.showUserObject(data)
+
     def isBought(self, data: dict):
         shopView = self.app.frames["SHOP"]
         shopView.buy(data)
 
     def addCourse(self, data: dict):
         if data is not None:
-           print("Cours enregistré avec succès: ",data)
+            print("Cours enregistré avec succès: ", data)
         else:
-            #TODO: Pop-up cours existe déjà
+            # TODO: Pop-up cours existe déjà
             classView = self.app.frames["CLASS"]
             classView.rollback_course()
-
 
     def checkLeaderboard(self, data: list[dict]):
         leaderView = self.app.frames["LEADERBOARD"]
@@ -66,5 +69,3 @@ class ReceiverInWindow:
             leaderView.leaderboard.append(tuple(user.values()))
         self.app.show_view("LEADERBOARD")
         leaderView.displayLeaderboard()
-
-
