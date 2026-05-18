@@ -45,8 +45,7 @@ class MenuView(View):
         self.controller.show_view("LOGIN")
 
     def class_action(self):
-        if self.manager.getAllCourse():
-            self.controller.show_view("CLASS")
+        self.controller.show_view("CLASS")
 
     def profil_action(self):
         if self.manager.getProfile(self.manager.current_user):

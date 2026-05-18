@@ -32,26 +32,57 @@ class ClassView(View):
         self.controller.current_cours = mnemonique
         self.controller.show_view("SUMMARY")
 
-    def add_course_action(self,course=None):
-        # TODO: Implémenter un pop up pour récupérer les valeurs
-        if course is None:
-            course = {
-                "Mnemonique": "TEST-123",
-                "Nom": "Nouveau Cours",
-                "Fac": "Sciences",
-                "Credits": 5,
-                "Annee": 1
-            }
-        mnemo = course.get("Mnemonique", "Inconnu")
-        name = course.get("Nom", "Sans Nom")
-        fac = course.get("Fac", "Sans Fac")
-        utc = course.get("Credits", 0)
-        year = course.get("Annee", "Inconnue")
+    def add_course_action(self, course=None):
+        if course is not None:
+            # Appelé depuis le popup avec les vraies valeurs
+            mnemo = course.get("Mnemonique", "Inconnu")
+            name = course.get("Nom", "Sans Nom")
+            fac = course.get("Fac", "Sans Fac")
+            utc = course.get("Credits", 0)
+            year = course.get("Annee", 2025)
+            self.courses.append(course)
+            self.manager.addCourse(mnemo, name, fac, utc, year)
+            self.refresh()
+            return
 
-        self.courses.append(course)
-        self.manager.addCourse(mnemo,name,fac,utc,year)
-        self.refresh()
-        print("Ajouter un cours -test")
+        # Ouvre le popup de saisie
+        popup = ctk.CTkToplevel(self)
+        popup.title("Ajouter un cours")
+        popup.geometry("400x500")
+        popup.grab_set()  # bloque la fenêtre principale
+
+        ctk.CTkLabel(popup, text="Mnémonique").pack(padx=20, pady=(15, 0), anchor="w")
+        mnemo_entry = ctk.CTkEntry(popup, placeholder_text="INFO-H303")
+        mnemo_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        ctk.CTkLabel(popup, text="Nom du cours").pack(padx=20, pady=(5, 0), anchor="w")
+        nom_entry = ctk.CTkEntry(popup, placeholder_text="Base de données")
+        nom_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        ctk.CTkLabel(popup, text="Faculté").pack(padx=20, pady=(5, 0), anchor="w")
+        fac_entry = ctk.CTkEntry(popup, placeholder_text="Sciences")
+        fac_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        ctk.CTkLabel(popup, text="Crédits").pack(padx=20, pady=(5, 0), anchor="w")
+        credits_entry = ctk.CTkEntry(popup, placeholder_text="5")
+        credits_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        ctk.CTkLabel(popup, text="Année").pack(padx=20, pady=(5, 0), anchor="w")
+        annee_entry = ctk.CTkEntry(popup, placeholder_text="2025")
+        annee_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        def confirm():
+            course = {
+                "Mnemonique": mnemo_entry.get(),
+                "Nom": nom_entry.get(),
+                "Fac": fac_entry.get(),
+                "Credits": int(credits_entry.get()) if credits_entry.get().isdigit() else 0,
+                "Annee": int(annee_entry.get()) if annee_entry.get().isdigit() else 2025
+            }
+            popup.destroy()
+            self.add_course_action(course)
+
+        ctk.CTkButton(popup, text="Confirmer", command=confirm).pack(padx=20, pady=15, fill="x")
 
     def back_action(self):
         self.controller.show_view("MENU")
