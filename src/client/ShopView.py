@@ -1,3 +1,5 @@
+import time
+
 import customtkinter as ctk
 from object import Object
 from View import View
@@ -69,7 +71,12 @@ class ShopView(View):
     def buy_action(self, o_id, prix, nom):
         self.buying = o_id
         self.manager.buyObject(self.manager.user.idUser, o_id, prix)
+        time.sleep(0.05)
         self.manager.getUserObject(self.manager.user.idUser)
+        time.sleep(0.05)
+        self.manager.getPoints(self.manager.user.idUser)
+        time.sleep(0.05)
+
         print(f"Acheter {nom} pour {prix} points - test")
 
     def toggle_activate(self, typ):
@@ -127,6 +134,7 @@ class ShopView(View):
             self.buy_buttons[objId] = btn
             if objId in self.manager.objBought:
                 btn.configure(text="Acheté", fg_color="gray", state="disabled")
+
             row += 1
 
     def buy(self, data: dict):
@@ -201,3 +209,14 @@ class ShopView(View):
                 print("appending : ", o_id)
                 self.manager.objBought.append(o_id)
                 print("objbought", self.manager.objBought)
+
+    def updatePoints(self, data):
+        print("updating")
+        print()
+        newPoints = data.get("Points")
+        print("NOW USER HAVE: ", newPoints)
+        if newPoints is not None:
+            self.manager.user.points = newPoints
+        self.points_label.configure(
+            text=f"Points disponibles : {self.manager.user.points}"
+        )

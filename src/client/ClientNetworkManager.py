@@ -41,13 +41,25 @@ class ClientNetworkManager:
     """Functions to Receive messages from ServerNetworkManager"""
 
     def receive_message(self):
+        buffer = ""
+        decoder = json.JSONDecoder()
         while True:
             try:
                 reponse = self.sock.recv(65536)
                 if not reponse:
                     break
-                data = json.loads(reponse.decode("utf-8"))
-                self.handle_reponse(data)
+                buffer += reponse.decode("utf-8")
+                while buffer:
+                    buffer = buffer.strip()
+                    if not buffer:
+                        break
+                    try:
+                        data, index = decoder.raw_decode(buffer)
+                        self.handle_reponse(data)
+                        buffer = buffer[index:]
+                    except json.JSONDecodeError:
+                        break
+
             except Exception as e:
                 print(f"Erreur : Connexion interrompue : {e}")
                 break
@@ -63,7 +75,7 @@ class ClientNetworkManager:
             case Protocol.SIGNIN.value:
                 if data is not None:
                     self.user.initData(data)
-                    self.current_user = data.get("ID")
+                    # self.current_user = data.get("ID")
                     self.receiver.isAcceptedLogin(connect=True)
                 else:
                     self.receiver.isAcceptedLogin(connect=False)
@@ -100,6 +112,9 @@ class ClientNetworkManager:
 
             case Protocol.GET_USER_OBJECT.value:
                 self.receiver.showUserObject(data)
+
+            case Protocol.GET_POINT.value:
+                self.receiver.updatePointsInShop(data)
 
             # case Protocol.
 

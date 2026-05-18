@@ -69,3 +69,7 @@ class ReceiverInWindow:
             leaderView.leaderboard.append(tuple(user.values()))
         self.app.show_view("LEADERBOARD")
         leaderView.displayLeaderboard()
+
+    def updatePointsInShop(self, data):
+        shopView = self.app.frames["SHOP"]
+        shopView.updatePoints(data)

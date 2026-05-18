@@ -22,7 +22,8 @@ class ProfilView(View):
         name = data.get("Nom")
         level = data.get("Niveau")
         points = data.get("Points")
-        title = data.get("IdObjet")
+        title = data.get("NomObjet")
+
         # nom de l'utilisateur
         self.name_label = ctk.CTkLabel(self, text=f"Nom : {name}")
         self.name_label.grid(row=1, column=0, padx=20, pady=10)
