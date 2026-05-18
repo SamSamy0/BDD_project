@@ -84,7 +84,7 @@ class DatabaseManager:
 
     # Courses
     def addCourse(self, data):
-        return self.reader_query(self.path_addCourse, "NOne", True, params=data)
+        return self.reader_query(self.path_addCourse, "None", True, params=data)
 
     def deleteUserCourse(self, data):
         return self.reader_query(self.path_deleteUserCourse, "one", True, params=data)

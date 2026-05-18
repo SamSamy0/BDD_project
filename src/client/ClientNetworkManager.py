@@ -95,6 +95,9 @@ class ClientNetworkManager:
             case Protocol.ADD_COURSE.value:
                 self.receiver.addCourse(data)
 
+            case Protocol.DELETE_COURSE.value:
+                self.receiver.deleteCourse(data,self.currentUser)
+
             # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
@@ -131,8 +134,8 @@ class ClientNetworkManager:
             {"Mnemonique": mnemo, "Nom": name, "Fac": fac, "Credits": utc, "Annee": year},
         )
 
-    def deleteCourse(self, mnemo: str):
-        self.send_request(Protocol.DELETE_COURSE, {"mnemo": mnemo})
+    def deleteCourse(self, mnemo: str, iduser:int):
+        self.send_request(Protocol.DELETE_COURSE.value, {"mnemo": mnemo,"idUser": iduser})
 
     def getUserCourse(self, userId: int, mnemo: int):
         self.send_request(

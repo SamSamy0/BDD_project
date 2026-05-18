@@ -67,4 +67,13 @@ class ReceiverInWindow:
         self.app.show_view("LEADERBOARD")
         leaderView.displayLeaderboard()
 
+    def deleteCourse(self,data,iduser):
+        if data is not None:
+            classView = self.app.frames["CLASS"]
+            classView.deleteCourse(data,iduser)
+            classView.after(0, classView.refresh)
+
+    def getUserCourse(self,data):
+        pass
+
 

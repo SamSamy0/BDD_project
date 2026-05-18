@@ -21,7 +21,7 @@ class ClassView(View):
 
         # btn ajouter cours
         self.add_button = ctk.CTkButton(
-            self, text="Ajouter un cours", command=self.add_course_action
+            self, text="Ajouter un cours", command=self.deleteCourse
         )
         self.add_button.grid(row=2, column=0, padx=20, pady=10)
 
@@ -98,4 +98,11 @@ class ClassView(View):
     def rollback_course(self):
         if len(self.courses) > 0:
             self.courses.pop()
-            self.after(0, self.refresh)
+            self.after(0,self.refresh)
+
+
+    #TODO:Pop-up pour delete ces cours
+    def deleteCourse(self,course=None,iduser=-1):
+        self.manager.deleteCourse("INFOH303",1)
+
+
