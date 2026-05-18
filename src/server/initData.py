@@ -1,9 +1,9 @@
 import csv
+import json
 
+import mysql.connector
 from jsonParser import parseEval
 from xml_parser import parseReward, parseUser
-
-utilisateurs = parseUser()
 
 
 def getUserId(mycursor, auteur):
@@ -59,6 +59,7 @@ def initCours(myCursor):
 
 
 def initUser(mycursor):
+    utilisateurs = parseUser()
     insertUserSql = """INSERT INTO Utilisateur
                     (ID, Nom, Email, Inscription, Niveau, Points )
                     VALUES (%s, %s, %s, %s, %s, %s)"""
@@ -144,7 +145,9 @@ def initRew(myCursor):
         except:
             print("SOMETHING WRONG")
 
+
 def initCoursUtilisateur(mycursor):
+    utilisateurs = parseUser()
     insertCoursUtilisateur = """
     INSERT IGNORE INTO CoursUtilisateur
     (Mnemonique, IdUtilisateur)
@@ -168,6 +171,7 @@ def initCoursUtilisateur(mycursor):
                         continue
 
 def initUtilisateurObjet(mycursor):
+    utilisateurs = parseUser()
     rew = parseReward()
 
     mapping_object = dict()
@@ -201,6 +205,35 @@ def initUtilisateurObjet(mycursor):
             except Exception as e:
                 print(f"Erreur lors de l'insertion de l'objet {obj} pour l'utilisateur {iduser} : {e}")
 
+def load_json():
+    with open("DB/config.json", "r") as jsonfile:
+        data = json.load(jsonfile)
+
+    return data
 
 
+def connect_mySql():
+    connection = None
+    init = load_json()
+    connection = mysql.connector.connect(
+        host=init["host"],
+        port=init["port"],
+        user=init["user"],
+        password=init["password"],
+        database=init["database"],
+    )
+    print("MySQL Database connection successful")
+    return connection
 
+
+if __name__ == "__main__":
+    cursor = connect_mySql()
+    initCours(cursor.cursor())
+    initUser(cursor.cursor())
+    initEval(cursor.cursor())
+    initCoursUtilisateur(cursor.cursor())
+    initUtilisateurObjet(cursor.cursor())
+    initRew(cursor.cursor())
+    cursor.commit()
+    cursor.cursor.close
+    cursor.close()
