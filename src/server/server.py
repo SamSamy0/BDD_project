@@ -6,8 +6,6 @@ import types
 import mysql.connector
 from ServerNetworkManager import ServerNetworkManager
 
-# import pandas as pd
-# from mysql.connector import Error
 
 
 class Server:
@@ -120,4 +118,3 @@ if __name__ == "__main__":
     cursor.commit()
     s = Server(cursor)
     s.run()
-    # resultat = mapping_actions[Message.SIGNIN]("daniel", "daniel", "daniel")
