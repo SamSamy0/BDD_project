@@ -30,6 +30,7 @@ class Protocol(Enum):
     # Summary
     ADD_SUMMARY = 20
     READ_SUMMARY = 21
+    READ_SUMMARIES = 33
     EDIT_SUMMARY = 22
     DELETE_SUMMARY = 23
     ADD_EVAL = 24

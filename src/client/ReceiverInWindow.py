@@ -56,4 +56,18 @@ class ReceiverInWindow:
         self.app.show_view("LEADERBOARD")
         leaderView.displayLeaderboard()
 
+    def checkSummaries(self,data:list[dict]):
+        view = self.app.frames["SUMMARY"]
+        summaries = view.summaries
+        for summary in data:
+            temp = (summary["Titre"],summary["Mnemonique"],summary["Moyenne"])
+            summaries.append(temp)
+
+        self.app.show_view("SUMMARY")
+        view.displaySummaries()
+
+
+
+
+
 

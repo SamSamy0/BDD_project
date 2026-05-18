@@ -14,28 +14,8 @@ class SummaryView(View):
         #liste des résumés scrollable
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Liste des résumés")
         self.scroll_frame.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
-        #données de test fictives
-        resume_fictifs = [
-            ("Résumé 1", "Alice", 4.5),
-            ("Résumé 2", "Bob", 3.8),
-            ("Résumé 3", "Charlie", 2),
-        ]
-        for title, auteur, note in resume_fictifs:
-            frame = ctk.CTkFrame(self.scroll_frame)
-            frame.pack(padx=10, pady=5, fill="x")
-            frame.grid_columnconfigure(0, weight=1)
-            #info résumé
-            info = ctk.CTkLabel(frame, text=f"{title} | par {auteur} | * {note}/5")
-            info.grid(row=0, column=0, padx=10, pady=8, sticky="w")
-            #bouton voir
-            btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda t=title, f=frame: self.toggle_eval(f, t))
-            btn.grid(row=0, column=1, padx=5, pady=8)
-            #btn supprimer
-            btn = ctk.CTkButton(frame, text="supprimer", width=80, fg_color="red", hover_color="darkred", command=lambda f=frame: self.delete_action(f))
-            btn.grid(row=0, column=2, padx=5, pady=8)
-            #btn modfication
-            btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda f=frame, t=title: self.toggle_eval(f, t))#pour l'instant, réutilise le même formulaire que pour voir, à différencier plus tard
-            btn_edit.grid(row=0, column=3, padx=5, pady=8)
+        #resumé vide 
+        self.summaries = []
         
         #Sep vis
         self.separator = ctk.CTkLabel(self, text="---Publier un résumé---", font=ctk.CTkFont(size=16, weight="bold"))
@@ -107,3 +87,25 @@ class SummaryView(View):
     def send_eval(self, title, note, comment):
         print(f"Evaluer résumé {title} avec note {note} et commentaire : {comment}")
         #plus tard appel au manager pour envoyer l'évaluation à la BDD
+
+
+    def displaySummaries(self):
+        for widget in self.scroll_frame.winfo_children():
+                widget.destroy()
+        
+        for title, auteur, note in self.summaries:
+            frame = ctk.CTkFrame(self.scroll_frame)
+            frame.pack(padx=10, pady=5, fill="x")
+            frame.grid_columnconfigure(0, weight=1)
+            #info résumé
+            info = ctk.CTkLabel(frame, text=f"{title} | par {auteur} | * {note}/5")
+            info.grid(row=0, column=0, padx=10, pady=8, sticky="w")
+            #bouton voir
+            btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda t=title, f=frame: self.toggle_eval(f, t))
+            btn.grid(row=0, column=1, padx=5, pady=8)
+            #btn supprimer
+            btn = ctk.CTkButton(frame, text="supprimer", width=80, fg_color="red", hover_color="darkred", command=lambda f=frame: self.delete_action(f))
+            btn.grid(row=0, column=2, padx=5, pady=8)
+            #btn modfication
+            btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda f=frame, t=title: self.toggle_eval(f, t))#pour l'instant, réutilise le même formulaire que pour voir, à différencier plus tard
+            btn_edit.grid(row=0, column=3, padx=5, pady=8)

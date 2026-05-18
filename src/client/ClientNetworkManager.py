@@ -92,6 +92,10 @@ class ClientNetworkManager:
             case Protocol.BUY.value:
                 self.receiver.isBought(data)
 
+            case Protocol.READ_SUMMARIES.value:
+                print(data)
+                self.receiver.checkSummaries(data)
+
             # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
@@ -203,6 +207,9 @@ class ClientNetworkManager:
 
     def checkSummary(self, idSumm: int):
         self.send_request(Protocol.READ_SUMMARY.value, {"idSumm": idSumm})
+
+    def checkSummaries(self, Mnemonique :str):
+        self.send_request(Protocol.READ_SUMMARIES.value,{"Mnemonique" : Mnemonique})
 
     def deleteSummary(self, idSumm: int):
         self.send_request(Protocol.DELETE_SUMMARY.value, {"idSumm": idSumm})
