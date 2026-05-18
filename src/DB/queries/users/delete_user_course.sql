@@ -1,1 +1,1 @@
-DELETE FROM CoursUtilisateur WHERE IdUtilisateur = %s and Mnemonique = %s;
+DELETE FROM CoursUtilisateur WHERE IdUtilisateur = %(idUser)s and Mnemonique = %(mnemo)s;

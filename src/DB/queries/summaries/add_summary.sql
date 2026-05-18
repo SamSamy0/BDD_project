@@ -1,0 +1,2 @@
+-- Add a summerize
+INSERT INTO Resume (Titre, Description, Publication, Version, Visibilite, Moyenne, Mnemonique, IdUtilisateur) VALUES (%(title)s, %(desc)s, %(date)s, %(version)s,%(visible)s, NULL, %(mnemo)s, %(idAuthor)s )
