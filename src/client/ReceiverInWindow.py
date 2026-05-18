@@ -17,7 +17,7 @@ class ReceiverInWindow:
     def setAllCourse(self, courses: list[dict]):
         self.app.show_view("CLASS")
         classView = self.app.frames["CLASS"]
-        classView.add_course_action(courses)
+        classView.displayCourses(courses)
 
 
 

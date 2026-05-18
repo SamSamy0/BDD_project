@@ -123,7 +123,6 @@ class ClientNetworkManager:
         self.send_request(Protocol.GET_ALL_COURSES.value)
 
     def addCourse(self, mnemo: str, name: str, fac: str, utc: int, year: int):
-        print("yessssssssssssssssss")
         self.send_request(
             Protocol.ADD_COURSE.value,
             {"mnemo": mnemo, "name": name, "fact": fac, "utc": utc, "year": year},
