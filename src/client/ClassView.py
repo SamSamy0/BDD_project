@@ -47,11 +47,10 @@ class ClassView(View):
         fac = course.get("Fac", "Sans Fac")
         utc = course.get("Credits", 0)
         year = course.get("Annee", "Inconnue")
+
         self.courses.append(course)
-        #self.manager.addCourse(mnemo,name,fac,utc,year)
-
+        self.manager.addCourse(mnemo,name,fac,utc,year)
         self.refresh()
-
         print("Ajouter un cours -test")
 
     def back_action(self):
@@ -95,3 +94,8 @@ class ClassView(View):
                 ),  # m=mnemonique capture la valeur
             )
             btn.pack(padx=10, pady=5, fill="x")
+
+    def rollback_course(self):
+        if len(self.courses) > 0:
+            self.courses.pop()
+            self.refresh

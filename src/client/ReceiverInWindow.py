@@ -50,10 +50,14 @@ class ReceiverInWindow:
         shopView = self.app.frames["SHOP"]
         shopView.buy(data)
 
-    def addCourse(self, courses: list[dict]):
-        self.app.show_view("CLASS")
-        classView = self.app.frames["CLASS"]
-        classView.add_course_action(courses)
+    def addCourse(self, data: dict):
+        if data is not None:
+           print("Cours enregistré avec succès: ",data)
+        else:
+            classView = self.app.frames["CLASS"]
+            classView.rollback_course()
+
+
     def checkLeaderboard(self, data: list[dict]):
         leaderView = self.app.frames["LEADERBOARD"]
         leaderView.leaderboard = []

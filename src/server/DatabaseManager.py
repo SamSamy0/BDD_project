@@ -66,6 +66,7 @@ class DatabaseManager:
 
             except mysql.connector.Error as erreur:
                 print(f"Erreur d'exécution : {erreur}")
+                return None
 
     def signin(self, data):
         print("DM")
