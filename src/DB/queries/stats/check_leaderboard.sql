@@ -3,7 +3,7 @@ SELECT
     Nom,
     Points
 FROM Utilisateur
-ORDER BY Points DESC
+ORDER BY Points DESC;
 
 -- SELECT hc.Classement, hc.Periode, hc.Gains, hc.IdUtilisateur
 -- From HistoriqueClassement hc

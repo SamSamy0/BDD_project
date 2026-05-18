@@ -58,15 +58,19 @@ class DatabaseManager:
                 # Récupérer les résultats directement depuis le curseur
                 if fetch == "one":
                     results = self.cursor.fetchone()
+                    print("results in DM", results)
                 elif fetch == "all":
                     results = self.cursor.fetchall()
-                print("results in DM", results)
+                    print("results in DM", results)
+                else:
+                    results = params
 
                 # Retourne sous forme de liste de liste si c'est ce qu'attendait le reste du code
                 return results
 
             except mysql.connector.Error as erreur:
                 print(f"Erreur d'exécution : {erreur}")
+                return None
 
     def signin(self, data):
         print("DM")
@@ -81,7 +85,7 @@ class DatabaseManager:
 
     # Courses
     def addCourse(self, data):
-        return self.reader_query(self.path_addCourse, "one", True, params=data)
+        return self.reader_query(self.path_addCourse, "NOne", True, params=data)
 
     def deleteUserCourse(self, data):
         return self.reader_query(self.path_deleteUserCourse, "one", True, params=data)

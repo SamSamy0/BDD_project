@@ -18,6 +18,7 @@ class ClassView(View):
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Liste des cours")
         self.scroll_frame.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
 
+        self.courses = list()
 
         # btn ajouter cours
         self.add_button = ctk.CTkButton(
@@ -33,15 +34,36 @@ class ClassView(View):
         self.manager.checkSummaries(mnemonique)
         self.controller.show_view("SUMMARY")
 
-    def add_course_action(self):
-        # Ajouter plus tard
+    def add_course_action(self,course=None):
+        # TODO: Implémenter un pop up pour récupérer les valeurs
+        if course is None:
+            course = {
+                "Mnemonique": "TEST-123",
+                "Nom": "Nouveau Cours",
+                "Fac": "Sciences",
+                "Credits": 5,
+                "Annee": 1
+            }
+        mnemo = course.get("Mnemonique", "Inconnu")
+        name = course.get("Nom", "Sans Nom")
+        fac = course.get("Fac", "Sans Fac")
+        utc = course.get("Credits", 0)
+        year = course.get("Annee", "Inconnue")
+
+        self.courses.append(course)
+        self.manager.addCourse(mnemo,name,fac,utc,year)
+        self.refresh()
         print("Ajouter un cours -test")
 
     def back_action(self):
         self.controller.show_view("MENU")
 
-    def displayCourses(self, dictCours: list[dict]):
-        for cours in dictCours:
+    def refresh(self):
+        #Vide la liste
+        for widget in self.scroll_frame.winfo_children():
+            widget.destroy()
+
+        for cours in self.courses:
             mnemo = cours.get("Mnemonique", "Inconnu")
             name = cours.get("Nom", "Sans Nom")
             fac = cours.get("Fac", "Sans Fac")
@@ -56,3 +78,26 @@ class ClassView(View):
                 ),  # m=mnemonique capture la valeur
             )
             btn.pack(padx=10, pady=5, fill="x")
+
+    def displayCourses(self,courses):
+        self.courses.extend(courses)
+        for cours in self.courses:
+            mnemo = cours.get("Mnemonique", "Inconnu")
+            name = cours.get("Nom", "Sans Nom")
+            fac = cours.get("Fac", "Sans Fac")
+            utc = cours.get("Credits", 0)
+            year = cours.get("Annee", "Inconnue")
+
+            btn = ctk.CTkButton(
+                self.scroll_frame,
+                text=f"{mnemo} - {name} - {fac} - {utc} - {year}",
+                command=lambda m=mnemo: self.select_course(
+                    m
+                ),  # m=mnemonique capture la valeur
+            )
+            btn.pack(padx=10, pady=5, fill="x")
+
+    def rollback_course(self):
+        if len(self.courses) > 0:
+            self.courses.pop()
+            self.after(0, self.refresh)
