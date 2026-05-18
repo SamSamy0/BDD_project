@@ -37,14 +37,6 @@ class ShopView(View):
             self.catalog_frame,
             text="",
         ).grid(row=0, column=2, padx=10, pady=5)
-        # données fictives du catalogue
-        # catalog_fictif = [
-        #     ("Badge Or", 500),
-        #     ("Titre Maître", 300),
-        #     ("Badge Argent", 200),
-        #     ("Titre Expert", 150),
-        #     ("Badge Bronze", 100),
-        # ]
 
         # --- Colonne droite:Mes objets ---
         self.inventory_frame = ctk.CTkScrollableFrame(self, label_text="Mes objets")
