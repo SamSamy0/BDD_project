@@ -53,8 +53,8 @@ class ClientNetworkManager:
         print("handler")
         protocol = rep_dict["protocol"]
         data = rep_dict["data"]
-        print("dict = ", rep_dict)
-        print(data)
+        # print("dict = ", rep_dict)
+        # print(data)
         print("pass")
         match protocol:
             case Protocol.SIGNIN.value:
@@ -78,6 +78,9 @@ class ClientNetworkManager:
             # Shop
             case Protocol.GET_STORE.value:
                 self.receiver.displayStore(data)
+
+            case Protocol.GET_LEADERBOARD.value:
+                self.receiver.checkLeaderboard(data)
 
             # Stats
             case Protocol.GET_COURSES_MOST_RESUMES.value:

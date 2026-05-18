@@ -28,25 +28,9 @@ class LeaderBoardView(View):
             self.scroll_frame, text="Points", font=ctk.CTkFont(weight="bold")
         ).grid(row=0, column=2, padx=10, pady=5)
 
-        # Données fictives
-        users_fictifs = [
-            (1, "Alice", 850),
-            (2, "Bob", 720),
-            (3, "Charlie", 610),
-            (4, "Diana", 540),
-            (5, "Eve", 430),
-        ]
+        # leaderboard vide
+        self.leaderboard = []
 
-        for rang, nom, points in users_fictifs:
-            ctk.CTkLabel(self.scroll_frame, text=str(rang)).grid(
-                row=rang, column=0, padx=10, pady=5
-            )
-            ctk.CTkLabel(self.scroll_frame, text=nom).grid(
-                row=rang, column=1, padx=10, pady=5
-            )
-            ctk.CTkLabel(self.scroll_frame, text=str(points)).grid(
-                row=rang, column=2, padx=10, pady=5
-            )
 
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)
         self.back_button.grid(row=2, column=0, padx=20, pady=20)
@@ -71,3 +55,15 @@ class LeaderBoardView(View):
         for elem in data:
             name = elem.get("Nom")
             print(f"==={name}===")
+
+    def displayLeaderboard(self):
+        for r, nom, points in self.leaderboard:
+            ctk.CTkLabel(self.scroll_frame, text=str(r)).grid(
+                row=r, column=0, padx=10, pady=5
+            )
+            ctk.CTkLabel(self.scroll_frame, text=nom).grid(
+                row=r, column=1, padx=10, pady=5
+            )
+            ctk.CTkLabel(self.scroll_frame, text=str(points)).grid(
+                row=r, column=2, padx=10, pady=5
+            )

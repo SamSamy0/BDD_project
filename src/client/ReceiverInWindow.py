@@ -47,3 +47,13 @@ class ReceiverInWindow:
     def isBought(self, data: dict):
         shopView = self.app.frames["SHOP"]
         shopView.buy(data)
+
+    def checkLeaderboard(self, data: list[dict]):
+        leaderView = self.app.frames["LEADERBOARD"]
+        leaderView.leaderboard = []
+        for user in data:
+            leaderView.leaderboard.append(tuple(user.values()))
+        self.app.show_view("LEADERBOARD")
+        leaderView.displayLeaderboard()
+
+

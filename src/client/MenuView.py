@@ -37,6 +37,7 @@ class MenuView(View):
             self.controller.show_view("SHOP")
 
     def leaderboard_action(self):
+        self.manager.checkLeaderBoard()
         if self.manager.getSummInAtLeastThreeCourse():
             self.controller.show_view("LEADERBOARD")
 
