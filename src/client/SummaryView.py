@@ -1,5 +1,6 @@
 from View import View
 import customtkinter as ctk
+import datetime
 
 
 class SummaryView(View):
@@ -16,31 +17,32 @@ class SummaryView(View):
         self.scroll_frame.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
 
         #resumé vide
+        self.mnemonique = ""
         self.summaries = []
 
 
-        #données de test fictives
-        resume_fictifs = [
-            ("Résumé 1", "Alice", 4.5),
-            ("Résumé 2", "Bob", 3.8),
-            ("Résumé 3", "Charlie", 2),
-        ]
-        for title, auteur, note in resume_fictifs:
-            frame = ctk.CTkFrame(self.scroll_frame)
-            frame.pack(padx=10, pady=5, fill="x")
-            frame.grid_columnconfigure(0, weight=1)
-            #info résumé
-            info = ctk.CTkLabel(frame, text=f"{title} | par {auteur} | * {note}/5")
-            info.grid(row=0, column=0, padx=10, pady=8, sticky="w")
-            #bouton voir
-            btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda t=title, f=frame: self.toggle_eval(f, t))
-            btn.grid(row=0, column=1, padx=5, pady=8)
-            #btn supprimer
-            btn = ctk.CTkButton(frame, text="supprimer", width=80, fg_color="red", hover_color="darkred", command=lambda f=frame: self.delete_action(f))
-            btn.grid(row=0, column=2, padx=5, pady=8)
-            #btn modfication
-            btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda f=frame, t=title: self.toggle_eval(f, t))#pour l'instant, réutilise le même formulaire que pour voir, à différencier plus tard
-            btn_edit.grid(row=0, column=3, padx=5, pady=8)
+        # #données de test fictives
+        # resume_fictifs = [
+        #     ("Résumé 1", "Alice", 4.5),
+        #     ("Résumé 2", "Bob", 3.8),
+        #     ("Résumé 3", "Charlie", 2),
+        # ]
+        # for title, auteur, note in resume_fictifs:
+        #     frame = ctk.CTkFrame(self.scroll_frame)
+        #     frame.pack(padx=10, pady=5, fill="x")
+        #     frame.grid_columnconfigure(0, weight=1)
+        #     #info résumé
+        #     info = ctk.CTkLabel(frame, text=f"{title} | par {auteur} | * {note}/5")
+        #     info.grid(row=0, column=0, padx=10, pady=8, sticky="w")
+        #     #bouton voir
+        #     btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda t=title, f=frame: self.toggle_eval(f, t))
+        #     btn.grid(row=0, column=1, padx=5, pady=8)
+        #     #btn supprimer
+        #     btn = ctk.CTkButton(frame, text="supprimer", width=80, fg_color="red", hover_color="darkred", command=lambda f=frame: self.delete_action(f))
+        #     btn.grid(row=0, column=2, padx=5, pady=8)
+        #     #btn modfication
+        #     btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda f=frame, t=title: self.toggle_eval(f, t))#pour l'instant, réutilise le même formulaire que pour voir, à différencier plus tard
+        #     btn_edit.grid(row=0, column=3, padx=5, pady=8)
 
 
         #Sep vis
@@ -59,7 +61,6 @@ class SummaryView(View):
         self.back_button.grid(row=6, column=0, padx=20, pady=20)
 
     def back_action(self):
-        self.summaries = []
         previous = getattr(self.controller, 'previous_view', 'CLASS')
         self.controller.show_view(previous)
 
@@ -71,6 +72,10 @@ class SummaryView(View):
             return
         print(f"Publier résumé : {title} - {content} pour le cours {self.controller.current_cours}")
 
+
+        self.manager.addSummary(title,content,str(datetime.date.today()),1,True,self.mnemonique,self.manager.user.idUser) #WARNING: HARDCODE VISIBILITE
+        self.summaries.append((title,self.manager.user.name,"0/5"))
+    
     def delete_action(self, frame):
         print("Supprimer résumé - test")
         frame.destroy()

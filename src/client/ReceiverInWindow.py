@@ -115,10 +115,15 @@ class ReceiverInWindow:
 
     def checkSummaries(self, data: list[dict]):
         view = self.app.frames["SUMMARY"]
+        view.summaries = []
         summaries = view.summaries
         for summary in data:
             temp = (summary["Titre"],summary["Nom"],summary["Moyenne"])
             summaries.append(temp)
 
         self.app.show_view("SUMMARY")
+        view.after(0, lambda: view.displaySummaries())
+
+    def addSummary(self,data):
+        view = self.app.frames["SUMMARY"]
         view.after(0, lambda: view.displaySummaries())

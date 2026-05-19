@@ -126,6 +126,9 @@ class ClientNetworkManager:
             case Protocol.ADD_USER_COURSE.value:
                 self.receiver.addUserCourse(data)
 
+            case Protocol.ADD_SUMMARY.value:
+                self.receiver.addSummary(data)
+
 
 
             # case Protocol.
@@ -152,6 +155,7 @@ class ClientNetworkManager:
         self.send_request(
             Protocol.SIGNUP.value, {"username": username, "email": email, "date": date}
         )
+
 
     """Courses queries"""
 
@@ -230,7 +234,7 @@ class ClientNetworkManager:
         self,
         title: str,
         desc: str,
-        date: int,
+        date: str,
         version: int,
         visible: bool,
         mnemo: str,
