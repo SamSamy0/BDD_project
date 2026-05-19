@@ -29,7 +29,7 @@ class ServerNetworkManager:
                 result = self.db.addCourse(data)
                 return {"protocol": protocol, "data": result}
 
-            case Protocol.DELETE_COURSE.value:
+            case Protocol.DELETE_USER_COURSE.value:
                 result = self.db.deleteUserCourse(data)
                 return {"protocol": protocol, "data": result}
 
@@ -118,4 +118,8 @@ class ServerNetworkManager:
 
             case Protocol.GET_BEST_TEN_USERS.value:
                 result = self.db.getBestTenUsers(data)
+                return {"protocol": protocol, "data": result}
+
+            case Protocol.ADD_USER_COURSE.value:
+                result = self.db.addUserCourse(data)
                 return {"protocol": protocol, "data": result}

@@ -1,3 +1,3 @@
 -- Get courses
 SELECT *
-FROM Cours
+FROM Cours;

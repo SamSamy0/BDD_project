@@ -14,7 +14,7 @@ class MenuView(View):
         )
         self.profil_button.pack(padx=100, pady=20)
 
-        self.class_button = ctk.CTkButton(self, text="Cours", command=self.class_action)
+        self.class_button = ctk.CTkButton(self, text="List de cours", command=self.class_action)
         self.class_button.pack(padx=20, pady=20)
 
         self.leaderboard_button = ctk.CTkButton(
@@ -27,10 +27,16 @@ class MenuView(View):
         )
         self.shop_button.pack(padx=20, pady=20)
 
+        self.mycourse_button = ctk.CTkButton(
+            self, text="Mes cours", command=self.mycourse_action
+        )
+        self.mycourse_button.pack(padx=20, pady=20)
+
         self.logout_button = ctk.CTkButton(
             self, text="Déconnexion", command=self.logout_action
         )
         self.logout_button.pack(padx=20, pady=20)
+
 
     def shop_action(self):
         self.manager.getUserObject(self.manager.user.idUser)
@@ -54,4 +60,9 @@ class MenuView(View):
 
     def profil_action(self):
         self.manager.getProfile(self.manager.user.idUser)
-        # self.controller.show_view("PROFIL")
+        if self.manager.getProfile(self.manager.current_user):
+            self.controller.show_view("PROFIL")
+
+    def mycourse_action(self):
+        self.manager.getUserCourse(self.manager.current_user)
+

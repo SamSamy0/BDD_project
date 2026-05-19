@@ -65,12 +65,9 @@ class ClientNetworkManager:
                 break
 
     def handle_reponse(self, rep_dict):
-        print("handler")
+
         protocol = rep_dict["protocol"]
         data = rep_dict["data"]
-        # print("dict = ", rep_dict)
-        # print(data)
-        print("pass")
         match protocol:
             case Protocol.SIGNIN.value:
                 if data is not None:
@@ -120,6 +117,17 @@ class ClientNetworkManager:
             case Protocol.GET_POINT.value:
                 self.receiver.updatePointsInShop(data)
 
+            case Protocol.DELETE_USER_COURSE.value:
+                self.receiver.deleteUserCourse(data)
+
+            case Protocol.GET_USER_COURSES.value:
+                self.receiver.getUserCourse(data)
+
+            case Protocol.ADD_USER_COURSE.value:
+                self.receiver.addUserCourse(data)
+
+
+
             # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
@@ -162,12 +170,18 @@ class ClientNetworkManager:
             },
         )
 
-    def deleteCourse(self, mnemo: str):
-        self.send_request(Protocol.DELETE_COURSE, {"mnemo": mnemo})
-
-    def getUserCourse(self, userId: int, mnemo: int):
+    def addUserCourse(self, mnemo: str, iduser: int):
         self.send_request(
-            Protocol.GET_USER_COURSES.value, {"userId": userId, "mnemo": mnemo}
+            Protocol.ADD_USER_COURSE.value,
+            {"Mnemonique": mnemo, "IdUtilisateur": iduser},
+        )
+
+    def deleteUserCourse(self, mnemo: str, iduser:int):
+        self.send_request(Protocol.DELETE_USER_COURSE.value, {"mnemo": mnemo,"idUser": iduser})
+
+    def getUserCourse(self, userId: int):
+        self.send_request(
+            Protocol.GET_USER_COURSES.value, {"idUser": userId}
         )
 
     """Reviews queries"""
