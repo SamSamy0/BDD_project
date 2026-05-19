@@ -21,7 +21,7 @@ class MyClassView(View):
 
         # btn ajouter cours
         self.add_button = ctk.CTkButton(
-            self, text="Ajouter un cours", command=self.delete_user_course_action
+            self, text="Ajouter un cours", command=self.add_course_action
         )
         self.add_button.grid(row=2, column=0, padx=20, pady=10)
 
@@ -51,7 +51,7 @@ class MyClassView(View):
         year = course.get("Annee", "Inconnue")
 
 
-        self.manager.addUserCourse(mnemo,self.manager.current_user)
+        self.manager.addUserCourse(mnemo,self.manager.user.idUser)
         print("Ajouter un cours -test")
 
     def confirmedAdd(self,course = None):
@@ -106,7 +106,7 @@ class MyClassView(View):
         utc = course.get("Credits", 0)
         year = course.get("Annee", "Inconnue")
 
-        self.manager.deleteUserCourse(mnemo,self.manager.current_user)
+        self.manager.deleteUserCourse(mnemo,self.manager.user.idUser)
 
     def confirmedDelete(self,course):
         for obj in self.courses:
