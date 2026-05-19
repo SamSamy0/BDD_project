@@ -5,7 +5,6 @@ from View import View
 class ClassView(View):
 
     def initView(self):
-        self.id = {}
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
