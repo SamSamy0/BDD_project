@@ -50,7 +50,7 @@ class SummaryView(View):
     def publish_action(self):
         popup = ctk.CTkToplevel(self)
         popup.title("Publier un résumé")
-        popup.geometry("400x300")
+        popup.geometry("400x380")
         popup.after(100, popup.grab_set)
         popup.after(100, popup.lift)
         popup.after(100, popup.focus_force)
@@ -61,12 +61,13 @@ class SummaryView(View):
         self.title_entry.pack(padx=20, pady=(0, 10), fill="x")
 
         ctk.CTkLabel(popup, text="Description").pack(padx=20, pady=(5, 0), anchor="w")
-        self.content_entry = ctk.CTkEntry(popup, placeholder_text="Contenu du résumé")
+        #self.content_entry = ctk.CTkEntry(popup, placeholder_text="Contenu du résumé")
+        self.content_entry = ctk.CTkTextbox(popup, height=120)
         self.content_entry.pack(padx=20, pady=(0, 10), fill="x")
 
         def confirm():
             title = self.title_entry.get()
-            content = self.content_entry.get()
+            content = self.content_entry.get("1.0", "end-1c")#pour récupérer le contenu du Textbox, on utilise la méthode get avec les indices "1.0" (début du texte) et "end-1c" (fin du texte moins un caractère pour éviter d'avoir un saut de ligne en trop)
             if not title:
                 print("Le titre est requis pour publier un résumé.")
                 return
