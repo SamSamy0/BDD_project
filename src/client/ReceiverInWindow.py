@@ -17,11 +17,9 @@ class ReceiverInWindow:
     def setAllCourse(self, courses: list[dict]):
         self.app.show_view("CLASS")
         classView = self.app.frames["CLASS"]
-<<<<<<< HEAD
-        classView.displayCourses(courses)
-=======
+
         classView.after(0, lambda: classView.displayCourses(courses))
->>>>>>> receiver_Daniel
+
 
     def displayStore(self, store: dict):
         self.app.show_view("SHOP")

@@ -64,5 +64,6 @@ class MenuView(View):
             self.controller.show_view("PROFIL")
 
     def mycourse_action(self):
-        self.manager.getUserCourse(self.manager.current_user)
+        self.manager.getUserCourse(self.manager.user.idUser)
+        self.controller.show_view("MYCLASS")
 
