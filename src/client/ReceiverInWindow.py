@@ -121,4 +121,4 @@ class ReceiverInWindow:
             summaries.append(temp)
 
         self.app.show_view("SUMMARY")
-        view.displaySummaries()
+        view.after(0, lambda: view.displaySummaries())
