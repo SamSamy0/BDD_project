@@ -25,17 +25,21 @@ class SummaryView(View):
             frame.pack(padx=10, pady=5, fill="x")
             frame.grid_columnconfigure(0, weight=1)
             #info résumé
-            info = ctk.CTkLabel(frame, text=f"{title} | par {auteur} | * {note}/5")
-            info.grid(row=0, column=0, padx=10, pady=8, sticky="w")
+            #info = ctk.CTkLabel(frame, text=f"{title} | par {auteur} | * {note}/5")
+            #info.grid(row=0, column=0, padx=10, pady=8, sticky="w")
+            title_label = ctk.CTkLabel(frame, text=title, font=ctk.CTkFont(size=14, weight="bold"))
+            title_label.grid(row=0, column=0, padx=10, pady=(0,8), sticky="w")
+            detail_label = ctk.CTkLabel(frame, text=f"par {auteur} | ★ {note}/5", text_color="gray", anchor="w")
+            detail_label.grid(row=1, column=0, padx=10, pady=(0, 8), sticky="w")
             #bouton voir
             btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda t=title, a=auteur, n=note: self.view_action(t, a, n))
-            btn.grid(row=0, column=1, padx=5, pady=8)
+            btn.grid(row=0, column=1,rowspan=2,  padx=5, pady=8)
             #btn supprimer
             btn = ctk.CTkButton(frame, text="supprimer", width=80, fg_color="red", hover_color="darkred", command=lambda f=frame: self.delete_action(f))
-            btn.grid(row=0, column=2, padx=5, pady=8)
+            btn.grid(row=0, column=2, rowspan=2, padx=5, pady=8)
             #btn modfication
             btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda f=frame, t=title: self.toggle_eval(f, t))#pour l'instant, réutilise le même formulaire que pour voir, à différencier plus tard
-            btn_edit.grid(row=0, column=3, padx=5, pady=8)
+            btn_edit.grid(row=0, column=3,rowspan=2, padx=5, pady=8)
         
         self.btn_publish = ctk.CTkButton(self, text="Publier un résumé", command=self.publish_action)
         self.btn_publish.grid(row=2, column=0, padx=20, pady=10)
