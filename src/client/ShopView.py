@@ -11,6 +11,8 @@ class ShopView(View):
         self.allobj = []
         self.buy_buttons = {}
         self.buying = None
+        self.catalog_widgets = []
+        self.inventory_widgets = []
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)  # deux colonnes de taille identique
         self.grid_rowconfigure(2, weight=1)
@@ -108,6 +110,26 @@ class ShopView(View):
         self.points_label.configure(
             text=f"Points disponibles : {self.manager.user.points}"
         )
+
+        for widget in self.catalog_widgets:
+            widget.destroy()
+        self.catalog_widgets.clear()
+
+        lbl_obj = ctk.CTkLabel(
+            self.catalog_frame, text="Objet", font=ctk.CTkFont(weight="bold")
+        )
+        lbl_obj.grid(row=0, column=0, padx=10, pady=5)
+        self.catalog_widgets.append(lbl_obj)
+
+        lbl_prix = ctk.CTkLabel(
+            self.catalog_frame, text="Prix", font=ctk.CTkFont(weight="bold")
+        )
+        lbl_prix.grid(row=0, column=1, padx=10, pady=5)
+        self.catalog_widgets.append(lbl_prix)
+
+        lbl_vide = ctk.CTkLabel(self.catalog_frame, text="")
+        lbl_vide.grid(row=0, column=2, padx=10, pady=5)
+        self.catalog_widgets.append(lbl_vide)
         row = 1
         for elem in obj:
             name = elem.get("Nom")
@@ -159,7 +181,19 @@ class ShopView(View):
             print(f"xxxx{data.get("msg")}xxxx")
 
     def showUserObject(self, data: dict):
-        self.actif_states = {}  # garde l'état de chaque objet
+        for widget in self.inventory_widgets:
+            widget.destroy()
+        self.inventory_widgets.clear()
+
+        lbl_obj = ctk.CTkLabel(
+            self.inventory_frame, text="Objet", font=ctk.CTkFont(weight="bold")
+        )
+        lbl_obj.grid(row=0, column=0, padx=10, pady=5)
+        self.inventory_widgets.append(lbl_obj)
+
+        lbl_vide = ctk.CTkLabel(self.inventory_frame, text="")
+        lbl_vide.grid(row=0, column=1, padx=10, pady=5)
+        self.inventory_widgets.append(lbl_vide)
         row = 1
         for elem in data:
             name = elem.get("Nom")
