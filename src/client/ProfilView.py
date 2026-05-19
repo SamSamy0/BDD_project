@@ -17,6 +17,10 @@ class ProfilView(View):
 
     def back_action(self):
         self.controller.show_view("MENU")
+    
+
+    def showProfile(self, data):
+        self.after(0, lambda: self.displayStats(data))
 
     def displayStats(self, data):
         name = data.get("Nom")

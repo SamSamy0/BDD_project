@@ -37,7 +37,9 @@ class MenuView(View):
             self.controller.show_view("SHOP")
 
     def leaderboard_action(self):
+        #self.manager.receiver = self.controller.frames["LEADERBOARD"]
         self.manager.checkLeaderBoard()
+        #self.controller.show_view("LEADERBOARD")
         # if self.manager.getSummInAtLeastThreeCourse():
             # self.controller.show_view("LEADERBOARD")
 
@@ -45,8 +47,13 @@ class MenuView(View):
         self.controller.show_view("LOGIN")
 
     def class_action(self):
+        self.manager.receiver = self.controller.frames["CLASS"]
+        self.manager.getAllCourse()    
         self.controller.show_view("CLASS")
 
     def profil_action(self):
-        if self.manager.getProfile(self.manager.current_user):
-            self.controller.show_view("PROFIL")
+        #if self.manager.getProfile(self.manager.current_user):
+            #self.controller.show_view("PROFIL")
+        self.manager.receiver = self.controller.frames["PROFIL"]
+        self.manager.getProfile(self.manager.current_user)
+        self.controller.show_view("PROFIL")

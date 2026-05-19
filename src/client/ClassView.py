@@ -111,23 +111,11 @@ class ClassView(View):
             )
             btn.pack(padx=10, pady=5, fill="x")
 
-    def displayCourses(self,courses):
+    def setAllCourse(self, courses):
+        self.courses = []
         self.courses.extend(courses)
-        for cours in self.courses:
-            mnemo = cours.get("Mnemonique", "Inconnu")
-            name = cours.get("Nom", "Sans Nom")
-            fac = cours.get("Fac", "Sans Fac")
-            utc = cours.get("Credits", 0)
-            year = cours.get("Annee", "Inconnue")
-
-            btn = ctk.CTkButton(
-                self.scroll_frame,
-                text=f"{mnemo} - {name} - {fac} - {utc} - {year}",
-                command=lambda m=mnemo: self.select_course(
-                    m
-                ),  # m=mnemonique capture la valeur
-            )
-            btn.pack(padx=10, pady=5, fill="x")
+        self.after(0, self.refresh)  # rafraîchit la liste des cours dans l'interface
+        
 
     def rollback_course(self):
         if len(self.courses) > 0:
