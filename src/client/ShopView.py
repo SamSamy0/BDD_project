@@ -15,12 +15,34 @@ class ShopView(View):
         self.inventory_widgets = []
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
-        self.grid_rowconfigure(2, weight=1)
+        self.grid_rowconfigure(3, weight=1)
 
         self.title_label = ctk.CTkLabel(
             self, text="Boutique", font=ctk.CTkFont(size=20, weight="bold")
         )
         self.title_label.grid(row=0, column=0, padx=20, pady=20)
+
+        # Information about the user can't activate several object of same type
+        self.info_frame = ctk.CTkFrame(
+            self,
+            fg_color=("#EAEAEA", "#2E2E2E"),
+            border_width=1,
+            border_color=("#A0A0A0", "#555555"),
+        )
+        self.info_frame.grid(
+            row=1, column=0, columnspan=2, padx=20, pady=(0, 15), sticky="ew"
+        )
+
+        self.info_label = ctk.CTkLabel(
+            self.info_frame,
+            text="⚠️ Règle d'activation : Vous ne pouvez équiper qu'un seul Titre ou Badge à la fois (l'un exclut l'autre), et un seul Thème à la fois.",
+            font=ctk.CTkFont(size=12, slant="italic"),
+            text_color=(
+                "#D32F2F",
+                "#F44336",
+            ),
+        )
+        self.info_label.pack(padx=15, pady=8)
 
         print("poiiiiint", self.manager.user.points)
         print()
@@ -30,10 +52,10 @@ class ShopView(View):
             text=f"Points disponibles :...",
             font=ctk.CTkFont(size=14),
         )
-        self.points_label.grid(row=1, column=0, columnspan=2, padx=20, pady=(0, 10))
+        self.points_label.grid(row=2, column=0, columnspan=2, padx=20, pady=(0, 10))
 
         self.catalog_frame = ctk.CTkScrollableFrame(self, label_text="Catalogue")
-        self.catalog_frame.grid(row=2, column=0, padx=(20, 10), pady=10, sticky="nsew")
+        self.catalog_frame.grid(row=3, column=0, padx=(20, 10), pady=10, sticky="nsew")
         self.catalog_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
         ctk.CTkLabel(
@@ -52,7 +74,7 @@ class ShopView(View):
 
         self.inventory_frame = ctk.CTkScrollableFrame(self, label_text="Mes objets")
         self.inventory_frame.grid(
-            row=2, column=1, padx=(10, 20), pady=10, sticky="nsew"
+            row=3, column=1, padx=(10, 20), pady=10, sticky="nsew"
         )
         self.inventory_frame.grid_columnconfigure((0, 1, 2), weight=1)
 
@@ -69,7 +91,7 @@ class ShopView(View):
         self.actif_states = {}
 
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)
-        self.back_button.grid(row=3, column=0, columnspan=2, padx=20, pady=20)
+        self.back_button.grid(row=4, column=0, columnspan=2, padx=20, pady=20)
 
     def back_action(self):
         self.controller.show_view("MENU")
@@ -77,37 +99,45 @@ class ShopView(View):
     def buy_action(self, o_id, prix, nom):
         self.buying = o_id
         self.manager.buyObject(self.manager.user.idUser, o_id, prix)
-        time.sleep(0.05)
-        self.manager.getUserObject(self.manager.user.idUser)
-        time.sleep(0.05)
-        self.manager.getPoints(self.manager.user.idUser)
-        time.sleep(0.05)
-
+        print(f"Demande d'achat envoyée pour {nom} ({prix} points)")
         print(f"Acheter {nom} pour {prix} points - test")
 
-    def toggle_activate(self, typ):
-        state = self.actif_states[typ]
-        target = state["typ"]
+    def toggle_activate(self, obj_name):
+        state = self.actif_states[obj_name]
+        target_type = state["typ"]
+
         if state["actif"]:
             state["actif"] = False
             state["btn"].configure(
                 text="Activer", fg_color="green", hover_color="darkgreen"
             )
             self.manager.actObject(self.manager.user.idUser, state["o_id"], 0)
-            print(f"{typ} désactivé")
+            print(f"{obj_name} désactivé")
         else:
+            if target_type in ["Titre", "Badge", "titre", "badge"]:
+                exclusive_types = ["Titre", "Badge", "titre", "badge"]
+            else:
+                exclusive_types = [target_type]
+
             for otherName, otherState in self.actif_states.items():
-                if otherState["actif"] and otherState["typ"] == target:
+                if otherState["actif"] and otherState["typ"] in exclusive_types:
                     otherState["actif"] = False
                     otherState["btn"].configure(
                         text="Activer", fg_color="green", hover_color="darkgreen"
                     )
+                    self.manager.actObject(
+                        self.manager.user.idUser, otherState["o_id"], 0
+                    )
+                    print(
+                        f"Ancien objet '{otherName}' désactivé (remplacé par '{obj_name}')"
+                    )
+
             state["actif"] = True
             state["btn"].configure(
                 text="Désactiver", fg_color="gray", hover_color="darkgray"
             )
             self.manager.actObject(self.manager.user.idUser, state["o_id"], 1)
-            print(f"{typ} activé")
+            print(f"{obj_name} activé")
 
     def displayStore(self, obj: dict):
         self.points_label.configure(
@@ -150,22 +180,18 @@ class ShopView(View):
             obj_instance = Object(name, objId, typeObj, price, desc)
             self.allobj.append(obj_instance)
 
-            # Name
             lbl_name = ctk.CTkLabel(self.catalog_frame, text=name)
             lbl_name.grid(row=row, column=0, padx=10, pady=5)
             self.catalog_widgets.append(lbl_name)
 
-            # Type
             lbl_type_val = ctk.CTkLabel(self.catalog_frame, text=typeObj)
             lbl_type_val.grid(row=row, column=1, padx=10, pady=5)
             self.catalog_widgets.append(lbl_type_val)
 
-            # Price
             lbl_price = ctk.CTkLabel(self.catalog_frame, text=f"{price} pts")
             lbl_price.grid(row=row, column=2, padx=10, pady=5)
             self.catalog_widgets.append(lbl_price)
 
-            # Buy Button
             btn = ctk.CTkButton(
                 self.catalog_frame,
                 text="Acheter",
@@ -195,6 +221,10 @@ class ShopView(View):
                 if self.buying not in self.manager.objBought:
                     self.manager.objBought.append(self.buying)
                 self.buying = None
+
+            self.manager.getUserObject(self.manager.user.idUser)
+            self.manager.getPoints(self.manager.user.idUser)
+
         else:
             print(f"xxxx{data.get('msg')}xxxx")
 
