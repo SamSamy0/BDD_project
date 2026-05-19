@@ -201,16 +201,17 @@ class ShopView(View):
             typ = elem.get("TypeObjet")
             state = elem.get("EstActif")
             print("STATETATE", state)
-            ctk.CTkLabel(self.inventory_frame, text=name).grid(
-                row=row, column=0, padx=10, pady=5
-            )
+
+            lbl_name = ctk.CTkLabel(self.inventory_frame, text=name)
+            lbl_name.grid(row=row, column=0, padx=10, pady=5)
+            self.inventory_widgets.append(lbl_name)
+
             self.actif_states[name] = True if state else False
 
             if state:
                 text = "Désactiver"
                 fg_color = "gray"
                 hover_color = "darkgray"
-
             else:
                 text = "Activer"
                 fg_color = "green"
@@ -224,14 +225,16 @@ class ShopView(View):
                 hover_color=hover_color,
                 command=lambda n=name: self.toggle_activate(n),
             )
-
             btn.grid(row=row, column=1, padx=10, pady=5)
+
+            self.inventory_widgets.append(btn)
+
             self.actif_states[name] = {
                 "actif": True if state else False,
                 "btn": btn,
                 "typ": typ,
                 "o_id": o_id,
-            }  # stocke le bouton pour pouvoir le mettre à jour
+            }
             row += 1
 
     def saveBoughtObject(self, data):
