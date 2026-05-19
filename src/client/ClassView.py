@@ -49,7 +49,7 @@ class ClassView(View):
         popup = ctk.CTkToplevel(self)
         popup.title("Ajouter un cours")
         popup.geometry("400x500")
-        popup.grab_set()  # bloque la fenêtre principale
+        popup.after(100, popup.grab_set())  # bloque la fenêtre principale
         #pour fixer le problème de focus du popup, on utilise after pour s'assurer que le popup est au premier plan et reçoit le focus
         popup.after(100, popup.lift)  # assure que le popup est au premier plan
         popup.after(100, lambda: popup.focus_force())  # donne le focus au popup
