@@ -59,6 +59,7 @@ class SummaryView(View):
         self.back_button.grid(row=6, column=0, padx=20, pady=20)
 
     def back_action(self):
+        self.summaries = []
         previous = getattr(self.controller, 'previous_view', 'CLASS')
         self.controller.show_view(previous)
 
