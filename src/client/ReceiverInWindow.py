@@ -71,7 +71,7 @@ class ReceiverInWindow:
         view = self.app.frames["SUMMARY"]
         summaries = view.summaries
         for summary in data:
-            temp = (summary["Titre"],summary["Mnemonique"],summary["Moyenne"])
+            temp = (summary["Titre"],summary["Nom"],summary["Moyenne"])
             summaries.append(temp)
 
         self.app.show_view("SUMMARY")
