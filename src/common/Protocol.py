@@ -35,6 +35,7 @@ class Protocol(Enum):
     DELETE_SUMMARY = 24
     ADD_EVAL = 25
     CHECK_EVALUATIONS = 26  # Not sure
+    READ_SUMMARIES = 34
     # Stats
     GET_LEADERBOARD = 27
     GET_COURSES_MOST_RESUMES = 28

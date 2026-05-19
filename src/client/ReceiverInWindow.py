@@ -73,3 +73,13 @@ class ReceiverInWindow:
     def updatePointsInShop(self, data):
         shopView = self.app.frames["SHOP"]
         shopView.updatePoints(data)
+
+    def checkSummaries(self, data: list[dict]):
+        view = self.app.frames["SUMMARY"]
+        summaries = view.summaries
+        for summary in data:
+            temp = (summary["Titre"], summary["Mnemonique"], summary["Moyenne"])
+            summaries.append(temp)
+
+        self.app.show_view("SUMMARY")
+        view.displaySummaries()

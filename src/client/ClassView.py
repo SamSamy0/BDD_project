@@ -5,6 +5,7 @@ from View import View
 class ClassView(View):
 
     def initView(self):
+        self.id = {}
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
@@ -30,6 +31,7 @@ class ClassView(View):
 
     def select_course(self, mnemonique):
         self.controller.current_cours = mnemonique
+        self.manager.checkSummaries(mnemonique)
         self.controller.show_view("SUMMARY")
 
     def add_course_action(self,course=None):
