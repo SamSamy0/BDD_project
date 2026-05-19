@@ -4,6 +4,8 @@ import socket
 import threading
 from typing import Any
 
+from Profil import Profile
+
 from common.Protocol import Protocol
 
 
@@ -12,6 +14,7 @@ class ClientNetworkManager:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.receiver: Any = None
+        self.user = Profile()
         self.currentUser: Any = None
         self.objBought = []
 
@@ -38,13 +41,25 @@ class ClientNetworkManager:
     """Functions to Receive messages from ServerNetworkManager"""
 
     def receive_message(self):
+        buffer = ""
+        decoder = json.JSONDecoder()
         while True:
             try:
                 reponse = self.sock.recv(65536)
                 if not reponse:
                     break
-                data = json.loads(reponse.decode("utf-8"))
-                self.handle_reponse(data)
+                buffer += reponse.decode("utf-8")
+                while buffer:
+                    buffer = buffer.strip()
+                    if not buffer:
+                        break
+                    try:
+                        data, index = decoder.raw_decode(buffer)
+                        self.handle_reponse(data)
+                        buffer = buffer[index:]
+                    except json.JSONDecodeError:
+                        break
+
             except Exception as e:
                 print(f"Erreur : Connexion interrompue : {e}")
                 break
@@ -59,10 +74,10 @@ class ClientNetworkManager:
         match protocol:
             case Protocol.SIGNIN.value:
                 if data is not None:
-                    self.current_user = data.get("ID")
+                    self.user.initData(data)
+                    # self.current_user = data.get("ID")
                     self.receiver.isAcceptedLogin(connect=True)
                 else:
-                    self.current_user = None
                     self.receiver.isAcceptedLogin(connect=False)
 
             case Protocol.SIGNUP.value:
@@ -99,6 +114,12 @@ class ClientNetworkManager:
             case Protocol.ADD_COURSE.value:
                 self.receiver.addCourse(data)
 
+            case Protocol.GET_USER_OBJECT.value:
+                self.receiver.showUserObject(data)
+
+            case Protocol.GET_POINT.value:
+                self.receiver.updatePointsInShop(data)
+
             # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
@@ -132,7 +153,13 @@ class ClientNetworkManager:
     def addCourse(self, mnemo: str, name: str, fac: str, utc: int, year: int):
         self.send_request(
             Protocol.ADD_COURSE.value,
-            {"Mnemonique": mnemo, "Nom": name, "Fac": fac, "Credits": utc, "Annee": year},
+            {
+                "Mnemonique": mnemo,
+                "Nom": name,
+                "Fac": fac,
+                "Credits": utc,
+                "Annee": year,
+            },
         )
 
     def deleteCourse(self, mnemo: str):
@@ -222,14 +249,17 @@ class ClientNetworkManager:
 
     """Users Queries"""
 
-    def actObject(self, idUser: int, idObject: int):
+    def actObject(self, idUser: int, idObject: int, state_val: int):
         self.send_request(
             Protocol.CHANGE_STATE_OBJ.value,
-            {"State": 1, "idUser": idUser, "idObject": idObject},
+            {"State": state_val, "idUser": idUser, "idObject": idObject},
         )
 
     def getProfile(self, idUser: int):
         self.send_request(Protocol.GET_PROFILE.value, {"idUser": idUser})
+
+    def getUserObject(self, idUser: int):
+        self.send_request(Protocol.GET_USER_OBJECT.value, {"idUser": idUser})
 
     """Statistic Queries"""
 

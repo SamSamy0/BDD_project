@@ -91,6 +91,10 @@ class ServerNetworkManager:
                 result = self.db.getProfile(data)
                 return {"protocol": protocol, "data": result}
 
+            case Protocol.GET_USER_OBJECT.value:
+                result = self.db.getUserObjet(data)
+                return {"protocol": protocol, "data": result}
+
             # Statistic
             case Protocol.GET_LEADERBOARD.value:
                 result = self.db.checkLeaderBoard(data)

@@ -32,8 +32,9 @@ class DatabaseManager:
         self.path_deleteSummary = "DB/queries/summaries/delete_summary.sql"
         self.path_getSummAverage = "DB/queries/stats/summary_average.sql"
         # User
-        self.path_changeStateObj = "DB/queries/users/changeStataeObj"
+        self.path_changeStateObj = "DB/queries/users/change_state_object.sql"
         self.path_getProfile = "DB/queries/users/check_profile.sql"
+        self.path_getUserObject = "DB/queries/users/get_user_object.sql"
         # Statistic
         self.path_checkLeaderBoard = "DB/queries/stats/check_leaderboard.sql"
         self.path_getObRanking = "DB/queries/stats/ranking_object.sql"
@@ -160,10 +161,14 @@ class DatabaseManager:
 
     # User
     def changeStateObj(self, data):
-        return self.reader_query(self.path_changeStateObj, "one", False, params=data)
+        return self.reader_query(self.path_changeStateObj, "one", True, params=data)
 
     def getProfile(self, data):
         return self.reader_query(self.path_getProfile, "one", False, params=data)
+
+    def getUserObjet(self, data):
+        print("dadada", data)
+        return self.reader_query(self.path_getUserObject, "all", False, params=data)
 
     # Statistic
     def checkLeaderBoard(self, data):
