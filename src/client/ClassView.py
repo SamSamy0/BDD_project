@@ -50,6 +50,9 @@ class ClassView(View):
         popup.title("Ajouter un cours")
         popup.geometry("400x500")
         popup.grab_set()  # bloque la fenêtre principale
+        #pour fixer le problème de focus du popup, on utilise after pour s'assurer que le popup est au premier plan et reçoit le focus
+        popup.after(100, popup.lift)  # assure que le popup est au premier plan
+        popup.after(100, lambda: popup.focus_force())  # donne le focus au popup
 
         ctk.CTkLabel(popup, text="Mnémonique").pack(padx=20, pady=(15, 0), anchor="w")
         mnemo_entry = ctk.CTkEntry(popup, placeholder_text="INFO-H303")
