@@ -51,7 +51,10 @@ class SummaryView(View):
         popup = ctk.CTkToplevel(self)
         popup.title("Publier un résumé")
         popup.geometry("400x300")
-        popup.grab_set()  # bloque la fenêtre principale
+        popup.after(100, popup.grab_set)
+        popup.after(100, popup.lift)
+        popup.after(100, popup.focus_force)
+
 
         ctk.CTkLabel(popup, text="Titre").pack(padx=20, pady=(15, 0), anchor="w")
         self.title_entry = ctk.CTkEntry(popup, placeholder_text="Titre du résumé")
@@ -82,7 +85,10 @@ class SummaryView(View):
         popup = ctk.CTkToplevel(self)
         popup.title("Voir le résumé")
         popup.geometry("500x400")
-        popup.grab_set()
+
+        popup.after(100, popup.grab_set)
+        popup.after(100, popup.lift)
+        popup.after(100, popup.focus_force)
 
         # Titre et auteur
         ctk.CTkLabel(popup, text=title, font=ctk.CTkFont(size=18, weight="bold")).pack(padx=20, pady=(15, 0))
@@ -109,7 +115,9 @@ class SummaryView(View):
         popup = ctk.CTkToplevel(self)
         popup.title("Évaluer un résumé")
         popup.geometry("400x300")
-        popup.grab_set()
+        popup.after(100, popup.grab_set)
+        popup.after(100, popup.lift)
+        popup.after(100, popup.focus_force)
 
         note_label = ctk.CTkLabel(popup, text="Note : 3")
         note_label.pack(padx=20, pady=(15, 0), anchor="w")
