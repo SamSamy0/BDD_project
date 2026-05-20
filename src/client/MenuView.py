@@ -42,22 +42,16 @@ class MenuView(View):
     def shop_action(self):
         self.manager.getUserObject(self.manager.user.idUser)
         self.manager.checkCatalogue()
-        print("ici")
-        print()
-        print("passing")
-        # self.controller.show_view("SHOP")
+
 
     def leaderboard_action(self):
         self.manager.checkLeaderBoard()
-        # if self.manager.getSummInAtLeastThreeCourse():
-        # self.controller.show_view("LEADERBOARD")
 
     def logout_action(self):
         self.controller.show_view("LOGIN")
 
     def class_action(self):
         self.manager.getAllCourse()
-        # self.controller.show_view("CLASS")
 
     def profil_action(self):
         self.manager.getProfile(self.manager.user.idUser)
