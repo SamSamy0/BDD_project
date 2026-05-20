@@ -119,4 +119,8 @@ class MyClassView(View):
         #TODO:POP-UP
         pass
 
+    def getUserCourse(self, data):
+        self.courses = data if data else []
+        self.after(0,self.refresh)
+
 
