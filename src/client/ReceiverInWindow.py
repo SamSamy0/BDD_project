@@ -118,7 +118,7 @@ class ReceiverInWindow:
         view.summaries = []
         summaries = view.summaries
         for summary in data:
-            temp = (summary["Titre"],summary["Nom"],summary["Moyenne"])
+            temp = (summary["ID"], summary["Titre"],summary["Nom"],summary["Moyenne"])
             summaries.append(temp)
 
         self.app.show_view("SUMMARY")
@@ -127,3 +127,8 @@ class ReceiverInWindow:
     def addSummary(self,data):
         view = self.app.frames["SUMMARY"]
         view.after(0, lambda: view.displaySummaries())
+
+    def addReview(self,data):
+        view = self.app.frames["SUMMARY"]
+        view.after(0, lambda: view.displaySummaries())
+

@@ -74,14 +74,14 @@ class SummaryView(View):
 
 
         self.manager.addSummary(title,content,str(datetime.date.today()),1,True,self.mnemonique,self.manager.user.idUser) #WARNING: HARDCODE VISIBILITE
-        self.summaries.append((title,self.manager.user.name,"0/5"))
+        self.summaries.append((None, title,self.manager.user.name,0))
     
     def delete_action(self, frame):
         print("Supprimer résumé - test")
         frame.destroy()
         #que un test, plus tard appel au manager pour supp de la BDD
 
-    def toggle_eval(self, frame, title):
+    def toggle_eval(self, frame, title, id_summ):
         # si le formulaire d'évaluation existe déjà, on le ferme, sinon on l'ouvre
         if hasattr(frame, "eval_frame"):
             frame.eval_frame.destroy()
@@ -113,20 +113,21 @@ class SummaryView(View):
         btn_submit = ctk.CTkButton(
             frame.eval_frame,
             text="Soumettre",
-            command=lambda: self.send_eval(title, int(slider.get()), comment_entry.get())
+            command=lambda: self.send_eval(title, int(slider.get()), comment_entry.get(), id_summ)
         )
         btn_submit.pack(padx=10, pady=5, fill="x")
 
-    def send_eval(self, title, note, comment):
+    def send_eval(self, title, note, comment, id_summ):
         print(f"Evaluer résumé {title} avec note {note} et commentaire : {comment}")
-        #plus tard appel au manager pour envoyer l'évaluation à la BDD
+        self.manager.addReview(note,comment,self.manager.user.idUser,id_summ)
+
 
 
     def displaySummaries(self):
         for widget in self.scroll_frame.winfo_children():
                 widget.destroy()
 
-        for title, auteur, note in self.summaries:
+        for id_summ, title, auteur, note in self.summaries:
             frame = ctk.CTkFrame(self.scroll_frame)
             frame.pack(padx=10, pady=5, fill="x")
             frame.grid_columnconfigure(0, weight=1)
@@ -134,11 +135,11 @@ class SummaryView(View):
             info = ctk.CTkLabel(frame, text=f"{title} | par {auteur} | * {note}/5")
             info.grid(row=0, column=0, padx=10, pady=8, sticky="w")
             #bouton voir
-            btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda t=title, f=frame: self.toggle_eval(f, t))
+            btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda t=title, f=frame, i=id_summ: self.toggle_eval(f, t, i))
             btn.grid(row=0, column=1, padx=5, pady=8)
             #btn supprimer
             btn = ctk.CTkButton(frame, text="supprimer", width=80, fg_color="red", hover_color="darkred", command=lambda f=frame: self.delete_action(f))
             btn.grid(row=0, column=2, padx=5, pady=8)
             #btn modfication
-            btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda f=frame, t=title: self.toggle_eval(f, t))#pour l'instant, réutilise le même formulaire que pour voir, à différencier plus tard
+            btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda f=frame, t=title, i=id_summ: self.toggle_eval(f, t, i))#pour l'instant, réutilise le même formulaire que pour voir, à différencier plus tard
             btn_edit.grid(row=0, column=3, padx=5, pady=8)

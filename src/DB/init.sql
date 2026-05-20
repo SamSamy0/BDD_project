@@ -36,7 +36,7 @@ CREATE TABLE Resume(
   Publication DATE NOT NULL,
   Version INT NOT NULL,
   Visibilite BOOLEAN NOT NULL,
-  Moyenne INT,
+  Moyenne FLOAT,
   Mnemonique VARCHAR(255) NOT NULL,
   IdUtilisateur INT NOT NULL,
   PRIMARY KEY (ID),
@@ -92,5 +92,20 @@ CREATE TABLE UtilisateurObjet (
 
 );
 
+DELIMITER //
 
+CREATE TRIGGER after_eval_insert
+AFTER INSERT ON Evaluation
+FOR EACH ROW
+BEGIN 
+  UPDATE Resume
+  SET Moyenne = (
+    SELECT AVG(Note)
+    FROM Evaluation
+    WHERE IdResume = NEW.IdResume
+  )
+  WHERE ID = NEW.IdResume;
+END //
+
+DELIMITER ;
 

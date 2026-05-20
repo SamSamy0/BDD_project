@@ -129,6 +129,9 @@ class ClientNetworkManager:
             case Protocol.ADD_SUMMARY.value:
                 self.receiver.addSummary(data)
 
+            case Protocol.ADD_EVAL.value:
+                self.receiver.addReview(data)
+
 
 
             # case Protocol.
@@ -190,14 +193,14 @@ class ClientNetworkManager:
 
     """Reviews queries"""
 
-    def addReview(self, note: str, comment: str, idAuthor: int, idSummary: int):
+    def addReview(self, note: str, comment: str, idAuthor: int, idSumm: int):
         self.send_request(
             Protocol.ADD_EVAL.value,
             {
                 "note": note,
                 "comment": comment,
                 "idAuthor": idAuthor,
-                "idSummary": idSummary,
+                "idSumm": idSumm,
             },
         )
 

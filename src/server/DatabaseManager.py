@@ -15,7 +15,7 @@ class DatabaseManager:
         self.path_deleteUserCourse = "DB/queries/users/delete_user_course.sql"
         self.path_getUserCourse = "DB/queries/courses/list_user_cours.sql"
         # Review
-        self.path_addReview = "DB/queries/review/add_evaluation.sql"
+        self.path_addReview = "DB/queries/reviews/add_evaluation.sql"
         # Shop
         self.path_buyObjet = "DB/queries/shop/add_object_to_users.sql"
         self.path_getPoints = "DB/queries/shop/check_points.sql"
