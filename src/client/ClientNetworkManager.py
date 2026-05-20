@@ -129,6 +129,9 @@ class ClientNetworkManager:
             case Protocol.ADD_SUMMARY.value:
                 self.receiver.addSummary(data)
 
+            case Protocol.GET_RANKING_OBJECT.value:
+                self.receiver.getObRanking(data)
+
 
 
             # case Protocol.

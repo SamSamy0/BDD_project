@@ -17,7 +17,7 @@ class Gui(ctk.CTk):
         super().__init__()
         self.manager = manager
 
-        self.withdraw() #permet cacher les fenêtre quand on execute le client
+        #self.withdraw() #permet cacher les fenêtre quand on execute le client
 
         self.title("BDD")
         self.geometry("1000x1000")
@@ -50,7 +50,7 @@ class Gui(ctk.CTk):
         # Gérer la fermeture de la fenêtre
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-        self.deiconify() # on réaffiche  la fenêtre proprement après l'installation des fenêtres
+        #self.deiconify() # on réaffiche  la fenêtre proprement après l'installation des fenêtres
 
     def on_closing(self, event=None):
         """Action effectuée à la fermeture de la fenêtre."""

@@ -72,13 +72,17 @@ class ReceiverInWindow:
         for user in data:
             leaderView.leaderboard.append(tuple(user.values()))
         self.app.show_view("LEADERBOARD")
-        leaderView.displayLeaderboard()
+        leaderView.after(0, lambda: leaderView.displayLeaderboard())
 
 
     def updatePointsInShop(self, data):
         shopView = self.app.frames["SHOP"]
         shopView.after(0, lambda: shopView.updatePoints(data))
-        
+
+    def getObRanking(self,data):
+        shopView = self.app.frames["SHOP"]
+        shopView.after(0, lambda: shopView.showRanking(data))
+
     def addCourse(self, data: dict):
         classView = self.app.frames["CLASS"]
         if data is not None:
@@ -127,3 +131,4 @@ class ReceiverInWindow:
     def addSummary(self,data):
         view = self.app.frames["SUMMARY"]
         view.after(0, lambda: view.displaySummaries())
+
