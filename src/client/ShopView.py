@@ -213,6 +213,8 @@ class ShopView(View):
             self.buy_buttons[objId] = btn
             if objId in self.manager.objBought:
                 btn.configure(text="Acheté", fg_color="gray", state="disabled")
+            elif price > self.manager.user.points:
+                btn.configure(text="Insuffisant", fg_color="gray", state="disabled")
 
             row += 1
 
@@ -316,6 +318,9 @@ class ShopView(View):
                 self.manager.objBought.append(o_id)
                 print("objbought", self.manager.objBought)
 
+    def updatePointsInShop(self, data):
+        self.after(0, lambda: self.updatePoints(data))
+
     def updatePoints(self, data):
         print("updating")
         print()
@@ -326,6 +331,13 @@ class ShopView(View):
         self.points_label.configure(
             text=f"Points disponibles : {self.manager.user.points}"
         )
+        for obj in self.allobj:
+            btn = self.buy_buttons.get(obj.id)
+            if btn and obj.id not in self.manager.objBought:
+                if obj.price > self.manager.user.points:
+                    btn.configure(text="Insuffisant", fg_color="gray", state="disabled")
+                else:
+                    btn.configure(text="Acheter", fg_color=("#3B8ED0", "#1F6AA5"), state="normal")
 
     def objranking(self):
         self.manager.getObRanking()
