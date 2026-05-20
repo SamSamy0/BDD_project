@@ -14,7 +14,7 @@ class LoginView(View):
         self.mail_label = ctk.CTkLabel(self, text="Adresse mail")
         self.mail_label.grid(row=1, column=0, padx=20, pady=(10, 0), sticky="w")
 
-        self.mail_entry = ctk.CTkEntry(self, placeholder_text="alice.dupont@univ.be")
+        self.mail_entry = ctk.CTkEntry(self, placeholder_text="emma.bernard@univ.be")
         self.mail_entry.grid(row=2, column=0, padx=20, pady=(0, 10), sticky="ew")
 
         self.userName_label = ctk.CTkLabel(self, text="Nom")
@@ -37,6 +37,7 @@ class LoginView(View):
 
     def login_action(self):
         #if self.manager.signin("alice_dupont", "alice.dupont@univ.be"):
+        #if self.manager.signin("emma_bernard", "emma.bernard@univ.be"):
             # if self.manager.signin(self.userName_entry.get(),self.mail_entry.get()):
             #self.controller.show_view("MENU")
         self.manager.receiver = self

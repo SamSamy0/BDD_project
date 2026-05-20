@@ -43,7 +43,7 @@ class Server:
 
                     reponse_dict = self.manager.handle_request(request_dict)
 
-                    data.outb += json.dumps(reponse_dict).encode("utf-8")
+                    data.outb += json.dumps(reponse_dict,default=str).encode("utf-8")
                 else:
                     # Client has closed their socket
                     self.selector.unregister(sock)

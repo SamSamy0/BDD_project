@@ -29,7 +29,7 @@ class ServerNetworkManager:
                 result = self.db.addCourse(data)
                 return {"protocol": protocol, "data": result}
 
-            case Protocol.DELETE_COURSE.value:
+            case Protocol.DELETE_USER_COURSE.value:
                 result = self.db.deleteUserCourse(data)
                 return {"protocol": protocol, "data": result}
 
@@ -70,6 +70,10 @@ class ServerNetworkManager:
             case Protocol.READ_SUMMARY.value:
                 result = self.db.checkSummary(data)
                 return {"protocol": protocol, "data": result}
+            
+            case Protocol.READ_SUMMARIES.value:
+                result = self.db.checkSummaries(data)
+                return {"protocol": protocol, "data": result}
 
             case Protocol.DELETE_SUMMARY.value:
                 result = self.db.deleteSummary(data)
@@ -85,6 +89,10 @@ class ServerNetworkManager:
 
             case Protocol.GET_PROFILE.value:
                 result = self.db.getProfile(data)
+                return {"protocol": protocol, "data": result}
+
+            case Protocol.GET_USER_OBJECT.value:
+                result = self.db.getUserObjet(data)
                 return {"protocol": protocol, "data": result}
 
             # Statistic
@@ -110,4 +118,8 @@ class ServerNetworkManager:
 
             case Protocol.GET_BEST_TEN_USERS.value:
                 result = self.db.getBestTenUsers(data)
+                return {"protocol": protocol, "data": result}
+
+            case Protocol.ADD_USER_COURSE.value:
+                result = self.db.addUserCourse(data)
                 return {"protocol": protocol, "data": result}

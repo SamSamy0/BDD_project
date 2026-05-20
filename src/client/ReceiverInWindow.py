@@ -17,14 +17,14 @@ class ReceiverInWindow:
     def setAllCourse(self, courses: list[dict]):
         self.app.show_view("CLASS")
         classView = self.app.frames["CLASS"]
-        classView.displayCourses(courses)
 
+        classView.after(0, lambda: classView.displayCourses(courses))
 
 
     def displayStore(self, store: dict):
         self.app.show_view("SHOP")
         shopView = self.app.frames["SHOP"]
-        shopView.displayStore(store)
+        shopView.after(0, lambda: shopView.displayStore(store))
 
     def bestTenUser(self, top: dict):
         self.app.show_view("LEADERBOARD")
@@ -46,15 +46,22 @@ class ReceiverInWindow:
         profilView = self.app.frames["PROFIL"]
         profilView.displayStats(data)
 
+    def showUserObject(self, data: dict):
+        # self.app.show_view("SHOP")
+        shopView = self.app.frames["SHOP"]
+        shopView.after(0, lambda: shopView.saveBoughtObject(data))
+        shopView.after(0, lambda: shopView.showUserObject(data))
+
     def isBought(self, data: dict):
         shopView = self.app.frames["SHOP"]
         shopView.buy(data)
 
+
     def addCourse(self, data: dict):
         if data is not None:
-           print("Cours enregistré avec succès: ",data)
+            print("Cours enregistré avec succès: ", data)
         else:
-            #TODO: Pop-up cours existe déjà
+            # TODO: Pop-up cours existe déjà
             classView = self.app.frames["CLASS"]
             classView.rollback_course()
 
@@ -65,6 +72,63 @@ class ReceiverInWindow:
         for user in data:
             leaderView.leaderboard.append(tuple(user.values()))
         self.app.show_view("LEADERBOARD")
-        leaderView.displayLeaderboard()
+        leaderView.after(0, lambda: leaderView.displayLeaderboard())
 
+
+    def updatePointsInShop(self, data):
+        shopView = self.app.frames["SHOP"]
+        shopView.after(0, lambda: shopView.updatePoints(data))
+
+    def getObRanking(self,data):
+        shopView = self.app.frames["SHOP"]
+        shopView.after(0, lambda: shopView.showRanking(data))
+
+    def addCourse(self, data: dict):
+        classView = self.app.frames["CLASS"]
+        if data is not None:
+           classView.after(0, lambda: classView.confirmedAdd(data))
+           print("Cours enregistré avec succès: ",data)
+        else:
+            #TODO: Pop-up cours existe déjà
+            classView = self.app.frames["CLASS"]
+            classView.after(0, lambda: classView.refusedAdd(data))
+
+
+    def getUserCourse(self,data):
+        if data is not None:
+            self.app.show_view("MYCLASS")
+            myClassView = self.app.frames["MYCLASS"]
+            myClassView.after(0, lambda: myClassView.displayCourses(data))
+
+
+    def addUserCourse(self,data):
+        self.app.show_view("MYCLASS")
+        myClassView = self.app.frames["MYCLASS"]
+        if data is not None:
+            myClassView.after(0, lambda: myClassView.confirmedAdd(data))
+        else:
+            myClassView.after(0, lambda: myClassView.refusedAdd(data))
+
+    def deleteUserCourse(self,data):
+        self.app.show_view("MYCLASS")
+        myClassView = self.app.frames["MYCLASS"]
+        if data is not None:
+            myClassView.after(0, lambda: myClassView.confirmedDelete(data))
+
+
+
+    def checkSummaries(self, data: list[dict]):
+        view = self.app.frames["SUMMARY"]
+        view.summaries = []
+        summaries = view.summaries
+        for summary in data:
+            temp = (summary["Titre"],summary["Nom"],summary["Moyenne"])
+            summaries.append(temp)
+
+        self.app.show_view("SUMMARY")
+        view.after(0, lambda: view.displaySummaries())
+
+    def addSummary(self,data):
+        view = self.app.frames["SUMMARY"]
+        view.after(0, lambda: view.displaySummaries())
 

@@ -30,6 +30,10 @@ class ClassView(View):
 
     def select_course(self, mnemonique):
         self.controller.current_cours = mnemonique
+        self.controller.frames["SUMMARY"].mnemonique = mnemonique
+        self.manager.receiver = self.controller.frames["SUMMARY"]
+        self.manager.checkSummaries(mnemonique)
+        self.controller.previous_view = "CLASS"
         self.controller.show_view("SUMMARY")
 
     def add_course_action(self, course=None):
@@ -86,6 +90,25 @@ class ClassView(View):
             self.add_course_action(course)
 
         ctk.CTkButton(popup, text="Confirmer", command=confirm).pack(padx=20, pady=15, fill="x")
+
+    def confirmedAdd(self,course = None):
+        self.courses.append(course)
+        self.refresh()
+
+    def refusedAdd(self):
+        if len(self.courses) > 0:
+            self.courses.pop()
+            self.after(0,self.refresh)
+
+
+    def confirmedAdd(self,course = None):
+        self.courses.append(course)
+        self.refresh()
+
+    def refusedAdd(self):
+        if len(self.courses) > 0:
+            self.courses.pop()
+            self.after(0,self.refresh)
 
     def back_action(self):
         self.controller.show_view("MENU")

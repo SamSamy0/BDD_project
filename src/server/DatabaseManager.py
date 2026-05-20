@@ -11,6 +11,7 @@ class DatabaseManager:
 
         self.path_getAllCourses = "DB/queries/courses/list_courses.sql"
         self.path_addCourse = "DB/queries/courses/add_course.sql"
+        self.path_addUserCourse = "DB/queries/users/add_usercourse.sql"
         self.path_deleteUserCourse = "DB/queries/users/delete_user_course.sql"
         self.path_getUserCourse = "DB/queries/courses/list_user_cours.sql"
         # Review
@@ -28,11 +29,13 @@ class DatabaseManager:
         # Summaries
         self.path_addSummary = "DB/queries/summaries/add_summary.sql"
         self.path_checkSummary = "DB/queries/summaries/check_summary.sql"
+        self.path_checkSummaries = "DB/queries/summaries/check_summaries.sql"
         self.path_deleteSummary = "DB/queries/summaries/delete_summary.sql"
         self.path_getSummAverage = "DB/queries/stats/summary_average.sql"
         # User
-        self.path_changeStateObj = "DB/queries/users/changeStataeObj"
+        self.path_changeStateObj = "DB/queries/users/change_state_object.sql"
         self.path_getProfile = "DB/queries/users/check_profile.sql"
+        self.path_getUserObject = "DB/queries/users/get_user_object.sql"
         # Statistic
         self.path_checkLeaderBoard = "DB/queries/stats/check_leaderboard.sql"
         self.path_getObRanking = "DB/queries/stats/ranking_object.sql"
@@ -84,10 +87,14 @@ class DatabaseManager:
 
     # Courses
     def addCourse(self, data):
-        return self.reader_query(self.path_addCourse, "NOne", True, params=data)
+        return self.reader_query(self.path_addCourse, "None", True, params=data)
+
+    def addUserCourse(self, data):
+
+        return self.reader_query(self.path_addUserCourse, "None", True, params=data)
 
     def deleteUserCourse(self, data):
-        return self.reader_query(self.path_deleteUserCourse, "one", True, params=data)
+        return self.reader_query(self.path_deleteUserCourse, "None", True, params=data)
 
     def getUserCourse(self, data):
         return self.reader_query(self.path_getUserCourse, "all", False, params=data)
@@ -148,6 +155,9 @@ class DatabaseManager:
     def checkSummary(self, data):
         return self.reader_query(self.path_checkSummary, "all", False, params=data)
 
+    def checkSummaries(self,data):
+        return self.reader_query(self.path_checkSummaries,"all",False,params=data)
+
     def deleteSummary(self, data):
         return self.reader_query(self.path_deleteSummary, "one", True, params=data)
 
@@ -156,10 +166,14 @@ class DatabaseManager:
 
     # User
     def changeStateObj(self, data):
-        return self.reader_query(self.path_changeStateObj, "one", False, params=data)
+        return self.reader_query(self.path_changeStateObj, "one", True, params=data)
 
     def getProfile(self, data):
         return self.reader_query(self.path_getProfile, "one", False, params=data)
+
+    def getUserObjet(self, data):
+        print("dadada", data)
+        return self.reader_query(self.path_getUserObject, "all", False, params=data)
 
     # Statistic
     def checkLeaderBoard(self, data):
