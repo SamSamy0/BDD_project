@@ -1,4 +1,9 @@
-SELECT u.Nom, u.Niveau, u.Points, uo.IdObjet AS IdObjet
+SELECT u.Nom, u.Niveau, u.Points, Titre.IdObjet, Titre.NomObjet AS NomObjet
 FROM Utilisateur u 
-LEFT JOIN UtilisateurObjet uo ON u.ID = uo.IdUtilisateur AND uo.EstActif = 1
-WHERE u.ID = %(idUser)s;
+LEFT JOIN (
+  SELECT uo.IdUtilisateur, uo.IdObjet, oc.nom AS NomObjet
+  FROM UtilisateurObjet uo
+  JOIN ObjetCosmetique oc on uo.IdObjet = oc.ID
+  WHERE EstActif = 1 AND oc.TypeObjet = 'Titre'
+) AS Titre ON u.ID = Titre.IdUtilisateur
+WHERE u.ID = 5;

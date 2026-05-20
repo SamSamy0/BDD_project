@@ -2,7 +2,7 @@ import customtkinter as ctk
 from View import View
 
 
-class ClassView(View):
+class MyClassView(View):
 
     def initView(self):
         self.grid_columnconfigure(0, weight=1)
@@ -28,12 +28,10 @@ class ClassView(View):
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)
         self.back_button.grid(row=3, column=0, padx=20, pady=20)
 
+
     def select_course(self, mnemonique):
         self.controller.current_cours = mnemonique
-        self.manager.checkSummaries(mnemonique)
-        self.manager.receiver.app.frames["SUMMARY"].mnemonique = mnemonique
-
-        self.controller.previous_view = "CLASS"
+        self.controller.previous_view = "MYCLASS"
         self.controller.show_view("SUMMARY")
 
     def add_course_action(self,course=None):
@@ -53,7 +51,7 @@ class ClassView(View):
         year = course.get("Annee", "Inconnue")
 
 
-        self.manager.addCourse(mnemo,name,fac,utc,year)
+        self.manager.addUserCourse(mnemo,self.manager.user.idUser)
         print("Ajouter un cours -test")
 
     def confirmedAdd(self,course = None):
@@ -92,4 +90,33 @@ class ClassView(View):
     def displayCourses(self,courses):
         self.courses = courses
         self.refresh()
+
+    def delete_user_course_action(self,course = None):
+        if course is None:
+            course = {
+                "Mnemonique": "TEST-123",
+                "Nom": "Nouveau Cours",
+                "Fac": "Sciences",
+                "Credits": 5,
+                "Annee": 1
+            }
+        mnemo = course.get("Mnemonique", "Inconnu")
+        name = course.get("Nom", "Sans Nom")
+        fac = course.get("Fac", "Sans Fac")
+        utc = course.get("Credits", 0)
+        year = course.get("Annee", "Inconnue")
+
+        self.manager.deleteUserCourse(mnemo,self.manager.user.idUser)
+
+    def confirmedDelete(self,course):
+        for obj in self.courses:
+            if obj["Mnemonique"] == course["mnemo"]:
+                self.courses.remove(obj)
+                break
+        self.refresh()
+
+    def refusedDelete(self,course):
+        #TODO:POP-UP
+        pass
+
 

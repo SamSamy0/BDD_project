@@ -9,12 +9,15 @@ from ShopView import ShopView
 from IpView import IpView
 from ProfilView import ProfilView
 from SummaryView import SummaryView
+from MyClassView import MyClassView
 
 
 class Gui(ctk.CTk):
     def __init__(self, manager: ClientNetworkManager):
         super().__init__()
         self.manager = manager
+
+        #self.withdraw() #permet cacher les fenêtre quand on execute le client
 
         self.title("BDD")
         self.geometry("1000x1000")
@@ -34,7 +37,7 @@ class Gui(ctk.CTk):
         self.frames = {}
 
         # Initialisation des vues
-        for F in (IpView,LoginView, MenuView, LeaderBoardView, ShopView, ClassView, ProfilView, SummaryView):
+        for F in (IpView,LoginView, MenuView, LeaderBoardView, ShopView, ClassView, ProfilView, SummaryView,MyClassView):
             page_name = F.__name__.replace("View", "").upper()
             frame = F(parent=self.container, controller=self, manager=self.manager)
             self.frames[page_name] = frame
@@ -46,6 +49,8 @@ class Gui(ctk.CTk):
 
         # Gérer la fermeture de la fenêtre
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+        #self.deiconify() # on réaffiche  la fenêtre proprement après l'installation des fenêtres
 
     def on_closing(self, event=None):
         """Action effectuée à la fermeture de la fenêtre."""

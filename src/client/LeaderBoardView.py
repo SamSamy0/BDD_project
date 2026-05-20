@@ -57,6 +57,12 @@ class LeaderBoardView(View):
             print(f"==={name}===")
 
     def displayLeaderboard(self):
+        for widget in self.scroll_frame.winfo_children():
+                widget.destroy()
+
+        ctk.CTkLabel(self.scroll_frame, text="Rang", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, padx=10, pady=5)
+        ctk.CTkLabel(self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")).grid(row=0, column=1, padx=10, pady=5)
+        ctk.CTkLabel(self.scroll_frame, text="Points", font=ctk.CTkFont(weight="bold")).grid(row=0, column=2, padx=10, pady=5)
         for r, nom, points in self.leaderboard:
             ctk.CTkLabel(self.scroll_frame, text=str(r)).grid(
                 row=r, column=0, padx=10, pady=5
