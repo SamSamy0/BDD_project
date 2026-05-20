@@ -326,8 +326,13 @@ class ShopView(View):
         self.manager.getObRanking()
 
     def showRanking(self,data):
+        text = str()
+        if len(data) == 1:
+            for i in data:
+                text += "L'objet le plus vendu: " + "\n" +i.get("Nom") + "\n"
+        else:
+            text += "Les objets les plus vendu: \n"
+            for i in data:
+                text += "\n"+ "- " +i.get("Nom") + "\n"
 
-        print(type(data))
-        for i in data:
-            compteur = str(i.get("compteur"))
-            messagebox.showinfo("Objet","L'objet le plus vendu: " + "\n" +i.get("Nom") + "\n")
+        messagebox.showinfo("Objet",text)
