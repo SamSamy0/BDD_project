@@ -54,7 +54,7 @@ class SummaryView(View):
                 return
             popup.destroy()
             self.manager.addSummary(title, content, str(datetime.date.today()), 1, True, self.mnemonique, self.manager.user.idUser)#WARNING: HARDCODE VISIBILITE
-            self.summaries.append((title, self.manager.user.username, "0/5"))#ajoute le nouveau résumé à la liste des résumés affichés, avec une note initiale de 0/5
+            self.summaries.append((title, self.manager.user.name, "0/5"))#ajoute le nouveau résumé à la liste des résumés affichés, avec une note initiale de 0/5
             print(f"Publier résumé : {title} - {content} pour le cours {self.controller.current_cours}")
             # Plus tard : appel au manager pour publier le résumé dans la BDD
 
@@ -159,4 +159,7 @@ class SummaryView(View):
     
     def checkSummaries(self, data):
         self.summaries = data if data else []
+        self.after(0, self.displaySummaries)
+    
+    def addSummary(self, data):
         self.after(0, self.displaySummaries)

@@ -145,7 +145,10 @@ class ShopView(View):
             self.manager.actObject(self.manager.user.idUser, state["o_id"], 1)
             print(f"{obj_name} activé")
 
-    def displayStore(self, obj: dict):
+    def displayStore(self, data: dict):
+        self.after(0, lambda: self._displayStore(data))
+
+    def _displayStore(self, obj: dict):
         self.points_label.configure(
             text=f"Points disponibles : {self.manager.user.points}"
         )
@@ -233,6 +236,8 @@ class ShopView(View):
 
         else:
             print(f"xxxx{data.get('msg')}xxxx")
+    def isBought(self, data):
+        self.after(0, lambda:self.buy(data))
 
     def showUserObject(self, data: dict):
         for widget in self.inventory_widgets:
