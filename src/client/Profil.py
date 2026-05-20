@@ -7,6 +7,5 @@ class Profile:
 
     def initData(self, data: dict):
         self.idUser = data.get("ID")
-        # self.title = data.get("")
         self.points = data.get("Points")
         print("pointso", self.points)

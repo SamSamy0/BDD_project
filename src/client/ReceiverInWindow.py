@@ -24,7 +24,7 @@ class ReceiverInWindow:
     def displayStore(self, store: dict):
         self.app.show_view("SHOP")
         shopView = self.app.frames["SHOP"]
-        shopView.displayStore(store)
+        shopView.after(0, lambda: shopView.displayStore(store))
 
     def bestTenUser(self, top: dict):
         self.app.show_view("LEADERBOARD")
@@ -49,8 +49,8 @@ class ReceiverInWindow:
     def showUserObject(self, data: dict):
         # self.app.show_view("SHOP")
         shopView = self.app.frames["SHOP"]
-        shopView.saveBoughtObject(data)
-        shopView.showUserObject(data)
+        shopView.after(0, lambda: shopView.saveBoughtObject(data))
+        shopView.after(0, lambda: shopView.showUserObject(data))
 
     def isBought(self, data: dict):
         shopView = self.app.frames["SHOP"]
@@ -72,12 +72,16 @@ class ReceiverInWindow:
         for user in data:
             leaderView.leaderboard.append(tuple(user.values()))
         self.app.show_view("LEADERBOARD")
-        leaderView.displayLeaderboard()
+        leaderView.after(0, lambda: leaderView.displayLeaderboard())
 
 
     def updatePointsInShop(self, data):
         shopView = self.app.frames["SHOP"]
-        shopView.updatePoints(data)
+        shopView.after(0, lambda: shopView.updatePoints(data))
+
+    def getObRanking(self,data):
+        shopView = self.app.frames["SHOP"]
+        shopView.after(0, lambda: shopView.showRanking(data))
 
     def addCourse(self, data: dict):
         classView = self.app.frames["CLASS"]
@@ -131,4 +135,3 @@ class ReceiverInWindow:
     def addReview(self,data):
         view = self.app.frames["SUMMARY"]
         view.after(0, lambda: view.displaySummaries())
-

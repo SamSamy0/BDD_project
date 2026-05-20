@@ -3,6 +3,7 @@ import time
 import customtkinter as ctk
 from object import Object
 from View import View
+from tkinter import messagebox
 
 
 class ShopView(View):
@@ -92,6 +93,11 @@ class ShopView(View):
 
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)
         self.back_button.grid(row=4, column=0, columnspan=2, padx=20, pady=20)
+
+        self.ranking_button = ctk.CTkButton(
+            self, text="L'objet le plus vendu", command=self.objranking
+        )
+        self.ranking_button.grid(row=4, column=1, columnspan=2, padx=20, pady=20)
 
     def back_action(self):
         self.controller.show_view("MENU")
@@ -315,3 +321,18 @@ class ShopView(View):
         self.points_label.configure(
             text=f"Points disponibles : {self.manager.user.points}"
         )
+
+    def objranking(self):
+        self.manager.getObRanking()
+
+    def showRanking(self,data):
+        text = str()
+        if len(data) == 1:
+            for i in data:
+                text += "L'objet le plus vendu: " + "\n" +i.get("Nom") + "\n"
+        else:
+            text += "Les objets les plus vendu: \n"
+            for i in data:
+                text += "\n"+ "- " +i.get("Nom") + "\n"
+
+        messagebox.showinfo("Objet",text)

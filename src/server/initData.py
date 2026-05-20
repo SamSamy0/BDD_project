@@ -99,7 +99,8 @@ def initUser(mycursor):
             )
             try:
                 mycursor.execute(insertResumeSql, val)
-            except:
+            except Exception as e:
+                print("ERROR: ", e)
                 continue
 
 
@@ -126,7 +127,6 @@ def initEval(mycursor):
             print(f"Donnée incohérente => ignoré")
 
 
-
 def initRew(myCursor):
     rew = parseReward()
     initRew = """
@@ -142,8 +142,8 @@ def initRew(myCursor):
         desc = r["description"]
         try:
             myCursor.execute(initRew, (id, name, typeObj, prix, desc))
-        except:
-            print("SOMETHING WRONG")
+        except Exception as e:
+            print("SOMETHING WRONG: ", e)
 
 
 def initCoursUtilisateur(mycursor):
@@ -165,10 +165,12 @@ def initCoursUtilisateur(mycursor):
                         continue
                     try:
                         if res["cours"] == mnemo:
-                            val = (mnemo,iduser)
+                            val = (mnemo, iduser)
                             mycursor.execute(insertCoursUtilisateur, val)
-                    except:
+                    except Exception as e:
+                        print("ERROR:", e)
                         continue
+
 
 def initUtilisateurObjet(mycursor):
     utilisateurs = parseUser()
@@ -202,8 +204,12 @@ def initUtilisateurObjet(mycursor):
             val = (iduser, mapping_object[obj], is_active)
             try:
                 mycursor.execute(insertUtilisateurObjet, val)
+
             except Exception as e:
-                print(f"Erreur lors de l'insertion de l'objet {obj} pour l'utilisateur {iduser} : {e}")
+                print(
+                    f"Erreur lors de l'insertion de l'objet {obj} pour l'utilisateur {iduser} : {e}"
+                )
+
 
 def load_json():
     with open("DB/config.json", "r") as jsonfile:
@@ -227,13 +233,13 @@ def connect_mySql():
 
 
 if __name__ == "__main__":
-    cursor = connect_mySql()
-    initCours(cursor.cursor())
-    initUser(cursor.cursor())
-    initEval(cursor.cursor())
-    initCoursUtilisateur(cursor.cursor())
-    initUtilisateurObjet(cursor.cursor())
-    initRew(cursor.cursor())
-    cursor.commit()
-    # cursor.cursor.close
+    connexion = connect_mySql()
+    cursor = connexion.cursor()
+    initCours(cursor)
+    initUser(cursor)
+    initEval(cursor)
+    initRew(cursor)
+    initUtilisateurObjet(cursor)
+    connexion.commit()
     cursor.close()
+    connexion.close()

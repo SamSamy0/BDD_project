@@ -14,7 +14,9 @@ class MenuView(View):
         )
         self.profil_button.pack(padx=100, pady=20)
 
-        self.class_button = ctk.CTkButton(self, text="List de cours", command=self.class_action)
+        self.class_button = ctk.CTkButton(
+            self, text="List de cours", command=self.class_action
+        )
         self.class_button.pack(padx=20, pady=20)
 
         self.leaderboard_button = ctk.CTkButton(
@@ -37,33 +39,25 @@ class MenuView(View):
         )
         self.logout_button.pack(padx=20, pady=20)
 
-
     def shop_action(self):
         self.manager.getUserObject(self.manager.user.idUser)
         self.manager.checkCatalogue()
-        print("ici")
-        print()
-        print("passing")
-        # self.controller.show_view("SHOP")
+
 
     def leaderboard_action(self):
         self.manager.checkLeaderBoard()
-        # if self.manager.getSummInAtLeastThreeCourse():
-        # self.controller.show_view("LEADERBOARD")
 
     def logout_action(self):
         self.controller.show_view("LOGIN")
 
     def class_action(self):
         self.manager.getAllCourse()
-        # self.controller.show_view("CLASS")
 
     def profil_action(self):
         self.manager.getProfile(self.manager.user.idUser)
-        if self.manager.getProfile(self.manager.current_user):
+        if self.manager.getProfile(self.manager.user.idUser):
             self.controller.show_view("PROFIL")
 
     def mycourse_action(self):
         self.manager.getUserCourse(self.manager.user.idUser)
         self.controller.show_view("MYCLASS")
-
