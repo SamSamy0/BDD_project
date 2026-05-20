@@ -15,7 +15,6 @@ class ClientNetworkManager:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.receiver: Any = None
         self.user = Profile()
-        self.currentUser: Any = None
         self.objBought = []
 
     def connect(self, ip="127.0.0.1", port=8080):
@@ -132,8 +131,6 @@ class ClientNetworkManager:
             case Protocol.GET_RANKING_OBJECT.value:
                 self.receiver.getObRanking(data)
 
-
-
             # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
@@ -159,7 +156,6 @@ class ClientNetworkManager:
             Protocol.SIGNUP.value, {"username": username, "email": email, "date": date}
         )
 
-
     """Courses queries"""
 
     def getAllCourse(self):
@@ -183,13 +179,13 @@ class ClientNetworkManager:
             {"Mnemonique": mnemo, "IdUtilisateur": iduser},
         )
 
-    def deleteUserCourse(self, mnemo: str, iduser:int):
-        self.send_request(Protocol.DELETE_USER_COURSE.value, {"mnemo": mnemo,"idUser": iduser})
+    def deleteUserCourse(self, mnemo: str, iduser: int):
+        self.send_request(
+            Protocol.DELETE_USER_COURSE.value, {"mnemo": mnemo, "idUser": iduser}
+        )
 
     def getUserCourse(self, userId: int):
-        self.send_request(
-            Protocol.GET_USER_COURSES.value, {"idUser": userId}
-        )
+        self.send_request(Protocol.GET_USER_COURSES.value, {"idUser": userId})
 
     """Reviews queries"""
 
@@ -259,8 +255,8 @@ class ClientNetworkManager:
     def checkSummary(self, idSumm: int):
         self.send_request(Protocol.READ_SUMMARY.value, {"idSumm": idSumm})
 
-    def checkSummaries(self, Mnemonique :str):
-        self.send_request(Protocol.READ_SUMMARIES.value,{"Mnemonique" : Mnemonique})
+    def checkSummaries(self, Mnemonique: str):
+        self.send_request(Protocol.READ_SUMMARIES.value, {"Mnemonique": Mnemonique})
 
     def deleteSummary(self, idSumm: int):
         self.send_request(Protocol.DELETE_SUMMARY.value, {"idSumm": idSumm})
