@@ -29,7 +29,6 @@ class ClassView(View):
         self.back_button.grid(row=3, column=0, padx=20, pady=20)
 
     def select_course(self, mnemonique):
-        self.controller.current_cours = mnemonique
         self.manager.checkSummaries(mnemonique)
         self.manager.receiver.app.frames["SUMMARY"].mnemonique = mnemonique
 

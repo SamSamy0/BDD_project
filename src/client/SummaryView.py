@@ -46,15 +46,13 @@ class SummaryView(View):
 
         if title and content:
             self.manager.addSummary(title,content,str(datetime.date.today()),1,True,self.mnemonique,self.manager.user.idUser) #WARNING: HARDCODE VISIBILITE
-            self.manager.checkSummaries(self.mnemonique)
         else:
-            print("faut un titre et une description zinc") 
+            print("faut un titre et une description") 
 
     
-    def delete_action(self, frame):
-        print("Supprimer résumé - test")
-        frame.destroy()
-        #que un test, plus tard appel au manager pour supp de la BDD
+    def delete_action(self, frame, id_summ):
+        self.manager.deleteSummary(id_summ, self.manager.user.idUser)
+        # On ne rafraîchit plus ici, on attend le retour du serveur via le manager
 
     def toggle_eval(self, frame, title, id_summ):
         # si le formulaire d'évaluation existe déjà, on le ferme, sinon on l'ouvre
@@ -94,7 +92,6 @@ class SummaryView(View):
 
     def send_eval(self, title, note, comment, id_summ):
         self.manager.addReview(note,comment,self.manager.user.idUser,id_summ)
-        self.manager.checkSummaries(self.mnemonique)
 
 
 
@@ -117,7 +114,7 @@ class SummaryView(View):
             btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda t=title, f=frame, i=id_summ: self.toggle_eval(f, t, i))
             btn.grid(row=0, column=1, padx=5, pady=8)
             #btn supprimer
-            btn = ctk.CTkButton(frame, text="supprimer", width=80, fg_color="red", hover_color="darkred", command=lambda f=frame: self.delete_action(f))
+            btn = ctk.CTkButton(frame, text="supprimer", width=80, fg_color="red", hover_color="darkred", command=lambda f=frame, i=id_summ: self.delete_action(f, i))
             btn.grid(row=0, column=2, padx=5, pady=8)
             #btn modfication
             btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda f=frame, t=title, i=id_summ: self.toggle_eval(f, t, i))#pour l'instant, réutilise le même formulaire que pour voir, à différencier plus tard

@@ -130,8 +130,13 @@ class ReceiverInWindow:
 
     def addSummary(self,data):
         view = self.app.frames["SUMMARY"]
-        view.after(0, lambda: view.displaySummaries())
+        self.app.manager.checkSummaries(view.mnemonique)
 
     def addReview(self,data):
         view = self.app.frames["SUMMARY"]
-        view.after(0, lambda: view.displaySummaries())
+        self.app.manager.checkSummaries(view.mnemonique)
+
+
+    def deleteSummary(self, data):
+        view = self.app.frames["SUMMARY"]
+        self.app.manager.checkSummaries(view.mnemonique)

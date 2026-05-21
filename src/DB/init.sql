@@ -52,7 +52,7 @@ CREATE TABLE Evaluation (
   IdResume INT NOT NULL,
   PRIMARY KEY(ID),
   FOREIGN KEY(IdUtilisateur) REFERENCES Utilisateur(ID),
-  FOREIGN KEY(IdResume) REFERENCES Resume(ID)
+  FOREIGN KEY(IdResume) REFERENCES Resume(ID) ON DELETE CASCADE
 );
 
 CREATE TABLE CoursUtilisateur (
