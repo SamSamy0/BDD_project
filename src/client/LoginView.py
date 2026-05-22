@@ -36,10 +36,6 @@ class LoginView(View):
         self.signUp_button.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
 
     def login_action(self):
-        #if self.manager.signin("alice_dupont", "alice.dupont@univ.be"):
-        #if self.manager.signin("emma_bernard", "emma.bernard@univ.be"):
-            # if self.manager.signin(self.userName_entry.get(),self.mail_entry.get()):
-            #self.controller.show_view("MENU")
         self.manager.receiver = self
         self.manager.signin("alice_dupont", "alice.dupont@univ.be")
     
