@@ -62,8 +62,6 @@ class MenuView(View):
     def profil_action(self):
         self.manager.receiver = self.controller.frames["PROFIL"]
         self.manager.getProfile(self.manager.user.idUser)
-        #if self.manager.getProfile(self.manager.user.idUser):
-            #self.controller.show_view("PROFIL")
         self.controller.show_view("PROFIL")
 
     def mycourse_action(self):
