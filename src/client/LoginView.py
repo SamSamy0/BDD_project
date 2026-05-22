@@ -21,7 +21,7 @@ class LoginView(View):
         self.userName_label.grid(row=3, column=0, padx=20, pady=(10, 0), sticky="w")
 
         self.userName_entry = ctk.CTkEntry(
-            self, show="*", placeholder_text="emma_bernard"
+            self, placeholder_text="alice_dupont"
         )
         self.userName_entry.grid(row=4, column=0, padx=20, pady=(0, 20), sticky="ew")
 
@@ -36,8 +36,11 @@ class LoginView(View):
         self.signUp_button.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
 
     def login_action(self):
-        if self.manager.signin("emma_bernard", "emma.bernard@univ.be"):
-            # if self.manager.signin(self.userName_entry.get(),self.mail_entry.get()):
+        self.manager.receiver = self
+        self.manager.signin("alice_dupont", "alice.dupont@univ.be")
+    
+    def isAcceptedLogin(self, connect):
+        if connect:
             self.controller.show_view("MENU")
 
     def register_action(self):

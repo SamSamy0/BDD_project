@@ -40,24 +40,31 @@ class MenuView(View):
         self.logout_button.pack(padx=20, pady=20)
 
     def shop_action(self):
+        self.manager.receiver = self.controller.frames["SHOP"]
         self.manager.getUserObject(self.manager.user.idUser)
         self.manager.checkCatalogue()
+        self.controller.show_view("SHOP")
 
 
     def leaderboard_action(self):
+        self.manager.receiver = self.controller.frames["LEADERBOARD"]
         self.manager.checkLeaderBoard()
+        self.controller.show_view("LEADERBOARD")
 
     def logout_action(self):
         self.controller.show_view("LOGIN")
 
     def class_action(self):
+        self.manager.receiver = self.controller.frames["CLASS"]
         self.manager.getAllCourse()
+        self.controller.show_view("CLASS")
 
     def profil_action(self):
+        self.manager.receiver = self.controller.frames["PROFIL"]
         self.manager.getProfile(self.manager.user.idUser)
-        if self.manager.getProfile(self.manager.user.idUser):
-            self.controller.show_view("PROFIL")
+        self.controller.show_view("PROFIL")
 
     def mycourse_action(self):
+        self.manager.receiver = self.controller.frames["MYCLASS"]
         self.manager.getUserCourse(self.manager.user.idUser)
         self.controller.show_view("MYCLASS")

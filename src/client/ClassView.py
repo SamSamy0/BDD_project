@@ -30,31 +30,76 @@ class ClassView(View):
 
     def select_course(self, mnemonique):
         self.controller.current_cours = mnemonique
+        self.controller.frames["SUMMARY"].mnemonique = mnemonique
+        self.manager.receiver = self.controller.frames["SUMMARY"]
         self.manager.checkSummaries(mnemonique)
-        self.manager.receiver.app.frames["SUMMARY"].mnemonique = mnemonique
-
         self.controller.previous_view = "CLASS"
         self.controller.show_view("SUMMARY")
 
-    def add_course_action(self,course=None):
-        # TODO: Implémenter un pop up pour récupérer les valeurs
-        if course is None:
+    def add_course_action(self, course=None):
+        if course is not None:
+            # Appelé depuis le popup avec les vraies valeurs
+            mnemo = course.get("Mnemonique", "Inconnu")
+            name = course.get("Nom", "Sans Nom")
+            fac = course.get("Fac", "Sans Fac")
+            utc = course.get("Credits", 0)
+            year = course.get("Annee", 2025)
+            self.courses.append(course)
+            self.manager.addCourse(mnemo, name, fac, utc, year)
+            self.refresh()
+            return
+
+        # Ouvre le popup de saisie
+        popup = ctk.CTkToplevel(self)
+        popup.title("Ajouter un cours")
+        popup.geometry("400x500")
+        popup.after(100, popup.grab_set)  # bloque la fenêtre principale
+        #pour fixer le problème de focus du popup, on utilise after pour s'assurer que le popup est au premier plan et reçoit le focus
+        popup.after(100, popup.lift)  # assure que le popup est au premier plan
+        popup.after(100, lambda: popup.focus_force())  # donne le focus au popup
+
+        ctk.CTkLabel(popup, text="Mnémonique").pack(padx=20, pady=(15, 0), anchor="w")
+        mnemo_entry = ctk.CTkEntry(popup, placeholder_text="INFO-H303")
+        mnemo_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        ctk.CTkLabel(popup, text="Nom du cours").pack(padx=20, pady=(5, 0), anchor="w")
+        nom_entry = ctk.CTkEntry(popup, placeholder_text="Base de données")
+        nom_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        ctk.CTkLabel(popup, text="Faculté").pack(padx=20, pady=(5, 0), anchor="w")
+        fac_entry = ctk.CTkEntry(popup, placeholder_text="Sciences")
+        fac_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        ctk.CTkLabel(popup, text="Crédits").pack(padx=20, pady=(5, 0), anchor="w")
+        credits_entry = ctk.CTkEntry(popup, placeholder_text="5")
+        credits_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        ctk.CTkLabel(popup, text="Année").pack(padx=20, pady=(5, 0), anchor="w")
+        annee_entry = ctk.CTkEntry(popup, placeholder_text="2025")
+        annee_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        def confirm():
             course = {
-                "Mnemonique": "TEST-123",
-                "Nom": "Nouveau Cours",
-                "Fac": "Sciences",
-                "Credits": 5,
-                "Annee": 1
+                "Mnemonique": mnemo_entry.get(),
+                "Nom": nom_entry.get(),
+                "Fac": fac_entry.get(),
+                "Credits": int(credits_entry.get()) if credits_entry.get().isdigit() else 0,
+                "Annee": int(annee_entry.get()) if annee_entry.get().isdigit() else 2025
             }
-        mnemo = course.get("Mnemonique", "Inconnu")
-        name = course.get("Nom", "Sans Nom")
-        fac = course.get("Fac", "Sans Fac")
-        utc = course.get("Credits", 0)
-        year = course.get("Annee", "Inconnue")
+            popup.destroy()
+            self.add_course_action(course)
 
+        ctk.CTkButton(popup, text="Confirmer", command=confirm).pack(padx=20, pady=15, fill="x")
 
-        self.manager.addCourse(mnemo,name,fac,utc,year)
-        print("Ajouter un cours -test")
+    def confirmedAdd(self,course = None):
+        self.courses.append(course)
+        self.refresh()
+
+    def refusedAdd(self):
+        if len(self.courses) > 0:
+            self.courses.pop()
+            self.after(0,self.refresh)
+
 
     def confirmedAdd(self,course = None):
         self.courses.append(course)
@@ -89,7 +134,13 @@ class ClassView(View):
             )
             btn.pack(padx=10, pady=5, fill="x")
 
-    def displayCourses(self,courses):
-        self.courses = courses
-        self.refresh()
+    def setAllCourse(self, courses):
+        self.courses = []
+        self.courses.extend(courses)
+        self.after(0, self.refresh)  # rafraîchit la liste des cours dans l'interface
+        
 
+    def rollback_course(self):
+        if len(self.courses) > 0:
+            self.courses.pop()
+            self.after(0, self.refresh)
