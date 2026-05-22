@@ -42,7 +42,6 @@ class SummaryView(View):
         self.title_entry.pack(padx=20, pady=(0, 10), fill="x")
 
         ctk.CTkLabel(popup, text="Description").pack(padx=20, pady=(5, 0), anchor="w")
-        #self.content_entry = ctk.CTkEntry(popup, placeholder_text="Contenu du résumé")
         self.content_entry = ctk.CTkTextbox(popup, height=120)
         self.content_entry.pack(padx=20, pady=(0, 10), fill="x")
 
