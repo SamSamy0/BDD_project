@@ -235,8 +235,8 @@ if __name__ == "__main__":
     initUser(cursor.cursor())
     initEval(cursor.cursor())
     initCoursUtilisateur(cursor.cursor())
-    initUtilisateurObjet(cursor.cursor())
     initRew(cursor.cursor())
+    initUtilisateurObjet(cursor.cursor())
     cursor.commit()
     cursor.cursor.close
     cursor.close()

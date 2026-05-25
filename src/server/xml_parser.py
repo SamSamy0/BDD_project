@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+from enum import Enum
 
 MAXLV1 = 300
 MAXLV2 = 500
@@ -15,13 +16,52 @@ def parseUser():
     tree = ET.parse("data/utilisateurs")
     root = tree.getroot()
     for user in root.findall("utilisateur"):
+        str_points = user.findtext("points")
+        str_level = user.findtext("niveau")
+        points = int(str_points) if str_points else None
+        level = int(str_level) if str_level else None
+        # If we have level but not points
+        if points is None and level is not None:
+            default_points = {
+                1: 150,
+                2: 400,
+                3: 650,
+                4: 1000,
+                5: 1300,
+                6: 1700,
+                7: 2200,
+                8: 2600,
+                9: 3000,
+            }
+            points = default_points.get(level, 0)
+
+        if level is None and points is not None:
+            if points < MAXLV1:
+                level = 1
+            elif points < MAXLV2:
+                level = 2
+            elif points < MAXLV3:
+                level = 3
+            elif points < MAXLV4:
+                level = 4
+            elif points < MAXLV5:
+                level = 5
+            elif points < MAXLV6:
+                level = 6
+            elif points < MAXLV7:
+                level = 7
+            elif points < MAXLV8:
+                level = 8
+            elif points > MAXLV8:
+                level = 9
+
         data = {
             "id": user.get("id"),
             "nomUtilisateur": user.findtext("nomUtilisateur"),
             "email": user.findtext("email"),
             "dateInscription": user.findtext("dateInscription"),
-            "points": user.findtext("points"),
-            "niveau": user.findtext("niveau"),
+            "points": points,
+            "niveau": level,
             "titreActif": user.findtext("titreActif"),
             "resumes": [],
             "achats": [],
