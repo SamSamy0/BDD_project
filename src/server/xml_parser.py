@@ -1,5 +1,14 @@
 import xml.etree.ElementTree as ET
 
+MAXLV1 = 300
+MAXLV2 = 500
+MAXLV3 = 850
+MAXLV4 = 1150
+MAXLV5 = 1500
+MAXLV6 = 2000
+MAXLV7 = 2400
+MAXLV8 = 2850
+
 
 def parseUser():
     res = []
