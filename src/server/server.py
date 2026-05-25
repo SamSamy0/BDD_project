@@ -4,20 +4,15 @@ import socket
 import types
 
 import mysql.connector
-import pandas as pd
-from initData import initCours, initEval, initRew, initUser
-from mysql.connector import Error
-# from client.manager import Manager
 from ServerNetworkManager import ServerNetworkManager
 
-from client.ClientNetworkManager import ClientNetworkManager
-from common.protocol import Message, mapping_actions
 
 
 class Server:
-    def __init__(self):
+    def __init__(self, cursor):
         self.host = "127.0.0.1"
         self.port = 8080
+        self.manager = ServerNetworkManager(cursor)
         self.selector = selectors.DefaultSelector()
 
     def accept(self, sock):
@@ -38,17 +33,23 @@ class Server:
         # Mask contains the events that are ready (0 if not ready, 1 else)
         if mask & selectors.EVENT_READ:
             try:
-                receive_data = sock.recv(1024)
+                receive_data = sock.recv(65536)
                 if receive_data:
                     # Any data that is read is append to data.outb
                     # So it can be sent later
-                    data.outb += receive_data
-                    print(f"Receiving {data.outb!r}")
+                    request_str = receive_data.decode("utf-8")
+                    request_dict = json.loads(request_str)
+                    print(f"Requete recu : {request_dict}")
 
+                    reponse_dict = self.manager.handle_request(request_dict)
+
+                    data.outb += json.dumps(reponse_dict,default=str).encode("utf-8")
                 else:
                     # Client has closed their socket
                     self.selector.unregister(sock)
                     sock.close()
+            except json.JSONDecodeError:
+                print("Erreur : Le message reçu n'est pas un JSON valide.")
             except ConnectionResetError:
                 # Handles the case where the client closes the connection suddenly
                 self.selector.unregister(sock)
@@ -114,12 +115,6 @@ def connect_mySql():
 
 if __name__ == "__main__":
     cursor = connect_mySql()
-    initCours(cursor.cursor())
-    initUser(cursor.cursor())
-    initEval(cursor.cursor())
-    initRew(cursor.cursor())
     cursor.commit()
-    s = Server()
+    s = Server(cursor)
     s.run()
-    action_a_faire = ClientNetworkManager.signin
-    # resultat = mapping_actions[Message.SIGNIN]("daniel", "daniel", "daniel")

@@ -1,4 +1,4 @@
 -- Inspect the description
-SELECT * 
+SELECT *
 FROM ObjetCosmetique o
-WHERE o.Nom = %s
+WHERE o.Nom = %(idObjet)s

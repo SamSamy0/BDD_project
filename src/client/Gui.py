@@ -1,18 +1,28 @@
 import customtkinter as ctk
 from ClassView import ClassView
 from ClientNetworkManager import ClientNetworkManager
+from IpView import IpView
 from LeaderBoardView import LeaderBoardView
 from LoginView import LoginView
 from MenuView import MenuView
 from ShopView import ShopView
+from IpView import IpView
+from ProfilView import ProfilView
+from SummaryView import SummaryView
+from MyClassView import MyClassView
 
 
 class Gui(ctk.CTk):
     def __init__(self, manager: ClientNetworkManager):
         super().__init__()
+        self.manager = manager
+
+        #self.withdraw() #permet cacher les fenêtre quand on execute le client
 
         self.title("BDD")
-        self.geometry("400x500")
+        self.geometry("1000x1000")
+        self.middlex = self.winfo_screenwidth() / 2
+        self.middley = self.winfo_screenheight() / 2
 
         # Configuration du thème
         ctk.set_appearance_mode("dark")
@@ -27,13 +37,25 @@ class Gui(ctk.CTk):
         self.frames = {}
 
         # Initialisation des vues
-        for F in (LoginView, MenuView, LeaderBoardView, ShopView, ClassView):
+        for F in (IpView,LoginView, MenuView, LeaderBoardView, ShopView, ClassView, ProfilView, SummaryView,MyClassView):
             page_name = F.__name__.replace("View", "").upper()
-            frame = F(parent=self.container, controller=self)
+            frame = F(parent=self.container, controller=self, manager=self.manager)
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_view("LOGIN")
+        self.show_view("IP")
+        self.attributes("-fullscreen", True)
+        self.bind("<Escape>", self.on_closing)
+
+        # Gérer la fermeture de la fenêtre
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+        #self.deiconify() # on réaffiche  la fenêtre proprement après l'installation des fenêtres
+
+    def on_closing(self, event=None):
+        """Action effectuée à la fermeture de la fenêtre."""
+        self.manager.close()
+        self.destroy()
 
     def show_view(self, page_name):
         """Affiche une vue spécifique en la mettant au premier plan"""
