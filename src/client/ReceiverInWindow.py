@@ -70,9 +70,10 @@ class ReceiverInWindow:
         leaderView = self.app.frames["LEADERBOARD"]
         leaderView.leaderboard = []
         for user in data:
-            leaderView.leaderboard.append(tuple(user.values()))
-        self.app.show_view("LEADERBOARD")
+            temp = (user["Rang"], user["Nom"],user["Points"])
+            leaderView.leaderboard.append(temp)
         leaderView.after(0, lambda: leaderView.displayLeaderboard())
+        self.app.show_view("LEADERBOARD")
 
 
     def updatePointsInShop(self, data):
