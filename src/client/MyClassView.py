@@ -31,37 +31,44 @@ class MyClassView(View):
 
     def select_course(self, mnemonique):
         self.controller.current_cours = mnemonique
+        self.controller.frames["SUMMARY"].mnemonique = mnemonique
+        self.manager.checkSummaries(mnemonique)
         self.controller.previous_view = "MYCLASS"
         self.controller.show_view("SUMMARY")
 
-    def add_course_action(self,course=None):
-        # TODO: Implémenter un pop up pour récupérer les valeurs
-        if course is None:
-            course = {
-                "Mnemonique": "TEST-123",
-                "Nom": "Nouveau Cours",
-                "Fac": "Sciences",
-                "Credits": 5,
-                "Annee": 1
-            }
-        mnemo = course.get("Mnemonique", "Inconnu")
-        name = course.get("Nom", "Sans Nom")
-        fac = course.get("Fac", "Sans Fac")
-        utc = course.get("Credits", 0)
-        year = course.get("Annee", "Inconnue")
+    def add_course_action(self):
+        popup = ctk.CTkToplevel(self)
+        popup.title("Ajouter un cours")
+        popup.geometry("400x200")
+        popup.after(100, popup.grab_set)
+        popup.after(100, popup.lift)
+        popup.after(100, lambda: popup.focus_force())
 
+        ctk.CTkLabel(popup, text="Mnémonique du cours").pack(padx=20, pady=(15, 0), anchor="w")
+        mnemo_entry = ctk.CTkEntry(popup, placeholder_text="INFO-H303")
+        mnemo_entry.pack(padx=20, pady=(0, 10), fill="x")
 
-        self.manager.addUserCourse(mnemo,self.manager.user.idUser)
-        print("Ajouter un cours -test")
+        def confirm():
+            mnemo = mnemo_entry.get()
+            if not mnemo:
+                return
+            popup.destroy()
+            self.manager.addUserCourse(mnemo, self.manager.user.idUser)
+
+        ctk.CTkButton(popup, text="Rejoindre", command=confirm).pack(padx=20, pady=15, fill="x")
 
     def confirmedAdd(self,course = None):
         self.courses.append(course)
         self.refresh()
 
     def refusedAdd(self):
-        if len(self.courses) > 0:
-            self.courses.pop()
-            self.after(0,self.refresh)
+        popup = ctk.CTkToplevel(self)
+        popup.title("Erreur")
+        popup.geometry("300x120")
+        popup.after(100, popup.grab_set)
+        popup.after(100, popup.lift)
+        ctk.CTkLabel(popup, text="Impossible d'ajouter ce cours.\n(Déjà inscrit ou mnémonique invalide)").pack(padx=20, pady=20)
+        ctk.CTkButton(popup, text="OK", command=popup.destroy).pack(pady=5)
 
     def back_action(self):
         self.controller.show_view("MENU")
@@ -78,35 +85,35 @@ class MyClassView(View):
             utc = cours.get("Credits", 0)
             year = cours.get("Annee", "Inconnue")
 
+            frame = ctk.CTkFrame(self.scroll_frame)
+            frame.pack(padx=10, pady=5, fill="x")
+            frame.grid_columnconfigure(0, weight=1)
+
             btn = ctk.CTkButton(
-                self.scroll_frame,
+                frame,
                 text=f"{mnemo} - {name} - {fac} - {utc} - {year}",
                 command=lambda m=mnemo: self.select_course(
                     m
                 ),  # m=mnemonique capture la valeur
             )
-            btn.pack(padx=10, pady=5, fill="x")
+            btn.grid(row=0, column = 0, padx = 5, pady = 5, sticky = "ew")
+
+            btn_del = ctk.CTkButton(
+                frame,
+                text="Supprimer",
+                fg_color="red",
+                hover_color="darkred",
+                command=lambda c=cours: self.delete_user_course_action(c)
+            )
+            btn_del.grid(row=0, column = 1, padx = 5, pady = 5)
 
     def displayCourses(self,courses):
         self.courses = courses
         self.refresh()
 
-    def delete_user_course_action(self,course = None):
-        if course is None:
-            course = {
-                "Mnemonique": "TEST-123",
-                "Nom": "Nouveau Cours",
-                "Fac": "Sciences",
-                "Credits": 5,
-                "Annee": 1
-            }
+    def delete_user_course_action(self, course):
         mnemo = course.get("Mnemonique", "Inconnu")
-        name = course.get("Nom", "Sans Nom")
-        fac = course.get("Fac", "Sans Fac")
-        utc = course.get("Credits", 0)
-        year = course.get("Annee", "Inconnue")
-
-        self.manager.deleteUserCourse(mnemo,self.manager.user.idUser)
+        self.manager.deleteUserCourse(mnemo, self.manager.user.idUser)
 
     def confirmedDelete(self,course):
         for obj in self.courses:
@@ -118,5 +125,21 @@ class MyClassView(View):
     def refusedDelete(self,course):
         #TODO:POP-UP
         pass
+
+    def getUserCourse(self, data):
+        self.courses = data if data else []
+        self.after(0,self.refresh)
+    
+    def addUserCourse(self, data):
+        if data:
+            self.after(0, lambda: self.confirmedAdd(data))
+        else:
+            self.after(0, self.refusedAdd)
+
+    def deleteUserCourse(self, data):
+        if data:
+            self.after(0, lambda: self.confirmedDelete(data))
+        else:
+            self.after(0, lambda: self.refusedDelete(None))
 
 

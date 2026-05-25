@@ -18,7 +18,7 @@ class ReceiverInWindow:
         self.app.show_view("CLASS")
         classView = self.app.frames["CLASS"]
 
-        classView.after(0, lambda: classView.displayCourses(courses))
+        classView.after(0, lambda: classView.setAllCourse(courses))
 
 
     def displayStore(self, store: dict):
@@ -118,6 +118,7 @@ class ReceiverInWindow:
 
 
     def checkSummaries(self, data: list[dict]):
+        print("on accede au receiver")
         view = self.app.frames["SUMMARY"]
         view.summaries = []
         summaries = view.summaries
