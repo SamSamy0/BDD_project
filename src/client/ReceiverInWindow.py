@@ -150,7 +150,12 @@ class ReceiverInWindow:
         
 
     def getEval(self, data):
-        pass
+        view = self.app.frames["EVAL"]
+        auteur = data.get("Nom","Inconnu")
+        commentaire = data.get("Commentaire","Aucun commentaire")
+        note = data.get("Note",0)
+        view.after(0,view.displayEval(auteur,commentaire,note))
+
         
     def addReview(self,data):
         view = self.app.frames["SUMMARY"]

@@ -170,7 +170,7 @@ class DatabaseManager:
         return self.reader_query(self.path_getEvaluations, "all", False, params=data)
 
     def getEval(self, data):
-        return self.reader_query(self.path_getEval, "all", False, params=data)
+        return self.reader_query(self.path_getEval, "one", False, params=data)
 
     # User
     def changeStateObj(self, data):
