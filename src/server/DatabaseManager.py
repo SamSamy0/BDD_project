@@ -37,7 +37,7 @@ class DatabaseManager:
         self.path_changeStateObj = "DB/queries/users/change_state_object.sql"
         self.path_getProfile = "DB/queries/users/check_profile.sql"
         self.path_getUserObject = "DB/queries/users/get_user_object.sql"
-        self.path_getUserAllPoints = "DB/queries/users/get_alltime_points.sql"
+        self.path_getUserAllPoints = "DB/queries/users/get_alltime_points_user.sql"
         self.path_updateUserLevel = "DB/queries/users/update_level.sql"
         # Statistic
         self.path_checkLeaderBoard = "DB/queries/stats/check_leaderboard.sql"
@@ -49,21 +49,22 @@ class DatabaseManager:
         )
         self.path_getBestTenUsers = "DB/queries/stats/ranking_ten_users_points.sql"
 
-    def check_and_upgrade_level(self, idUser=int):
-        with open(self.path_getUserAllPoints, "r", encoding="utf-8") as fichier:
-
-            self.cursor.execute(fichier.read(), (idUser,))
-            res = self.cursor.fetchone()
-            total = res.get("Total") if res is not None else None
-
-            if total:
-                level = getUserLevel(total)
-
+    def check_and_upgrade_level(self, idUser: int):
+        try:
+            with open(self.path_getUserAllPoints, "r", encoding="utf-8") as fichier:
+                self.cursor.execute(fichier.read(), {"idUser": idUser})
+                res = self.cursor.fetchone()
+            total = res.get("Total") if (res and res.get("Total") is not None) else 0
+            level = getUserLevel(total)
             with open(self.path_updateUserLevel, "r", encoding="utf-8") as fichier2:
                 sql_update_level = fichier2.read()
 
-            self.cursor.execute(sql_update_level, (level, idUser))
+            self.cursor.execute(sql_update_level, {"level": level, "idUser": idUser})
             self.conn.commit()
+            print("CONGRATULATIONS, YOU UPGRADED")
+
+        except Exception as e:
+            print(f"Error when upgrading: {e}")
 
     def reader_query(self, path, fetch="all", insert=False, params=None):
         with open(path, "r", encoding="utf-8") as fichier:

@@ -1,1 +1,1 @@
-UPDATE Utilisateur SET Niveau=%(new_lvl)s WHERE ID=%(idUser) AND Niveau < %(new_lvl)s;
+UPDATE Utilisateur SET Niveau=%(level)s WHERE ID=%(idUser)s;

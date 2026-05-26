@@ -1,3 +1,3 @@
-SELECT SUM(Points) as Total
+SELECT SUM(Montant) as Total
 FROM TransactionPoints
-WHERE ID= %(idUser)s AND TypeTransaction='gains'
+WHERE IdUtilisateur= %(idUser)s AND TypeTransaction='gain'
