@@ -18,7 +18,7 @@ class ReceiverInWindow:
         self.app.show_view("CLASS")
         classView = self.app.frames["CLASS"]
 
-        classView.after(0, lambda: classView.displayCourses(courses))
+        classView.after(0, lambda: classView.setAllCourse(courses))
 
 
     def displayStore(self, store: dict):
@@ -70,9 +70,10 @@ class ReceiverInWindow:
         leaderView = self.app.frames["LEADERBOARD"]
         leaderView.leaderboard = []
         for user in data:
-            leaderView.leaderboard.append(tuple(user.values()))
-        self.app.show_view("LEADERBOARD")
+            temp = (user["Rang"], user["Nom"],user["Points"])
+            leaderView.leaderboard.append(temp)
         leaderView.after(0, lambda: leaderView.displayLeaderboard())
+        self.app.show_view("LEADERBOARD")
 
 
     def updatePointsInShop(self, data):
@@ -118,11 +119,12 @@ class ReceiverInWindow:
 
 
     def checkSummaries(self, data: list[dict]):
+        print("on accede au receiver")
         view = self.app.frames["SUMMARY"]
         view.summaries = []
         summaries = view.summaries
         for summary in data:
-            temp = (summary["Titre"],summary["Nom"],summary["Moyenne"],summary["ID"])
+            temp = (summary["ID"], summary["Titre"],summary["Nom"],summary["Moyenne"])
             summaries.append(temp)
 
         self.app.show_view("SUMMARY")
@@ -130,22 +132,31 @@ class ReceiverInWindow:
 
     def addSummary(self,data):
         view = self.app.frames["SUMMARY"]
-        view.after(0, lambda: view.displaySummaries())
+        self.app.manager.checkSummaries(view.mnemonique)
 
 
 
     def getEvaluations(self,data):
         view = self.app.frames["EVAL"]
-        view.evaluations = data if data else []
-        # for eval in data:
-        #     temp = (eval["Nom"],eval["Note"],eval["ID"])
-        #     evaluations.append(temp)
+        view.evaluations = []
+        evaluations = view.evaluations
+        for eval in data:
+            temp = (eval["Nom"],eval["Note"],eval["ID"])
+            evaluations.append(temp)
 
         self.app.show_view("EVAL")
-        view.after(0, lambda: view.displayEvaluations)
+        view.after(0, lambda: view.displayEvaluations())
 
         
 
     def getEval(self, data):
         pass
         
+    def addReview(self,data):
+        view = self.app.frames["SUMMARY"]
+        self.app.manager.checkSummaries(view.mnemonique)
+
+
+    def deleteSummary(self, data):
+        view = self.app.frames["SUMMARY"]
+        self.app.manager.checkSummaries(view.mnemonique)

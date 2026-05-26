@@ -32,7 +32,6 @@ class MyClassView(View):
     def select_course(self, mnemonique):
         self.controller.current_cours = mnemonique
         self.controller.frames["SUMMARY"].mnemonique = mnemonique
-        self.manager.receiver = self.controller.frames["SUMMARY"]
         self.manager.checkSummaries(mnemonique)
         self.controller.previous_view = "MYCLASS"
         self.controller.show_view("SUMMARY")
@@ -54,7 +53,6 @@ class MyClassView(View):
             if not mnemo:
                 return
             popup.destroy()
-            self.manager.receiver = self
             self.manager.addUserCourse(mnemo, self.manager.user.idUser)
 
         ctk.CTkButton(popup, text="Rejoindre", command=confirm).pack(padx=20, pady=15, fill="x")
@@ -115,7 +113,6 @@ class MyClassView(View):
 
     def delete_user_course_action(self, course):
         mnemo = course.get("Mnemonique", "Inconnu")
-        self.manager.receiver = self
         self.manager.deleteUserCourse(mnemo, self.manager.user.idUser)
 
     def confirmedDelete(self,course):

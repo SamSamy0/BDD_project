@@ -16,7 +16,7 @@ class EvalView(View):
         self.scroll_frame.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
         self.evaluations = []
         
-        self.btn_eval = ctk.CTkButton(self, text="Voir", command=self.back_action)
+        self.btn_eval = ctk.CTkButton(self, text="Retour", command=self.back_action)
         self.btn_eval.grid(row=2, column=0, padx=20, pady=10)
 
 
@@ -34,10 +34,7 @@ class EvalView(View):
         for widget in self.scroll_frame.winfo_children():
                 widget.destroy()
 
-        for eval in self.evaluations:
-            auteur = eval.get("Nom")
-            note = eval.get("Note")
-            id = eval.get("ID")
+        for auteur, note, id_eval in self.evaluations:
             
             frame = ctk.CTkFrame(self.scroll_frame)
             frame.pack(padx=10, pady=5, fill="x")
@@ -46,7 +43,7 @@ class EvalView(View):
             info = ctk.CTkLabel(frame, text=f"par {auteur} | * {note}/5")
             info.grid(row=0, column=0, padx=10, pady=8, sticky="w")
             #bouton voir
-            btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda i = id: self.eval_action(i))
+            btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda i = id_eval: self.eval_action(i))
             btn.grid(row=0, column=1, padx=5, pady=8)
 
 

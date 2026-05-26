@@ -31,7 +31,6 @@ class ClassView(View):
     def select_course(self, mnemonique):
         self.controller.current_cours = mnemonique
         self.controller.frames["SUMMARY"].mnemonique = mnemonique
-        self.manager.receiver = self.controller.frames["SUMMARY"]
         self.manager.checkSummaries(mnemonique)
         self.controller.previous_view = "CLASS"
         self.controller.show_view("SUMMARY")

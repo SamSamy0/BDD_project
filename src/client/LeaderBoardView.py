@@ -64,9 +64,9 @@ class LeaderBoardView(View):
         ctk.CTkLabel(self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")).grid(row=0, column=1, padx=10, pady=5)
         ctk.CTkLabel(self.scroll_frame, text="Points", font=ctk.CTkFont(weight="bold")).grid(row=0, column=2, padx=10, pady=5)
         for i, entry in enumerate(self.leaderboard, start=1):
-            rang = entry.get("Rang")
-            nom = entry.get("Nom")
-            points = entry.get("Points")
+            rang = entry[0]
+            nom = entry[1]
+            points = entry[2]
             ctk.CTkLabel(self.scroll_frame, text=str(rang)).grid(
                 row=i, column=0, padx=10, pady=5
             )
