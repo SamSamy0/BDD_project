@@ -8,4 +8,8 @@ class Profile:
     def initData(self, data: dict):
         self.idUser = data.get("ID")
         self.points = data.get("Points")
-        print("pointso", self.points)
+        self.name = data.get("Nom")
+
+
+    def getName(self):
+        return self.name

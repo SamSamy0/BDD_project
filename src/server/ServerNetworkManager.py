@@ -16,6 +16,9 @@ class ServerNetworkManager:
         match protocol:
             case Protocol.SIGNIN.value:
                 result = self.db.signin(data)
+                print(data)
+                print('ybunj,kl;pm:ù')
+                print()
                 return {"protocol": protocol, "data": result}
 
             case Protocol.SIGNUP.value:

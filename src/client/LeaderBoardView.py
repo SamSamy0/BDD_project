@@ -8,6 +8,9 @@ class LeaderBoardView(View):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
+        self.position_label = ctk.CTkLabel(self, text="Votre position ...", text_color="red", font=ctk.CTkFont(slant="italic"))
+        self.position_label.grid(row=0, column=0, sticky="e", padx=20)
+
         self.title_label = ctk.CTkLabel(
             self, text="LeaderBoard", font=ctk.CTkFont(size=20, weight="bold")
         )
@@ -57,6 +60,8 @@ class LeaderBoardView(View):
             print(f"==={name}===")
 
     def displayLeaderboard(self):
+        self.getMyPosition()
+
         for widget in self.scroll_frame.winfo_children():
                 widget.destroy()
 
@@ -79,3 +84,16 @@ class LeaderBoardView(View):
     def checkLeaderboard(self, data):
         self.leaderboard = data if data else []
         self.after(0, self.displayLeaderboard)
+
+    def getMyPosition(self):
+        user_name = self.manager.user.getName()
+        print(user_name)
+        pass
+        for i, entry in enumerate(self.leaderboard, start=1):
+            nom = entry[1]
+            if(nom == user_name):
+                rang = entry[0]
+                points = entry[2]
+                self.position_label.configure(text=f"Votre position : {rang}  avec {points} de points")
+                break
+
