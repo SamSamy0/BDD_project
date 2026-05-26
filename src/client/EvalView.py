@@ -22,7 +22,6 @@ class EvalView(View):
 
     def back_action(self):
         self.manager.checkSummaries(self.controller.frames["SUMMARY"].mnemonique)
-        # self.controller.show_view("SUMMARIES") #WARNING: NE MET PAS A JOUR LES SUMMARIES MAIS PAS GRAVE
 
 
     def eval_action(self,eval_id):
