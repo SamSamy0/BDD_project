@@ -136,6 +136,8 @@ class ClientNetworkManager:
 
             case Protocol.GET_RANKING_OBJECT.value:
                 self.receiver.getObRanking(data)
+            case Protocol.GET_SUMMARY_AVERAGE.value:
+                self.receiver.summaryAverage(data)
 
             # case Protocol.
 
@@ -270,8 +272,8 @@ class ClientNetworkManager:
             {"ID": int(idSumm), "IdUtilisateur": idAuthor},
         )
 
-    def getSummAverage(self, idSumm: int):
-        self.send_request(Protocol.GET_SUMMARY_AVERAGE.value, {"idSumm": idSumm})
+    def getSummAverage(self):
+        self.send_request(Protocol.GET_SUMMARY_AVERAGE.value, {"None": ""})
 
     """Users Queries"""
 

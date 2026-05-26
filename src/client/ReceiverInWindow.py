@@ -142,3 +142,8 @@ class ReceiverInWindow:
     def deleteSummary(self, data):
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)
+
+    def summaryAverage(self,data):
+        view = self.app.frames["SUMMARY"]
+        if data:
+            view.after(0, lambda: view.update_average(data))
