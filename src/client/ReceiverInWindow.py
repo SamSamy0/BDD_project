@@ -122,7 +122,7 @@ class ReceiverInWindow:
         view.summaries = []
         summaries = view.summaries
         for summary in data:
-            temp = (summary["Titre"],summary["Nom"],summary["Moyenne"])
+            temp = (summary["Titre"],summary["Nom"],summary["Moyenne"],summary["ID"])
             summaries.append(temp)
 
         self.app.show_view("SUMMARY")
@@ -132,3 +132,20 @@ class ReceiverInWindow:
         view = self.app.frames["SUMMARY"]
         view.after(0, lambda: view.displaySummaries())
 
+
+
+    def getEvaluations(self,data):
+        view = self.app.frames["EVAL"]
+        view.evaluations = data if data else []
+        # for eval in data:
+        #     temp = (eval["Nom"],eval["Note"],eval["ID"])
+        #     evaluations.append(temp)
+
+        self.app.show_view("EVAL")
+        view.after(0, lambda: view.displayEvaluations)
+
+        
+
+    def getEval(self, data):
+        pass
+        

@@ -131,6 +131,12 @@ class ClientNetworkManager:
             case Protocol.GET_RANKING_OBJECT.value:
                 self.receiver.getObRanking(data)
 
+            case Protocol.GET_EVALUATIONS.value:
+                self.receiver.getEvaluations(data)
+
+            case Protocol.GET_EVAL.value:
+                self.receiver.getEval(data)
+
             # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
@@ -297,3 +303,9 @@ class ClientNetworkManager:
 
     def getBestTenUsers(self):
         self.send_request(Protocol.GET_BEST_TEN_USERS.value)
+
+    def getEvaluations(self, idResume):
+        self.send_request(Protocol.GET_EVALUATIONS.value, {"IdResume": idResume})
+
+    def getEval(self, idEval):
+        self.send_request(Protocol.GET_EVAL.value, {"ID": idEval})
