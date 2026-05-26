@@ -1,4 +1,5 @@
 import mysql.connector
+from getUserLevel import getUserLevel
 
 
 class DatabaseManager:
@@ -38,6 +39,8 @@ class DatabaseManager:
         self.path_changeStateObj = "DB/queries/users/change_state_object.sql"
         self.path_getProfile = "DB/queries/users/check_profile.sql"
         self.path_getUserObject = "DB/queries/users/get_user_object.sql"
+        self.path_getUserAllPoints = "DB/queries/users/get_alltime_points_user.sql"
+        self.path_updateUserLevel = "DB/queries/users/update_level.sql"
         # Statistic
         self.path_checkLeaderBoard = "DB/queries/stats/check_leaderboard.sql"
         self.path_getObRanking = "DB/queries/stats/ranking_object.sql"
@@ -47,6 +50,23 @@ class DatabaseManager:
             "DB/queries/stats/at_least_three_differents.sql"
         )
         self.path_getBestTenUsers = "DB/queries/stats/ranking_ten_users_points.sql"
+
+    def check_and_upgrade_level(self, idUser: int):
+        try:
+            with open(self.path_getUserAllPoints, "r", encoding="utf-8") as fichier:
+                self.cursor.execute(fichier.read(), {"idUser": idUser})
+                res = self.cursor.fetchone()
+            total = res.get("Total") if (res and res.get("Total") is not None) else 0
+            level = getUserLevel(total)
+            with open(self.path_updateUserLevel, "r", encoding="utf-8") as fichier2:
+                sql_update_level = fichier2.read()
+
+            self.cursor.execute(sql_update_level, {"level": level, "idUser": idUser})
+            self.conn.commit()
+            print("CONGRATULATIONS, YOU UPGRADED")
+
+        except Exception as e:
+            print(f"Error when upgrading: {e}")
 
     def reader_query(self, path, fetch="all", insert=False, params=None):
         with open(path, "r", encoding="utf-8") as fichier:
@@ -103,7 +123,9 @@ class DatabaseManager:
 
     # Review
     def addReview(self, data):
-        return self.reader_query(self.path_addReview, "one", True, params=data)
+        res = self.reader_query(self.path_addReview, "one", True, params=data)
+        self.check_and_upgrade_level(data.get("idAuthor"))
+        return res
 
     # Shop
     def buyObject(self, data):
@@ -152,13 +174,15 @@ class DatabaseManager:
 
     # Summaries
     def addSummary(self, data):
-        return self.reader_query(self.path_addSummary, "one", True, params=data)
+        res = self.reader_query(self.path_addSummary, "one", True, params=data)
+        self.check_and_upgrade_level(data.get("idAuthor"))
+        return res
 
     def checkSummary(self, data):
         return self.reader_query(self.path_checkSummary, "all", False, params=data)
 
-    def checkSummaries(self,data):
-        return self.reader_query(self.path_checkSummaries,"all",False,params=data)
+    def checkSummaries(self, data):
+        return self.reader_query(self.path_checkSummaries, "all", False, params=data)
 
     def deleteSummary(self, data):
         return self.reader_query(self.path_deleteSummary, "one", True, params=data)

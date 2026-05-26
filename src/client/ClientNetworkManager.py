@@ -221,7 +221,7 @@ class ClientNetworkManager:
             {
                 "idUser": idUser,
                 "objId": objId,
-                "cost": cost,
+                "cost": -cost,
                 "typ": "dépense",
                 "jour": jour,
             },
@@ -271,7 +271,10 @@ class ClientNetworkManager:
         self.send_request(Protocol.READ_SUMMARIES.value, {"Mnemonique": Mnemonique})
 
     def deleteSummary(self, idSumm, idAuthor):
-        self.send_request(Protocol.DELETE_SUMMARY.value, {"ID": int(idSumm), "IdUtilisateur": idAuthor})
+        self.send_request(
+            Protocol.DELETE_SUMMARY.value,
+            {"ID": int(idSumm), "IdUtilisateur": idAuthor},
+        )
 
     def getSummAverage(self, idSumm: int):
         self.send_request(Protocol.GET_SUMMARY_AVERAGE.value, {"idSumm": idSumm})

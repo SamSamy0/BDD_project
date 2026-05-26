@@ -6,4 +6,4 @@ LEFT JOIN (
   JOIN ObjetCosmetique oc on uo.IdObjet = oc.ID
   WHERE EstActif = 1 AND oc.TypeObjet = 'Titre'
 ) AS Titre ON u.ID = Titre.IdUtilisateur
-WHERE u.ID = 5;
+WHERE u.ID = %(idUser)s;
