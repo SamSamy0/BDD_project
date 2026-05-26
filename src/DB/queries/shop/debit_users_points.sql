@@ -1,2 +1,2 @@
 -- Debit user's point
-UPDATE Utilisateur SET Points = Points - %(cost)s WHERE ID =  %(idUser)s
+UPDATE Utilisateur SET Points = Points + %(cost)s WHERE ID =  %(idUser)s

@@ -1,13 +1,5 @@
 import mysql.connector
-
-MAXLV1 = 300
-MAXLV2 = 500
-MAXLV3 = 850
-MAXLV4 = 1150
-MAXLV5 = 1500
-MAXLV6 = 2000
-MAXLV7 = 2400
-MAXLV8 = 2850
+from getUserLevel import getUserLevel
 
 
 class DatabaseManager:
@@ -65,24 +57,7 @@ class DatabaseManager:
             total = res.get("Total") if res is not None else None
 
             if total:
-                if total < MAXLV1:
-                    level = 1
-                elif total < MAXLV2:
-                    level = 2
-                elif total < MAXLV3:
-                    level = 3
-                elif total < MAXLV4:
-                    level = 4
-                elif total < MAXLV5:
-                    level = 5
-                elif total < MAXLV6:
-                    level = 6
-                elif total < MAXLV7:
-                    level = 7
-                elif total < MAXLV8:
-                    level = 8
-                elif total > MAXLV8:
-                    level = 9
+                level = getUserLevel(total)
 
             with open(self.path_updateUserLevel, "r", encoding="utf-8") as fichier2:
                 sql_update_level = fichier2.read()
@@ -220,7 +195,6 @@ class DatabaseManager:
         return self.reader_query(self.path_getProfile, "one", False, params=data)
 
     def getUserObjet(self, data):
-        print("dadada", data)
         return self.reader_query(self.path_getUserObject, "all", False, params=data)
 
     # Statistic
