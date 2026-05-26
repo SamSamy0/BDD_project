@@ -45,6 +45,7 @@ class DatabaseManager:
             "DB/queries/stats/at_least_three_differents.sql"
         )
         self.path_getBestTenUsers = "DB/queries/stats/ranking_ten_users_points.sql"
+        self.path_getUserNeverPublish="DB/queries/stats/user_never_publish.sql"
 
     def reader_query(self, path, fetch="all", insert=False, params=None):
         with open(path, "r", encoding="utf-8") as fichier:
@@ -195,3 +196,6 @@ class DatabaseManager:
 
     def getBestTenUsers(self, data):
         return self.reader_query(self.path_getBestTenUsers, "all", False, params=data)
+    
+    def getUserNeverPublish(self):
+        return self.reader_query(self.path_getUserNeverPublish, "all", False, None)

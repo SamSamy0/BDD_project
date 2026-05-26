@@ -33,8 +33,6 @@ class Protocol(Enum):
     ADD_USER_COURSE = 35
     DELETE_USER_COURSE = 36
 
-
-
     # Summary
     ADD_SUMMARY = 21
     READ_SUMMARY = 22
@@ -51,3 +49,4 @@ class Protocol(Enum):
     GET_RANKING_SPENDER = 31
     GET_BEST_TEN_USERS = 32
     GET_SUMMARY_AVERAGE = 33
+    GET_USER_NEVER_PUBLISH = 37

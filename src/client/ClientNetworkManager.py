@@ -304,3 +304,6 @@ class ClientNetworkManager:
 
     def getBestTenUsers(self):
         self.send_request(Protocol.GET_BEST_TEN_USERS.value)
+
+    def getUserNeverPublish(self):
+        self.send_request(Protocol.GET_USER_NEVER_PUBLISH.value)
