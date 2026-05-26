@@ -34,8 +34,7 @@ class LoginView(View):
         self.signUp_button.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
 
     def login_action(self):
-        self.manager.receiver = self
-        self.manager.signin("emma_bernard", "emma.bernard@univ.be")
+        self.manager.signin("alice_dupont", "alice.dupont@univ.be")
 
     def isAcceptedLogin(self, connect):
         if connect:

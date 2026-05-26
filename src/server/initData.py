@@ -99,7 +99,8 @@ def initUser(mycursor):
             )
             try:
                 mycursor.execute(insertResumeSql, val)
-            except:
+            except Exception as e:
+                print("ERROR: ", e)
                 continue
 
 
@@ -141,8 +142,8 @@ def initRew(myCursor):
         desc = r["description"]
         try:
             myCursor.execute(initRew, (id, name, typeObj, prix, desc))
-        except:
-            print("SOMETHING WRONG")
+        except Exception as e:
+            print("SOMETHING WRONG: ", e)
 
 
 def initCoursUtilisateur(mycursor):
@@ -166,7 +167,8 @@ def initCoursUtilisateur(mycursor):
                         if res["cours"] == mnemo:
                             val = (mnemo, iduser)
                             mycursor.execute(insertCoursUtilisateur, val)
-                    except:
+                    except Exception as e:
+                        print("ERROR:", e)
                         continue
 
 
@@ -202,6 +204,7 @@ def initUtilisateurObjet(mycursor):
             val = (iduser, mapping_object[obj], is_active)
             try:
                 mycursor.execute(insertUtilisateurObjet, val)
+
             except Exception as e:
                 print(
                     f"Erreur lors de l'insertion de l'objet {obj} pour l'utilisateur {iduser} : {e}"
@@ -230,13 +233,13 @@ def connect_mySql():
 
 
 if __name__ == "__main__":
-    cursor = connect_mySql()
-    initCours(cursor.cursor())
-    initUser(cursor.cursor())
-    initEval(cursor.cursor())
-    initCoursUtilisateur(cursor.cursor())
-    initRew(cursor.cursor())
-    initUtilisateurObjet(cursor.cursor())
-    cursor.commit()
-    cursor.cursor.close
+    connexion = connect_mySql()
+    cursor = connexion.cursor()
+    initCours(cursor)
+    initUser(cursor)
+    initEval(cursor)
+    initRew(cursor)
+    initUtilisateurObjet(cursor)
+    connexion.commit()
     cursor.close()
+    connexion.close()

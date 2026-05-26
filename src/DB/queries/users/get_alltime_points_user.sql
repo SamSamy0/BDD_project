@@ -1,3 +1,3 @@
 SELECT SUM(Montant) as Total
 FROM TransactionPoints
-WHERE IdUtilisateur= %(idUser)s AND TypeTransaction='gain'
+WHERE IdUtilisateur= %(idUser)s AND Montant >0;

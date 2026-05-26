@@ -18,7 +18,7 @@ class ReceiverInWindow:
         self.app.show_view("CLASS")
         classView = self.app.frames["CLASS"]
 
-        classView.after(0, lambda: classView.displayCourses(courses))
+        classView.after(0, lambda: classView.setAllCourse(courses))
 
 
     def displayStore(self, store: dict):
@@ -70,9 +70,10 @@ class ReceiverInWindow:
         leaderView = self.app.frames["LEADERBOARD"]
         leaderView.leaderboard = []
         for user in data:
-            leaderView.leaderboard.append(tuple(user.values()))
-        self.app.show_view("LEADERBOARD")
+            temp = (user["Rang"], user["Nom"],user["Points"])
+            leaderView.leaderboard.append(temp)
         leaderView.after(0, lambda: leaderView.displayLeaderboard())
+        self.app.show_view("LEADERBOARD")
 
 
     def updatePointsInShop(self, data):
@@ -118,11 +119,12 @@ class ReceiverInWindow:
 
 
     def checkSummaries(self, data: list[dict]):
+        print("on accede au receiver")
         view = self.app.frames["SUMMARY"]
         view.summaries = []
         summaries = view.summaries
         for summary in data:
-            temp = (summary["Titre"],summary["Nom"],summary["Moyenne"])
+            temp = (summary["ID"], summary["Titre"],summary["Nom"],summary["Moyenne"])
             summaries.append(temp)
 
         self.app.show_view("SUMMARY")
@@ -130,5 +132,13 @@ class ReceiverInWindow:
 
     def addSummary(self,data):
         view = self.app.frames["SUMMARY"]
-        view.after(0, lambda: view.displaySummaries())
+        self.app.manager.checkSummaries(view.mnemonique)
 
+    def addReview(self,data):
+        view = self.app.frames["SUMMARY"]
+        self.app.manager.checkSummaries(view.mnemonique)
+
+
+    def deleteSummary(self, data):
+        view = self.app.frames["SUMMARY"]
+        self.app.manager.checkSummaries(view.mnemonique)

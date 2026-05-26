@@ -128,6 +128,12 @@ class ClientNetworkManager:
             case Protocol.ADD_SUMMARY.value:
                 self.receiver.addSummary(data)
 
+            case Protocol.ADD_EVAL.value:
+                self.receiver.addReview(data)
+
+            case Protocol.DELETE_SUMMARY.value:
+                self.receiver.deleteSummary(data)
+
             case Protocol.GET_RANKING_OBJECT.value:
                 self.receiver.getObRanking(data)
 
@@ -189,14 +195,14 @@ class ClientNetworkManager:
 
     """Reviews queries"""
 
-    def addReview(self, note: str, comment: str, idAuthor: int, idSummary: int):
+    def addReview(self, note: str, comment: str, idAuthor: int, idSumm: int):
         self.send_request(
             Protocol.ADD_EVAL.value,
             {
                 "note": note,
                 "comment": comment,
                 "idAuthor": idAuthor,
-                "idSummary": idSummary,
+                "idSumm": idSumm,
             },
         )
 
@@ -209,7 +215,7 @@ class ClientNetworkManager:
             {
                 "idUser": idUser,
                 "objId": objId,
-                "cost": cost,
+                "cost": -cost,
                 "typ": "dépense",
                 "jour": jour,
             },
@@ -258,8 +264,11 @@ class ClientNetworkManager:
     def checkSummaries(self, Mnemonique: str):
         self.send_request(Protocol.READ_SUMMARIES.value, {"Mnemonique": Mnemonique})
 
-    def deleteSummary(self, idSumm: int):
-        self.send_request(Protocol.DELETE_SUMMARY.value, {"idSumm": idSumm})
+    def deleteSummary(self, idSumm, idAuthor):
+        self.send_request(
+            Protocol.DELETE_SUMMARY.value,
+            {"ID": int(idSumm), "IdUtilisateur": idAuthor},
+        )
 
     def getSummAverage(self, idSumm: int):
         self.send_request(Protocol.GET_SUMMARY_AVERAGE.value, {"idSumm": idSumm})
