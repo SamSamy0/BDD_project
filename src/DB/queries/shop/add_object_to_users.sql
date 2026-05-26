@@ -1,3 +1,3 @@
 -- Add object to users
-INSERT INTO UtilisateurObjet (IdUtilisateur, Nom, EstActif)
-VALUES (%(idAuthor)s, %(name)s, False)
+INSERT INTO UtilisateurObjet (IdUtilisateur, IdObjet, EstActif)
+VALUES (%(idUser)s, %(objId)s, False);

@@ -1,2 +1,2 @@
 -- Add a course
-INSERT INTO Cours (Mnemonique, Nom, Fac, Credits, Annee) VALUES (%(mnemo)s, %(name)s, %(fac)s, %(utc)s, %(year)s )
+INSERT INTO Cours (Mnemonique, Nom, Fac, Credits, Annee) VALUES (%(Mnemonique)s, %(Nom)s, %(Fac)s, %(Credits)s, %(Annee)s )

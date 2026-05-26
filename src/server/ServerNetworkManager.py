@@ -29,7 +29,7 @@ class ServerNetworkManager:
                 result = self.db.addCourse(data)
                 return {"protocol": protocol, "data": result}
 
-            case Protocol.DELETE_COURSE.value:
+            case Protocol.DELETE_USER_COURSE.value:
                 result = self.db.deleteUserCourse(data)
                 return {"protocol": protocol, "data": result}
 
@@ -37,12 +37,12 @@ class ServerNetworkManager:
                 result = self.db.getUserCourse(data)
                 return {"protocol": protocol, "data": result}
 
-            #REVIEW
+            # REVIEW
             case Protocol.ADD_EVAL.value:
                 result = self.db.addReview(data)
                 return {"protocol": protocol, "data": result}
 
-            #SHOP
+            # SHOP
             case Protocol.BUY.value:
                 result = self.db.buyObject(data)
                 return {"protocol": protocol, "data": result}
@@ -59,13 +59,20 @@ class ServerNetworkManager:
                 result = self.db.getObjectInfo(data)
                 return {"protocol": protocol, "data": result}
 
-            #SUMMARIES
+            # SUMMARIES
+            case Protocol.GET_STORE.value:
+                result = self.db.getStore(data)
+                return {"protocol": protocol, "data": result}
             case Protocol.ADD_SUMMARY.value:
                 result = self.db.addSummary(data)
                 return {"protocol": protocol, "data": result}
 
             case Protocol.READ_SUMMARY.value:
                 result = self.db.checkSummary(data)
+                return {"protocol": protocol, "data": result}
+            
+            case Protocol.READ_SUMMARIES.value:
+                result = self.db.checkSummaries(data)
                 return {"protocol": protocol, "data": result}
 
             case Protocol.DELETE_SUMMARY.value:
@@ -75,8 +82,7 @@ class ServerNetworkManager:
             case Protocol.GET_SUMMARY_AVERAGE.value:
                 result = self.db.getSummAverage(data)
                 return {"protocol": protocol, "data": result}
-
-            #User
+            # User
             case Protocol.CHANGE_STATE_OBJ.value:
                 result = self.db.changeStateObj(data)
                 return {"protocol": protocol, "data": result}
@@ -85,7 +91,11 @@ class ServerNetworkManager:
                 result = self.db.getProfile(data)
                 return {"protocol": protocol, "data": result}
 
-            #Statistic
+            case Protocol.GET_USER_OBJECT.value:
+                result = self.db.getUserObjet(data)
+                return {"protocol": protocol, "data": result}
+
+            # Statistic
             case Protocol.GET_LEADERBOARD.value:
                 result = self.db.checkLeaderBoard(data)
                 return {"protocol": protocol, "data": result}
@@ -96,16 +106,20 @@ class ServerNetworkManager:
 
             case Protocol.GET_RANKING_SPENDER.value:
                 result = self.db.getSpenderRanking(data)
-                return {"protocol" : protocol, "data" : result}
+                return {"protocol": protocol, "data": result}
 
             case Protocol.GET_COURSES_MOST_RESUMES.value:
                 result = self.db.getMostSummCours(data)
-                return {"protocol" : protocol, "data" : result}
+                return {"protocol": protocol, "data": result}
 
             case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
                 result = self.db.getSummInAtLeastThreeCourse(data)
-                return {"protocol" : protocol, "data": result}
+                return {"protocol": protocol, "data": result}
 
             case Protocol.GET_BEST_TEN_USERS.value:
                 result = self.db.getBestTenUsers(data)
-                return {"protocol" : protocol, "data": result}
+                return {"protocol": protocol, "data": result}
+
+            case Protocol.ADD_USER_COURSE.value:
+                result = self.db.addUserCourse(data)
+                return {"protocol": protocol, "data": result}

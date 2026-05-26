@@ -1,4 +1,4 @@
-SELECT r.Mnemonique, COUNT(r.Mnemonique)
+SELECT r.Mnemonique, COUNT(r.Mnemonique) AS Number
 FROM Resume r
 GROUP BY Mnemonique
 HAVING COUNT(Mnemonique) = (

@@ -4,6 +4,8 @@ import socket
 import threading
 from typing import Any
 
+from Profil import Profile
+
 from common.Protocol import Protocol
 
 
@@ -12,6 +14,8 @@ class ClientNetworkManager:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.receiver: Any = None
+        self.user = Profile()
+        self.objBought = []
 
     def connect(self, ip="127.0.0.1", port=8080):
         self.ip = ip
@@ -36,36 +40,103 @@ class ClientNetworkManager:
     """Functions to Receive messages from ServerNetworkManager"""
 
     def receive_message(self):
+        buffer = ""
+        decoder = json.JSONDecoder()
         while True:
             try:
                 reponse = self.sock.recv(65536)
                 if not reponse:
                     break
-                data = json.loads(reponse.decode("utf-8"))
-                self.handle_reponse(data)
+                buffer += reponse.decode("utf-8")
+                while buffer:
+                    buffer = buffer.strip()
+                    if not buffer:
+                        break
+                    try:
+                        data, index = decoder.raw_decode(buffer)
+                        self.handle_reponse(data)
+                        buffer = buffer[index:]
+                    except json.JSONDecodeError:
+                        break
+
             except Exception as e:
                 print(f"Erreur : Connexion interrompue : {e}")
                 break
 
     def handle_reponse(self, rep_dict):
-        print("handler")
+
         protocol = rep_dict["protocol"]
         data = rep_dict["data"]
-        print("dict = ", rep_dict)
-        print(data)
-        print("pass")
         match protocol:
             case Protocol.SIGNIN.value:
-                # No need to verify because if Not
-                self.receiver.isAcceptedLogin(
-                    connect=True if data is not None else False
-                )
+                if data is not None:
+                    self.user.initData(data)
+                    # self.current_user = data.get("ID")
+                    self.receiver.isAcceptedLogin(connect=True)
+                else:
+                    self.receiver.isAcceptedLogin(connect=False)
+
             case Protocol.SIGNUP.value:
                 self.receiver.isAcceptedLogin(
                     connect=True if data is not None else False
                 )
             case Protocol.GET_ALL_COURSES.value:
                 self.receiver.setAllCourse(data)
+
+            case Protocol.GET_PROFILE.value:
+                self.receiver.showProfile(data)
+
+            # Shop
+            case Protocol.GET_STORE.value:
+                self.receiver.displayStore(data)
+
+            case Protocol.GET_LEADERBOARD.value:
+                self.receiver.checkLeaderboard(data)
+
+            # Stats
+            case Protocol.GET_COURSES_MOST_RESUMES.value:
+                self.receiver.mostSummCours(data)
+
+            case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
+                self.receiver.SumInAtLeastThree(data)
+
+            case Protocol.BUY.value:
+                self.receiver.isBought(data)
+
+            case Protocol.READ_SUMMARIES.value:
+                print(data)
+                self.receiver.checkSummaries(data)
+
+            case Protocol.ADD_COURSE.value:
+                self.receiver.addCourse(data)
+
+            case Protocol.GET_USER_OBJECT.value:
+                self.receiver.showUserObject(data)
+
+            case Protocol.GET_POINT.value:
+                self.receiver.updatePointsInShop(data)
+
+            case Protocol.DELETE_USER_COURSE.value:
+                self.receiver.deleteUserCourse(data)
+
+            case Protocol.GET_USER_COURSES.value:
+                self.receiver.getUserCourse(data)
+
+            case Protocol.ADD_USER_COURSE.value:
+                self.receiver.addUserCourse(data)
+
+            case Protocol.ADD_SUMMARY.value:
+                self.receiver.addSummary(data)
+
+            case Protocol.ADD_EVAL.value:
+                self.receiver.addReview(data)
+
+            case Protocol.DELETE_SUMMARY.value:
+                self.receiver.deleteSummary(data)
+
+            case Protocol.GET_RANKING_OBJECT.value:
+                self.receiver.getObRanking(data)
+
 
             # case Protocol.
 
@@ -100,35 +171,55 @@ class ClientNetworkManager:
     def addCourse(self, mnemo: str, name: str, fac: str, utc: int, year: int):
         self.send_request(
             Protocol.ADD_COURSE.value,
-            {"mnemo": mnemo, "name": name, "fac": fac, "utc": utc, "year": year},
+            {
+                "Mnemonique": mnemo,
+                "Nom": name,
+                "Fac": fac,
+                "Credits": utc,
+                "Annee": year,
+            },
         )
 
-    def deleteCourse(self, mnemo: str):
-        self.send_request(Protocol.DELETE_COURSE, {"mnemo": mnemo})
-
-    def getUserCourse(self, userId: int, mnemo: int):
+    def addUserCourse(self, mnemo: str, iduser: int):
         self.send_request(
-            Protocol.GET_USER_COURSES.value, {"userId": userId, "mnemo": mnemo}
+            Protocol.ADD_USER_COURSE.value,
+            {"Mnemonique": mnemo, "IdUtilisateur": iduser},
         )
+
+    def deleteUserCourse(self, mnemo: str, iduser: int):
+        self.send_request(
+            Protocol.DELETE_USER_COURSE.value, {"mnemo": mnemo, "idUser": iduser}
+        )
+
+    def getUserCourse(self, userId: int):
+        self.send_request(Protocol.GET_USER_COURSES.value, {"idUser": userId})
 
     """Reviews queries"""
 
-    def addReview(self, note: str, comment: str, idAuthor: int, idSummary: int):
+    def addReview(self, note: str, comment: str, idAuthor: int, idSumm: int):
         self.send_request(
             Protocol.ADD_EVAL.value,
             {
                 "note": note,
                 "comment": comment,
                 "idAuthor": idAuthor,
-                "idSummary": idSummary,
+                "idSumm": idSumm,
             },
         )
 
     """Shop Queries"""
 
     def buyObject(self, idUser: int, objId: int, cost: int):
+        jour = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.send_request(
-            Protocol.BUY.value, {"idUser": idUser, "objId": objId, "cost": cost}
+            Protocol.BUY.value,
+            {
+                "idUser": idUser,
+                "objId": objId,
+                "cost": cost,
+                "typ": "dépense",
+                "jour": jour,
+            },
         )
 
     def getPoints(self, idUser: int):
@@ -140,13 +231,16 @@ class ClientNetworkManager:
     def getObjetInfo(self, idObjet: int):
         self.send_request(Protocol.CHECK_ITEM.value, {"idObjet": idObjet})
 
+    def checkCatalogue(self):
+        self.send_request(Protocol.GET_STORE.value)
+
     """Summaries Queries"""
 
     def addSummary(
         self,
         title: str,
         desc: str,
-        date: int,
+        date: str,
         version: int,
         visible: bool,
         mnemo: str,
@@ -168,22 +262,28 @@ class ClientNetworkManager:
     def checkSummary(self, idSumm: int):
         self.send_request(Protocol.READ_SUMMARY.value, {"idSumm": idSumm})
 
-    def deleteSummary(self, idSumm: int):
-        self.send_request(Protocol.DELETE_SUMMARY.value, {"idSumm": idSumm})
+    def checkSummaries(self, Mnemonique: str):
+        self.send_request(Protocol.READ_SUMMARIES.value, {"Mnemonique": Mnemonique})
+
+    def deleteSummary(self, idSumm, idAuthor):
+        self.send_request(Protocol.DELETE_SUMMARY.value, {"ID": int(idSumm), "IdUtilisateur": idAuthor})
 
     def getSummAverage(self, idSumm: int):
         self.send_request(Protocol.GET_SUMMARY_AVERAGE.value, {"idSumm": idSumm})
 
     """Users Queries"""
 
-    def actObject(self, idUser: int, idObject: int):
+    def actObject(self, idUser: int, idObject: int, state_val: int):
         self.send_request(
             Protocol.CHANGE_STATE_OBJ.value,
-            {"State": 1, "idUser": idUser, "idObject": idObject},
+            {"State": state_val, "idUser": idUser, "idObject": idObject},
         )
 
     def getProfile(self, idUser: int):
         self.send_request(Protocol.GET_PROFILE.value, {"idUser": idUser})
+
+    def getUserObject(self, idUser: int):
+        self.send_request(Protocol.GET_USER_OBJECT.value, {"idUser": idUser})
 
     """Statistic Queries"""
 
