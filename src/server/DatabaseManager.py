@@ -33,6 +33,8 @@ class DatabaseManager:
         self.path_checkSummaries = "DB/queries/summaries/check_summaries.sql"
         self.path_deleteSummary = "DB/queries/summaries/delete_summary.sql"
         self.path_getSummAverage = "DB/queries/stats/summary_average.sql"
+        self.path_getEvaluations = "DB/queries/summaries/get_evaluations.sql"
+        self.path_getEval = "DB/queries/summaries/get_eval.sql"
         # User
         self.path_changeStateObj = "DB/queries/users/change_state_object.sql"
         self.path_getProfile = "DB/queries/users/check_profile.sql"
@@ -187,6 +189,12 @@ class DatabaseManager:
 
     def getSummAverage(self, data):
         return self.reader_query(self.path_getSummAverage, "one", False, params=data)
+
+    def getEvaluations(self, data):
+        return self.reader_query(self.path_getEvaluations, "all", False, params=data)
+
+    def getEval(self, data):
+        return self.reader_query(self.path_getEval, "one", False, params=data)
 
     # User
     def changeStateObj(self, data):

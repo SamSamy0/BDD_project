@@ -60,34 +60,8 @@ class SummaryView(View):
         ctk.CTkButton(popup, text="Publier", command=confirm).pack(padx=20, pady=15, fill="x")
     
     
-    def view_action(self, title, auteur, note):
-        popup = ctk.CTkToplevel(self)
-        popup.title("Voir le résumé")
-        popup.geometry("500x400")
-
-        popup.after(100, popup.grab_set)
-        popup.after(100, popup.lift)
-        popup.after(100, popup.focus_force)
-
-        # Titre et auteur
-        ctk.CTkLabel(popup, text=title, font=ctk.CTkFont(size=18, weight="bold")).pack(padx=20, pady=(15, 0))
-        ctk.CTkLabel(popup, text=f"par {auteur}", text_color="gray").pack(padx=20, pady=(0, 10))
-        # Séparateur
-        ctk.CTkLabel(popup, text="─" * 50, text_color="gray").pack()
-
-        # Contenu fictif
-        ctk.CTkLabel(popup, text="Description du résumé...", wraplength=400).pack(padx=20, pady=15)
-        # Note moyenne
-        ctk.CTkLabel(popup, text=f"Note moyenne : ★ {note}/5", text_color="gray").pack(padx=20, pady=(0, 15))
-
-        # Boutons
-        btn_frame = ctk.CTkFrame(popup, fg_color="transparent")
-        btn_frame.pack(padx=20, pady=10, fill="x")
-        btn_frame.grid_columnconfigure((0, 1), weight=1)
-
-        ctk.CTkButton(btn_frame,text="Évaluer",command=lambda: [popup.destroy(), self.eval_action(title)]).grid(row=0, column=0, padx=5)
-
-        ctk.CTkButton(btn_frame,text="Fermer",fg_color="gray",hover_color="darkgray",command=popup.destroy).grid(row=0, column=1, padx=5)
+    def view_action(self, idSummary):
+        self.manager.getEvaluations(idSummary)
 
     def send_eval(self, title, note, comment, id_summ):
         self.manager.addReview(note,comment,self.manager.user.idUser,id_summ)
@@ -142,7 +116,7 @@ class SummaryView(View):
                 info = ctk.CTkLabel(frame, text=f"{title} | par {auteur} | ")
             info.grid(row=0, column=0, padx=10, pady=8, sticky="w")
             #bouton voir
-            btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda t=title, a=auteur, n=note: self.view_action(t, a, n))
+            btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda i = id_summ: self.view_action(i))
             btn.grid(row=0, column=1, padx=5, pady=8)
             #btn supprimer
             btn = ctk.CTkButton(frame, text="supprimer", width=80, fg_color="red", hover_color="darkred", command=lambda f=frame, i=id_summ: self.delete_action(f, i))
