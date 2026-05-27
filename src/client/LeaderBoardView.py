@@ -87,12 +87,17 @@ class LeaderBoardView(View):
     def SumInMoreThanThree(self):
         for widget in self.scroll_frame.winfo_children():
                 widget.destroy()
-        self.scroll_frame.grid_columnconfigure(0, weight=1)
+
+        """self.scroll_frame.grid_columnconfigure(0, weight=1)
         ctk.CTkLabel(self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, padx=10, pady=5)
 
         for i, elem in enumerate(self.sum_in_at_least_three, start=1):
             name = elem.get("Nom", "?")
-            ctk.CTkLabel(self.scroll_frame, text=name).grid(row=i, column=0, padx=10, pady=5)
+            ctk.CTkLabel(self.scroll_frame, text=name).grid(row=i, column=0, padx=10, pady=5, sticky="")"""
+        ctk.CTkLabel(self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")).pack(pady=(10,5))
+        for elem in self.sum_in_at_least_three:
+            name = elem.get("Nom", "?")
+            ctk.CTkLabel(self.scroll_frame, text=name).pack(pady=3)
 
     def displayLeaderboard(self):
         for widget in self.scroll_frame.winfo_children():
