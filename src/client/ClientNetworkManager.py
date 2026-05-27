@@ -143,6 +143,9 @@ class ClientNetworkManager:
             case Protocol.GET_EVAL.value:
                 self.receiver.getEval(data)
 
+            case Protocol.ENOUGH_POINTS.value:
+                self.receiver.enoughPoints(data)
+
             # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
@@ -318,3 +321,6 @@ class ClientNetworkManager:
 
     def getEval(self, idEval):
         self.send_request(Protocol.GET_EVAL.value, {"ID": idEval})
+
+    def enoughPoints(self,userId, cost):
+        self.send_request(Protocol.ENOUGH_POINTS.value,{"ID":userId,"points" : cost})
