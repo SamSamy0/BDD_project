@@ -124,7 +124,7 @@ class ReceiverInWindow:
         view.summaries = []
         summaries = view.summaries
         for summary in data:
-            temp = (summary["ID"], summary["Titre"],summary["Nom"],summary["Moyenne"])
+            temp = (summary["ID"], summary["Titre"],summary["Nom"],summary["Moyenne"],summary["IdUtilisateur"])
             summaries.append(temp)
 
         self.app.show_view("SUMMARY")
@@ -163,5 +163,9 @@ class ReceiverInWindow:
 
 
     def deleteSummary(self, data):
+        view = self.app.frames["SUMMARY"]
+        self.app.manager.checkSummaries(view.mnemonique)
+
+    def editSummary(self,data):
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)

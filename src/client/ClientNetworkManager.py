@@ -143,6 +143,9 @@ class ClientNetworkManager:
             case Protocol.GET_EVAL.value:
                 self.receiver.getEval(data)
 
+            case Protocol.EDIT_SUMMARY.value:
+                self.receiver.editSummary(data)
+
             # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
@@ -246,7 +249,6 @@ class ClientNetworkManager:
         title: str,
         desc: str,
         date: str,
-        version: int,
         visible: bool,
         mnemo: str,
         idAuthor: int,
@@ -257,7 +259,6 @@ class ClientNetworkManager:
                 "title": title,
                 "desc": desc,
                 "date": date,
-                "version": version,
                 "visible": visible,
                 "mnemo": mnemo,
                 "idAuthor": idAuthor,
@@ -318,3 +319,6 @@ class ClientNetworkManager:
 
     def getEval(self, idEval):
         self.send_request(Protocol.GET_EVAL.value, {"ID": idEval})
+
+    def editSummary(self, title: str, desc: str, date: str, visible: bool, idSummary: int):
+        self.send_request(Protocol.EDIT_SUMMARY.value,{"title":title,"desc":desc,"date":date,"visible":visible,"idSummary":idSummary})
