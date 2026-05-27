@@ -73,8 +73,10 @@ class DatabaseManager:
 
             script_sql = fichier.read()
             try:
-                self.cursor.execute(script_sql, params)
-
+                if params:
+                    self.cursor.execute(script_sql, params)
+                else:
+                    self.cursor.execute(script_sql)
                 # Valider les modifications (utile seulement pour INSERT/UPDATE/DELETE)
                 if insert:
                     self.conn.commit()

@@ -102,6 +102,9 @@ class ClientNetworkManager:
             
             case Protocol.GET_BEST_TEN_USERS.value:
                 self.receiver.bestTenUsers(data)
+            
+            case Protocol.GET_SUMMARY_AVERAGE.value:
+                self.receiver.summAverage(data)
 
             case Protocol.BUY.value:
                 self.receiver.isBought(data)
@@ -321,3 +324,6 @@ class ClientNetworkManager:
 
     def getEval(self, idEval):
         self.send_request(Protocol.GET_EVAL.value, {"ID": idEval})
+    
+    def getGlobalSummAverage(self):
+        self.send_request(Protocol.GET_SUMMARY_AVERAGE.value)

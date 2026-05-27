@@ -41,6 +41,11 @@ class LeaderBoardView(View):
                                             command=self.action_topten)
         self.btn_top_ten.pack(side="left", padx=5, pady=5)
 
+        #moyenne résumés/utilisateur
+        self.btn_avg = ctk.CTkButton(self.stats_boutons_frame,
+                                     text="Moyenne de résumés par utilisateur",
+                                     command=self.action_summ_avg)
+        self.btn_avg.pack(side="left", padx=5, pady=5)
 
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Classement")
         self.scroll_frame.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
@@ -101,6 +106,15 @@ class LeaderBoardView(View):
         for elem in self.sum_in_at_least_three:
             name = elem.get("Nom", "?")
             ctk.CTkLabel(self.scroll_frame, text=name).pack(pady=3)
+    
+    def displaySummAvg(self):
+        print(self.avg_data, "HALLO") #pour debug
+        for widget in self.scroll_frame.winfo_children():
+            widget.destroy()
+
+        moyenne = self.avg_data.get("Moyenne", 0) if self.avg_data else 0
+        ctk.CTkLabel(self.scroll_frame, text=f"Moyenne de résumés par utilisateur", font=ctk.CTkFont(weight="bold")).pack(pady=(20,10))
+        ctk.CTkLabel(self.scroll_frame, text=f"{round(float(moyenne), 2)}", font=ctk.CTkFont(size=40, weight="bold")).pack(pady=10)
 
     def displayLeaderboard(self):
         for widget in self.scroll_frame.winfo_children():
@@ -151,4 +165,12 @@ class LeaderBoardView(View):
     def bestTenUsers(self, data):
         self.top_ten = data if data else []
         self.after(0, self.displayTop10)
+    
+    def action_summ_avg(self):
+        self.manager.receiver = self
+        self.manager.getGlobalSummAverage()
+    
+    def summAverage(self, data: dict):
+        self.avg_data = data #une seul ligne contenant la moyenne
+        self.after(0, self.displaySummAvg)
 
