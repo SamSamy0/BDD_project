@@ -6,15 +6,26 @@ class LeaderBoardView(View):
 
     def initView(self):
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=1)
 
         self.title_label = ctk.CTkLabel(
             self, text="LeaderBoard", font=ctk.CTkFont(size=20, weight="bold")
         )
         self.title_label.grid(row=0, column=0, padx=20, pady=20)
 
+        #frame horizontale pour les boutons de stats
+        self.stats_boutons_frame = ctk.CTkFrame(self)
+        self.stats_boutons_frame.grid(row=1, column=0, padx=20, pady=(0,10))
+
+        #cours ayant le plus de résumés
+        self.btn_most_sum = ctk.CTkButton(self.stats_boutons_frame, 
+                                          text="Cours avec le plus de résumés", 
+                                          command=self.action_most_summariezed_courses)
+        self.btn_most_sum.pack(side="left", padx=5, pady=5)
+
+
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Classement")
-        self.scroll_frame.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
+        self.scroll_frame.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
         self.scroll_frame.grid_columnconfigure((0, 1, 2), weight=1)
 
         # En-têtes
@@ -33,9 +44,10 @@ class LeaderBoardView(View):
 
 
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)
-        self.back_button.grid(row=2, column=0, padx=20, pady=20)
+        self.back_button.grid(row=3, column=0, padx=20, pady=20)
 
     def back_action(self):
+        self.manager.receiver = self.controller.default_receiver
         self.controller.show_view("MENU")
 
     def displayTop10(self, top: dict):
@@ -45,11 +57,20 @@ class LeaderBoardView(View):
             print(f"{count}==={name}")
             count += 1
 
-    def displayMostSumCours(self, best: dict):
-        for elem in best:
-            mnemo = elem.get("Mnemonique")
-            num = elem.get("Number")
-            print(f"{mnemo} || {num}")
+    def displayMostSumCours(self):
+        #vide le scroll_frame
+        for widget in self.scroll_frame.winfo_children():
+                widget.destroy()
+        #Entêtes
+        self.scroll_frame.grid_columnconfigure((0, 1), weight=1)
+        ctk.CTkLabel(self.scroll_frame, text="Cours", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, padx=10, pady=5)
+        ctk.CTkLabel(self.scroll_frame, text="Nombre de résumés", font=ctk.CTkFont(weight="bold")).grid(row=0, column=1, padx=10, pady=5)
+
+        for i, elem in enumerate(self.most_um_data, start=1):
+            name = elem.get("Mnemonique", "?")
+            nb_summ = elem.get("Number")
+            ctk.CTkLabel(self.scroll_frame, text=name).grid(row=i, column=0, padx=10, pady=5)
+            ctk.CTkLabel(self.scroll_frame, text=str(nb_summ)).grid(row=i, column=1, padx=10, pady=5)
 
     def SumInMoreThanThree(self, data: dict):
         for elem in data:
@@ -79,3 +100,14 @@ class LeaderBoardView(View):
     def checkLeaderboard(self, data):
         self.leaderboard = data if data else []
         self.after(0, self.displayLeaderboard)
+    
+    def action_most_summariezed_courses(self):
+        self.manager.receiver = self #réponse reviendra sur cette vue
+        self.manager.getMostSummCours()#envoie la requete au serveur
+        #on pointe le receiver vers soi-même avant  d'envoyer la requete pour que la réponse revienne sur cette vue et pas une autre
+    
+    def mostSummCours(self, data):
+        #appelé par le handle_reponse quand la réponse du serveur arrive.
+        self.most_um_data = data if data else []
+        self.after(0, self.displayMostSumCours)
+
