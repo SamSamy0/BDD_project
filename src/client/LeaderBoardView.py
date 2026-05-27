@@ -23,6 +23,12 @@ class LeaderBoardView(View):
                                           command=self.action_most_summariezed_courses)
         self.btn_most_sum.pack(side="left", padx=5, pady=5)
 
+        #utilisateurs ayant plus de 3 résumés
+        self.btn_at_least_3_sum = ctk.CTkButton(self.stats_boutons_frame,
+                                                text="Utilisateurs avec au moins 3 résumés",
+                                                command=self.action_at_least_three)
+        self.btn_at_least_3_sum.pack(side="left", padx=5, pady=5)
+
 
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Classement")
         self.scroll_frame.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
@@ -72,10 +78,15 @@ class LeaderBoardView(View):
             ctk.CTkLabel(self.scroll_frame, text=name).grid(row=i, column=0, padx=10, pady=5)
             ctk.CTkLabel(self.scroll_frame, text=str(nb_summ)).grid(row=i, column=1, padx=10, pady=5)
 
-    def SumInMoreThanThree(self, data: dict):
-        for elem in data:
-            name = elem.get("Nom")
-            print(f"==={name}===")
+    def SumInMoreThanThree(self):
+        for widget in self.scroll_frame.winfo_children():
+                widget.destroy()
+        self.scroll_frame.grid_columnconfigure(0, weight=1)
+        ctk.CTkLabel(self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, padx=10, pady=5)
+
+        for i, elem in enumerate(self.sum_in_at_least_three, start=1):
+            name = elem.get("Nom", "?")
+            ctk.CTkLabel(self.scroll_frame, text=name).grid(row=i, column=0, padx=10, pady=5)
 
     def displayLeaderboard(self):
         for widget in self.scroll_frame.winfo_children():
@@ -110,4 +121,12 @@ class LeaderBoardView(View):
         #appelé par le handle_reponse quand la réponse du serveur arrive.
         self.most_um_data = data if data else []
         self.after(0, self.displayMostSumCours)
+    
+    def action_at_least_three(self):
+        self.manager.receiver = self
+        self.manager.getSummInAtLeastThreeCourse()
+    
+    def SumInAtLeastThree(self, data):
+        self.sum_in_at_least_three = data if data else []
+        self.after(0, self.SumInMoreThanThree)
 
