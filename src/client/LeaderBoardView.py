@@ -17,6 +17,12 @@ class LeaderBoardView(View):
         self.stats_boutons_frame = ctk.CTkFrame(self)
         self.stats_boutons_frame.grid(row=1, column=0, padx=20, pady=(0,10))
 
+        #btn du classement de base
+        self.btn_leaderboard = ctk.CTkButton(self.stats_boutons_frame,
+                                             text="Classement",
+                                             command=self.displayLeaderboard)
+        self.btn_leaderboard.pack(side="left", padx=5, pady=5)
+
         #cours ayant le plus de résumés
         self.btn_most_sum = ctk.CTkButton(self.stats_boutons_frame, 
                                           text="Cours avec le plus de résumés", 
