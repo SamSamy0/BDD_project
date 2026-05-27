@@ -104,7 +104,6 @@ class ClientNetworkManager:
                 self.receiver.isBought(data)
 
             case Protocol.READ_SUMMARIES.value:
-                print(data)
                 self.receiver.checkSummaries(data)
 
             case Protocol.ADD_COURSE.value:
@@ -136,6 +135,7 @@ class ClientNetworkManager:
 
             case Protocol.GET_RANKING_OBJECT.value:
                 self.receiver.getObRanking(data)
+                
             case Protocol.GET_SUMMARY_AVERAGE.value:
                 self.receiver.summaryAverage(data)
 

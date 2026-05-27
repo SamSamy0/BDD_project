@@ -65,6 +65,7 @@ class SummaryView(View):
             self.manager.addSummary(title, content, str(datetime.date.today()), 1, True, self.mnemonique, self.manager.user.idUser)#WARNING: HARDCODE VISIBILITE
 
         ctk.CTkButton(popup, text="Publier", command=confirm).pack(padx=20, pady=15, fill="x")
+        self.average()
 
 
     def view_action(self, title, auteur, note):
