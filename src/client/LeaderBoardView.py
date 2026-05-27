@@ -35,6 +35,12 @@ class LeaderBoardView(View):
                                                 command=self.action_at_least_three)
         self.btn_at_least_3_sum.pack(side="left", padx=5, pady=5)
 
+        #top 10
+        self.btn_top_ten = ctk.CTkButton(self.stats_boutons_frame,
+                                            text="Top 10 (points)",
+                                            command=self.action_topten)
+        self.btn_top_ten.pack(side="left", padx=5, pady=5)
+
 
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Classement")
         self.scroll_frame.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
@@ -62,12 +68,16 @@ class LeaderBoardView(View):
         self.manager.receiver = self.controller.default_receiver
         self.controller.show_view("MENU")
 
-    def displayTop10(self, top: dict):
-        count = 1
-        for elem in top:
-            name = elem.get("Nom")
-            print(f"{count}==={name}")
-            count += 1
+    def displayTop10(self):
+        for widget in self.scroll_frame.winfo_children():
+                widget.destroy()
+        
+        ctk.CTkLabel(self.scroll_frame, text="Utilisateur   -   Points", font=ctk.CTkFont(weight="bold")).pack(pady=(10,5))
+        
+        for i, elem in enumerate(self.top_ten, start=1):
+            name = elem.get("Nom", "?")
+            points = elem.get("Points", 0)
+            ctk.CTkLabel(self.scroll_frame, text=f"{i}. {name} - {points} pts").pack(pady=3)
 
     def displayMostSumCours(self):
         #vide le scroll_frame
@@ -87,13 +97,6 @@ class LeaderBoardView(View):
     def SumInMoreThanThree(self):
         for widget in self.scroll_frame.winfo_children():
                 widget.destroy()
-
-        """self.scroll_frame.grid_columnconfigure(0, weight=1)
-        ctk.CTkLabel(self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, padx=10, pady=5)
-
-        for i, elem in enumerate(self.sum_in_at_least_three, start=1):
-            name = elem.get("Nom", "?")
-            ctk.CTkLabel(self.scroll_frame, text=name).grid(row=i, column=0, padx=10, pady=5, sticky="")"""
         ctk.CTkLabel(self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")).pack(pady=(10,5))
         for elem in self.sum_in_at_least_three:
             name = elem.get("Nom", "?")
@@ -140,4 +143,12 @@ class LeaderBoardView(View):
     def SumInAtLeastThree(self, data):
         self.sum_in_at_least_three = data if data else []
         self.after(0, self.SumInMoreThanThree)
+    
+    def action_topten(self):
+        self.manager.receiver = self
+        self.manager.getBestTenUsers()
+    
+    def bestTenUsers(self, data):
+        self.top_ten = data if data else []
+        self.after(0, self.displayTop10)
 

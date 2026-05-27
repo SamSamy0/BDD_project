@@ -99,6 +99,9 @@ class ClientNetworkManager:
 
             case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
                 self.receiver.SumInAtLeastThree(data)
+            
+            case Protocol.GET_BEST_TEN_USERS.value:
+                self.receiver.bestTenUsers(data)
 
             case Protocol.BUY.value:
                 self.receiver.isBought(data)
