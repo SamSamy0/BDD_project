@@ -1,6 +1,5 @@
 from enum import Enum
 
-# from client.ClientNetworkManager import ClientNetworkManager
 
 
 class Protocol(Enum):
@@ -15,6 +14,7 @@ class Protocol(Enum):
     CHECK_ITEM = 8
     CHECK_TRANSACTION_HISTORY = 9
     CHANGE_STATE_OBJ = 10
+    ENOUGH_POINTS = 39
 
     # Profile
     GET_PROFILE = 11
