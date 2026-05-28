@@ -45,19 +45,19 @@ class LeaderBoardView(View):
         count = 1
         for elem in top:
             name = elem.get("Nom")
-            print(f"{count}==={name}")
+            (f"{count}==={name}")
             count += 1
 
     def displayMostSumCours(self, best: dict):
         for elem in best:
             mnemo = elem.get("Mnemonique")
             num = elem.get("Number")
-            print(f"{mnemo} || {num}")
+            (f"{mnemo} || {num}")
 
     def SumInMoreThanThree(self, data: dict):
         for elem in data:
             name = elem.get("Nom")
-            print(f"==={name}===")
+            (f"==={name}===")
 
     def displayLeaderboard(self):
         self.getMyPosition()
@@ -87,8 +87,6 @@ class LeaderBoardView(View):
 
     def getMyPosition(self):
         user_name = self.manager.user.getName()
-        print(user_name)
-        pass
         for i, entry in enumerate(self.leaderboard, start=1):
             nom = entry[1]
             if(nom == user_name):
