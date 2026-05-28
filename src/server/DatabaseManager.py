@@ -50,6 +50,7 @@ class DatabaseManager:
             "DB/queries/stats/at_least_three_differents.sql"
         )
         self.path_getBestTenUsers = "DB/queries/stats/ranking_ten_users_points.sql"
+        self.path_getBestRatedSummary = "DB/queries/stats/ranking_summary.sql"
 
     def check_and_upgrade_level(self, idUser: int):
         try:
@@ -228,3 +229,6 @@ class DatabaseManager:
 
     def getBestTenUsers(self, data):
         return self.reader_query(self.path_getBestTenUsers, "all", False, params=data)
+    
+    def getBestRatedSummary(self, data):
+        return self.reader_query(self.path_getBestRatedSummary, "all", False, params=data)

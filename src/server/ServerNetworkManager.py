@@ -131,3 +131,7 @@ class ServerNetworkManager:
             case Protocol.ADD_USER_COURSE.value:
                 result = self.db.addUserCourse(data)
                 return {"protocol": protocol, "data": result}
+            
+            case Protocol.GET_BEST_RATED_SUMMARIY.value:
+                result = self.db.getBestRatedSummary(data)
+                return {"protocol": protocol, "data": result}

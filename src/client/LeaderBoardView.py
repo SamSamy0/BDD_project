@@ -47,6 +47,12 @@ class LeaderBoardView(View):
                                      command=self.action_summ_avg)
         self.btn_avg.pack(side="left", padx=5, pady=5)
 
+        #best summary by course
+        self.btn_best_rated = ctk.CTkButton(self.stats_boutons_frame,
+                                            text="Meilleur résumé par cours",
+                                            command=self.action_best_rated)
+        self.btn_best_rated.pack(side="left", padx=5, pady=5)
+
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Classement")
         self.scroll_frame.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
         self.scroll_frame.grid_columnconfigure((0, 1, 2), weight=1)
@@ -173,4 +179,31 @@ class LeaderBoardView(View):
     def summAverage(self, data: dict):
         self.avg_data = data #une seul ligne contenant la moyenne
         self.after(0, self.displaySummAvg)
+    
+    def action_best_rated(self):
+        self.manager.receiver = self
+        self.manager.getBestRatedSummary()
+    
+    def bestRatedSummary(self, data):
+        self.best_rated_data = data if data else []
+        self.after(0, self.displayBestRated)
+    
+    def displayBestRated(self):
+        for widget in self.scroll_frame.winfo_children():
+            widget.destroy()
+
+        ctk.CTkLabel(
+            self.scroll_frame,
+            text="Cours  —  Titre  —  Note moyenne",
+            font=ctk.CTkFont(weight="bold")
+        ).pack(pady=(10, 5))
+
+        for elem in self.best_rated_data:
+            mnemo = elem.get("Mnemonique", "?")
+            titre = elem.get("Titre", "?")
+            note = elem.get("note_moyenne", 0)
+            ctk.CTkLabel(
+                self.scroll_frame,
+                text=f"{mnemo}  —  {titre}  —  {round(float(note), 2)}/5"
+            ).pack(pady=3)
 
