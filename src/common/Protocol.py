@@ -43,6 +43,8 @@ class Protocol(Enum):
     ADD_EVAL = 25
     CHECK_EVALUATIONS = 26  # Not sure
     READ_SUMMARIES = 34
+    GET_EVALUATIONS = 37
+    GET_EVAL = 38
     # Stats
     GET_LEADERBOARD = 27
     GET_COURSES_MOST_RESUMES = 28

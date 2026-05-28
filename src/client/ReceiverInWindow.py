@@ -134,6 +134,29 @@ class ReceiverInWindow:
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)
 
+
+
+    def getEvaluations(self,data):
+        view = self.app.frames["EVAL"]
+        view.evaluations = []
+        evaluations = view.evaluations
+        for eval in data:
+            temp = (eval["Nom"],eval["Note"],eval["ID"])
+            evaluations.append(temp)
+
+        self.app.show_view("EVAL")
+        view.after(0, lambda: view.displayEvaluations())
+
+        
+
+    def getEval(self, data):
+        view = self.app.frames["EVAL"]
+        auteur = data.get("Nom","Inconnu")
+        commentaire = data.get("Commentaire","Aucun commentaire")
+        note = data.get("Note",0)
+        view.after(0,view.displayEval(auteur,commentaire,note))
+
+        
     def addReview(self,data):
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)

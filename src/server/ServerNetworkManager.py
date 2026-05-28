@@ -98,6 +98,14 @@ class ServerNetworkManager:
                 result = self.db.getUserObjet(data)
                 return {"protocol": protocol, "data": result}
 
+            case Protocol.GET_EVALUATIONS.value:
+                result = self.db.getEvaluations(data)
+                return {"protocol": protocol, "data": result}
+
+            case Protocol.GET_EVAL.value:
+                result = self.db.getEval(data)
+                return {"protocol": protocol, "data": result}
+
             # Statistic
             case Protocol.GET_LEADERBOARD.value:
                 result = self.db.checkLeaderBoard(data)

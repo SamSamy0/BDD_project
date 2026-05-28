@@ -1,0 +1,1 @@
+UPDATE Utilisateur SET Points = Points + 100  WHERE ID = %(idAuthor)s
