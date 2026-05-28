@@ -151,6 +151,9 @@ class ClientNetworkManager:
 
             case Protocol.GET_EVAL.value:
                 self.receiver.getEval(data)
+            
+            case Protocol.GET_USER_NEVER_PUBLISH.value:
+                self.receiver.userNeverPublish(data)
 
             # case Protocol.
 

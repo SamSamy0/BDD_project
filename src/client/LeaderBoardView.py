@@ -52,6 +52,13 @@ class LeaderBoardView(View):
                                             text="Meilleur résumé par cours",
                                             command=self.action_best_rated)
         self.btn_best_rated.pack(side="left", padx=5, pady=5)
+        
+        #user sans résumé publié
+        self.btn_never_publish = ctk.CTkButton(self.stats_boutons_frame,
+                                                text="Utilisateurs sans publication de résumé",
+                                                command=self.action_never_publish)
+        self.btn_never_publish.pack(side="left", padx=5, pady=5)
+
 
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Classement")
         self.scroll_frame.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
@@ -206,4 +213,21 @@ class LeaderBoardView(View):
                 self.scroll_frame,
                 text=f"{mnemo}  —  {titre}  —  {round(float(note), 2)}/5"
             ).pack(pady=3)
+    
+    def action_never_publish(self):
+        self.manager.receiver = self
+        self.manager.getUserNeverPublish()
+    
+    def userNeverPublish(self, data):
+        self.never_publish_data = data if data else []
+        self.after(0, self.displayNeverPublish)
+    
+    def displayNeverPublish(self):
+        for widget in self.scroll_frame.winfo_children():
+            widget.destroy()
 
+        ctk.CTkLabel(self.scroll_frame, text="Utilisateurs sans publication de résumé", font=ctk.CTkFont(weight="bold")).pack(pady=(10, 5))
+
+        for elem in self.never_publish_data:
+            name = elem.get("Nom", "?")
+            ctk.CTkLabel(self.scroll_frame, text=name).pack(pady=3)

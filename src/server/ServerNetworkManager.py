@@ -135,3 +135,7 @@ class ServerNetworkManager:
             case Protocol.GET_BEST_RATED_SUMMARIY.value:
                 result = self.db.getBestRatedSummary(data)
                 return {"protocol": protocol, "data": result}
+            
+            case Protocol.GET_USER_NEVER_PUBLISH.value:
+                result = self.db.getUserNeverPublish()
+                return {"protocol": protocol, "data": result}
