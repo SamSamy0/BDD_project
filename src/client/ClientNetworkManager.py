@@ -279,7 +279,7 @@ class ClientNetworkManager:
         )
 
     def getSummAverage(self):
-        self.send_request(Protocol.GET_SUMMARY_AVERAGE.value, {"None": ""})
+        self.send_request(Protocol.GET_SUMMARY_AVERAGE.value)
 
     """Users Queries"""
 
