@@ -333,3 +333,6 @@ class ClientNetworkManager:
 
     def getBestRatedSummary(self):
         self.send_request(Protocol.GET_BEST_RATED_SUMMARIY.value)
+
+    def getUserNeverPublish(self):
+        self.send_request(Protocol.GET_USER_NEVER_PUBLISH.value)
