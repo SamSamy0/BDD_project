@@ -240,6 +240,7 @@ if __name__ == "__main__":
     initEval(cursor)
     initRew(cursor)
     initUtilisateurObjet(cursor)
+    initCoursUtilisateur(cursor)
     connexion.commit()
     cursor.close()
     connexion.close()
