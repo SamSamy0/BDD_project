@@ -1,3 +1,7 @@
-SELECT u.ID
+SELECT u.Nom
 FROM Utilisateur u
-WHERE u.ID = %(ID)s and u.Points >= %(points)s
+WHERE u.Points < (
+    SELECT SUM(t.Montant)
+    FROM TransactionPoints t
+    WHERE t.IdUtilisateur = u.ID
+);
