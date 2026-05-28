@@ -23,6 +23,7 @@ class DatabaseManager:
         self.path_getTransactionHistory = (
             "DB/queries/shop/check_transaction_history.sql"
         )
+        self.path_enough_points = "DB/queries/shop/enough_points.sql"
         self.path_getStore = "DB/queries/shop/check_catalogue.sql"
         self.path_getObjectInfo = "DB/queries/shop/inspect_object.sql"
         self.path_debitPoints = "DB/queries/shop/debit_users_points.sql"
@@ -166,6 +167,8 @@ class DatabaseManager:
         return self.reader_query(
             self.path_getTransactionHistory, "all", False, params=data
         )
+    def enoughPoints(self,data):
+        return self.reader_query(self.path_enough_points,"one",False,params=data)
 
     def getObjectInfo(self, data):
         return self.reader_query(self.path_getObjectInfo, "all", False, params=data)

@@ -146,6 +146,10 @@ class ClientNetworkManager:
             case Protocol.EDIT_SUMMARY.value:
                 self.receiver.editSummary(data)
 
+            case Protocol.ENOUGH_POINTS.value:
+                self.receiver.enoughPoints(data)
+
+
             # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
@@ -322,3 +326,7 @@ class ClientNetworkManager:
 
     def editSummary(self, title: str, desc: str, date: str, visible: bool, idSummary: int):
         self.send_request(Protocol.EDIT_SUMMARY.value,{"title":title,"desc":desc,"date":date,"visible":visible,"idSummary":idSummary})
+
+    def enoughPoints(self,userId, cost):
+        self.send_request(Protocol.ENOUGH_POINTS.value,{"ID":userId,"points" : cost})
+

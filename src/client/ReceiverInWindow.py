@@ -169,3 +169,7 @@ class ReceiverInWindow:
     def editSummary(self,data):
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)
+        
+    def enoughPoints(self,data):
+        pass #TODO: MIKE
+
