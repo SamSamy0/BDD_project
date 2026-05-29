@@ -160,6 +160,9 @@ class ClientNetworkManager:
 
             case Protocol.ENOUGH_POINTS.value:
                 self.receiver.enoughPoints(data)
+            
+            case Protocol.GET_RANKING_SPENDER.value:
+                self.receiver.spenderRanking(data)
 
 
             # case Protocol.

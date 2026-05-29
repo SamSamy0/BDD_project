@@ -31,7 +31,7 @@ class LeaderBoardView(View):
 
         #utilisateurs ayant plus de 3 résumés
         self.btn_at_least_3_sum = ctk.CTkButton(self.stats_boutons_frame,
-                                                text="Utilisateurs avec au moins 3 résumés",
+                                                text="Uti avec au moins 3 résumés",
                                                 command=self.action_at_least_three)
         self.btn_at_least_3_sum.pack(side="left", padx=5, pady=5)
 
@@ -55,9 +55,15 @@ class LeaderBoardView(View):
         
         #user sans résumé publié
         self.btn_never_publish = ctk.CTkButton(self.stats_boutons_frame,
-                                                text="Utilisateurs sans publication de résumé",
+                                                text="Uti sans publication de résumé",
                                                 command=self.action_never_publish)
         self.btn_never_publish.pack(side="left", padx=5, pady=5)
+        
+        #user total sum dépensé > total points
+        self.btn_spender = ctk.CTkButton(self.stats_boutons_frame,
+                                            text="Util ayant dépense > points",
+                                            command=self.action_spender)
+        self.btn_spender.pack(side="left", padx=5, pady=5)
 
 
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Classement")
@@ -231,3 +237,30 @@ class LeaderBoardView(View):
         for elem in self.never_publish_data:
             name = elem.get("Nom", "?")
             ctk.CTkLabel(self.scroll_frame, text=name).pack(pady=3)
+    
+    def action_spender(self):
+        self.manager.receiver = self
+        self.manager.getSpenderRanking()
+    
+    def spenderRanking(self, data):
+        self.spender_data = data if data else []
+        self.after(0, self.displaySpender)
+    
+    def displaySpender(self):
+        for widget in self.scroll_frame.winfo_children():
+            widget.destroy()
+
+        ctk.CTkLabel(
+            self.scroll_frame,
+            text="Utilisateur  —  Points actuels  —  Total dépensé",
+            font=ctk.CTkFont(weight="bold")
+        ).pack(pady=(10, 5))
+
+        for elem in self.spender_data:
+            nom = elem.get("Nom", "?")
+            points = elem.get("Points", 0)
+            total = elem.get("TotalDepense", 0)
+            ctk.CTkLabel(
+                self.scroll_frame,
+                text=f"{nom}  —  {points} pts  —  {total} dépensés"
+            ).pack(pady=3)
