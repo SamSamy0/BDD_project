@@ -78,6 +78,9 @@ class ServerNetworkManager:
             case Protocol.DELETE_SUMMARY.value:
                 result = self.db.deleteSummary(data)
                 return {"protocol": protocol, "data": result}
+            case Protocol.EDIT_SUMMARY.value:
+                result = self.db.editSummary(data)
+                return {"protocol": protocol, "data": result}
 
             case Protocol.GET_SUMMARY_AVERAGE.value:
                 result = self.db.getSummAverage(data)
@@ -139,3 +142,8 @@ class ServerNetworkManager:
             case Protocol.GET_USER_NEVER_PUBLISH.value:
                 result = self.db.getUserNeverPublish()
                 return {"protocol": protocol, "data": result}
+
+            case Protocol.ENOUGH_POINTS.value:
+                result = self.db.enoughPoints(data)
+                return {"protocol": protocol, "data": result}
+                

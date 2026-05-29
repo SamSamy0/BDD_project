@@ -155,6 +155,13 @@ class ClientNetworkManager:
             case Protocol.GET_USER_NEVER_PUBLISH.value:
                 self.receiver.userNeverPublish(data)
 
+            case Protocol.EDIT_SUMMARY.value:
+                self.receiver.editSummary(data)
+
+            case Protocol.ENOUGH_POINTS.value:
+                self.receiver.enoughPoints(data)
+
+
             # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
@@ -258,7 +265,6 @@ class ClientNetworkManager:
         title: str,
         desc: str,
         date: str,
-        version: int,
         visible: bool,
         mnemo: str,
         idAuthor: int,
@@ -269,7 +275,6 @@ class ClientNetworkManager:
                 "title": title,
                 "desc": desc,
                 "date": date,
-                "version": version,
                 "visible": visible,
                 "mnemo": mnemo,
                 "idAuthor": idAuthor,
@@ -339,3 +344,10 @@ class ClientNetworkManager:
 
     def getUserNeverPublish(self):
         self.send_request(Protocol.GET_USER_NEVER_PUBLISH.value)
+
+    def editSummary(self, title: str, desc: str, date: str, visible: bool, idSummary: int):
+        self.send_request(Protocol.EDIT_SUMMARY.value,{"title":title,"desc":desc,"date":date,"visible":visible,"idSummary":idSummary})
+
+    def enoughPoints(self,userId, cost):
+        self.send_request(Protocol.ENOUGH_POINTS.value,{"ID":userId,"points" : cost})
+
