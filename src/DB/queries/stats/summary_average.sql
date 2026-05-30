@@ -1,6 +1,6 @@
-SELECT AVG(compteur)
+SELECT AVG(compteur) AS Moyenne
 FROM (
-    --Nombre de publication par utilisateur 
+    -- Nombre de publication par utilisateur 
     SELECT r.IdUtilisateur, COUNT(r.Mnemonique) AS compteur
     FROM Resume r
     GROUP BY r.IdUtilisateur

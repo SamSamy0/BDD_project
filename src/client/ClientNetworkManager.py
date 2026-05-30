@@ -99,6 +99,15 @@ class ClientNetworkManager:
 
             case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
                 self.receiver.SumInAtLeastThree(data)
+            
+            case Protocol.GET_BEST_TEN_USERS.value:
+                self.receiver.bestTenUsers(data)
+            
+            case Protocol.GET_SUMMARY_AVERAGE.value:
+                self.receiver.summAverage(data)
+            
+            case Protocol.GET_BEST_RATED_SUMMARIY.value:
+                self.receiver.bestRatedSummary(data)
 
             case Protocol.BUY.value:
                 self.receiver.isBought(data)
@@ -142,12 +151,18 @@ class ClientNetworkManager:
 
             case Protocol.GET_EVAL.value:
                 self.receiver.getEval(data)
+            
+            case Protocol.GET_USER_NEVER_PUBLISH.value:
+                self.receiver.userNeverPublish(data)
 
             case Protocol.EDIT_SUMMARY.value:
                 self.receiver.editSummary(data)
 
             case Protocol.ENOUGH_POINTS.value:
                 self.receiver.enoughPoints(data)
+            
+            case Protocol.GET_RANKING_SPENDER.value:
+                self.receiver.spenderRanking(data)
 
 
             # case Protocol.
@@ -323,6 +338,15 @@ class ClientNetworkManager:
 
     def getEval(self, idEval):
         self.send_request(Protocol.GET_EVAL.value, {"ID": idEval})
+    
+    def getGlobalSummAverage(self):
+        self.send_request(Protocol.GET_SUMMARY_AVERAGE.value)
+
+    def getBestRatedSummary(self):
+        self.send_request(Protocol.GET_BEST_RATED_SUMMARIY.value)
+
+    def getUserNeverPublish(self):
+        self.send_request(Protocol.GET_USER_NEVER_PUBLISH.value)
 
     def editSummary(self, title: str, desc: str, date: str, visible: bool, idSummary: int):
         self.send_request(Protocol.EDIT_SUMMARY.value,{"title":title,"desc":desc,"date":date,"visible":visible,"idSummary":idSummary})
