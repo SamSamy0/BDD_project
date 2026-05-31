@@ -14,6 +14,7 @@ class Client:
         self.gui = Gui(self.manager)
         self.receiver = rw(self.gui)
         self.manager.receiver = self.receiver
+        self.gui.default_receiver = self.receiver
 
         self.gui.run()
 
