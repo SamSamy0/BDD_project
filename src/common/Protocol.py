@@ -1,6 +1,5 @@
 from enum import Enum
 
-# from client.ClientNetworkManager import ClientNetworkManager
 
 
 class Protocol(Enum):
@@ -15,6 +14,7 @@ class Protocol(Enum):
     CHECK_ITEM = 8
     CHECK_TRANSACTION_HISTORY = 9
     CHANGE_STATE_OBJ = 10
+    ENOUGH_POINTS = 39
 
     # Profile
     GET_PROFILE = 11
@@ -33,8 +33,6 @@ class Protocol(Enum):
     ADD_USER_COURSE = 35
     DELETE_USER_COURSE = 36
 
-
-
     # Summary
     ADD_SUMMARY = 21
     READ_SUMMARY = 22
@@ -43,6 +41,8 @@ class Protocol(Enum):
     ADD_EVAL = 25
     CHECK_EVALUATIONS = 26  # Not sure
     READ_SUMMARIES = 34
+    GET_EVALUATIONS = 37
+    GET_EVAL = 38
     # Stats
     GET_LEADERBOARD = 27
     GET_COURSES_MOST_RESUMES = 28
@@ -51,3 +51,5 @@ class Protocol(Enum):
     GET_RANKING_SPENDER = 31
     GET_BEST_TEN_USERS = 32
     GET_SUMMARY_AVERAGE = 33
+    GET_USER_NEVER_PUBLISH = 40
+    GET_BEST_RATED_SUMMARIY = 39

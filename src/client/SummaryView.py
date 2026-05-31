@@ -6,6 +6,10 @@ import datetime
 class SummaryView(View):
 
     def initView(self):
+
+        self.average_label = ctk.CTkLabel(self, text="Calcul de la moyenne...", text_color="gray", font=ctk.CTkFont(slant="italic"))
+        self.average_label.grid(row=0, column=0, sticky="e", padx=20)
+
         self.grid_columnconfigure(0, weight=1)#dit à la colonne de s'étirer pour remplir l'espace disponible
         self.grid_rowconfigure(1, weight=1)
 
@@ -22,6 +26,9 @@ class SummaryView(View):
 
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)#crée un bouton "Retour" qui appelle la méthode back_action lorsqu'il est cliqué
         self.back_button.grid(row=3, column=0, padx=20, pady=20)
+
+
+
 
     def back_action(self):
         previous = getattr(self.controller, 'previous_view', 'CLASS')
@@ -55,39 +62,14 @@ class SummaryView(View):
                 print("Le titre est requis pour publier un résumé.")
                 return
             popup.destroy()
-            self.manager.addSummary(title, content, str(datetime.date.today()), 1, True, self.mnemonique, self.manager.user.idUser)#WARNING: HARDCODE VISIBILITE
+            self.manager.addSummary(title, content, str(datetime.date.today()), True, self.mnemonique, self.manager.user.idUser)#WARNING: HARDCODE VISIBILITE
 
         ctk.CTkButton(popup, text="Publier", command=confirm).pack(padx=20, pady=15, fill="x")
-    
-    
-    def view_action(self, title, auteur, note):
-        popup = ctk.CTkToplevel(self)
-        popup.title("Voir le résumé")
-        popup.geometry("500x400")
 
-        popup.after(100, popup.grab_set)
-        popup.after(100, popup.lift)
-        popup.after(100, popup.focus_force)
 
-        # Titre et auteur
-        ctk.CTkLabel(popup, text=title, font=ctk.CTkFont(size=18, weight="bold")).pack(padx=20, pady=(15, 0))
-        ctk.CTkLabel(popup, text=f"par {auteur}", text_color="gray").pack(padx=20, pady=(0, 10))
-        # Séparateur
-        ctk.CTkLabel(popup, text="─" * 50, text_color="gray").pack()
+    def view_action(self, idSummary):
+        self.manager.getEvaluations(idSummary)
 
-        # Contenu fictif
-        ctk.CTkLabel(popup, text="Description du résumé...", wraplength=400).pack(padx=20, pady=15)
-        # Note moyenne
-        ctk.CTkLabel(popup, text=f"Note moyenne : ★ {note}/5", text_color="gray").pack(padx=20, pady=(0, 15))
-
-        # Boutons
-        btn_frame = ctk.CTkFrame(popup, fg_color="transparent")
-        btn_frame.pack(padx=20, pady=10, fill="x")
-        btn_frame.grid_columnconfigure((0, 1), weight=1)
-
-        ctk.CTkButton(btn_frame,text="Évaluer",command=lambda: [popup.destroy(), self.eval_action(title)]).grid(row=0, column=0, padx=5)
-
-        ctk.CTkButton(btn_frame,text="Fermer",fg_color="gray",hover_color="darkgray",command=popup.destroy).grid(row=0, column=1, padx=5)
 
     def send_eval(self, title, note, comment, id_summ):
         self.manager.addReview(note,comment,self.manager.user.idUser,id_summ)
@@ -120,35 +102,78 @@ class SummaryView(View):
             note = float(slider.get())
             comment = comment_entry.get()
             popup.destroy()
-            self.send_eval(title, note, comment,id_summ) 
+            self.send_eval(title, note, comment,id_summ)
 
         ctk.CTkButton(popup, text="Soumettre", command=confirm).pack(padx=20, pady=15, fill="x")
-    
+
 
     def displaySummaries(self):
+
+        self.average()
+
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()
 
-        for id_summ, title, auteur, note in self.summaries:
-            
+
+        for id_summ, title, author, note, id_auhtor in self.summaries:
+
             frame = ctk.CTkFrame(self.scroll_frame)
             frame.pack(padx=10, pady=5, fill="x")
             frame.grid_columnconfigure(0, weight=1)
             #info résumé
             if note:
-                info = ctk.CTkLabel(frame, text=f"{title} | par {auteur} | {note}/5")
+                info = ctk.CTkLabel(frame, text=f"{title} | par {author} | {note}/5")
             else:
                 #s'il n'y a pas de note on n'affiche pas la moyenne (moyenne == NONE)
-                info = ctk.CTkLabel(frame, text=f"{title} | par {auteur} | ")
+                info = ctk.CTkLabel(frame, text=f"{title} | par {author} | ")
             info.grid(row=0, column=0, padx=10, pady=8, sticky="w")
             #bouton voir
-            btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda t=title, a=auteur, n=note: self.view_action(t, a, n))
+            btn = ctk.CTkButton(frame, text="voir", width=60, command=lambda i = id_summ: self.view_action(i))
             btn.grid(row=0, column=1, padx=5, pady=8)
             #btn supprimer
             btn = ctk.CTkButton(frame, text="supprimer", width=80, fg_color="red", hover_color="darkred", command=lambda f=frame, i=id_summ: self.delete_action(f, i))
             btn.grid(row=0, column=2, padx=5, pady=8)
             #btn modifier
-            btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda t=title, i=id_summ: self.eval_action(t,i))
+            btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda auth= id_auhtor, summ=id_summ: self.editSummary(auth,summ))
             btn_edit.grid(row=0, column=3, padx=5, pady=8)
-    
-    
+
+
+    def average(self):
+        self.manager.getSummAverage()
+
+    def update_average(self, data):
+        average = data.get("AVG(compteur)","NULL")
+        self.average_label.configure(text=f"Moyenne par étudiant : {average}  résumés")
+
+
+    def editSummary(self, userId,summId):
+        if userId != self.manager.user.idUser:
+            return;
+
+
+        popup = ctk.CTkToplevel(self)
+        popup.title("Publier un résumé")
+        popup.geometry("400x380")
+        popup.after(100, popup.grab_set)
+        popup.after(100, popup.lift)
+        popup.after(100, popup.focus_force)
+
+        ctk.CTkLabel(popup, text="Titre").pack(padx=20, pady=(15, 0), anchor="w")
+        self.title_entry = ctk.CTkEntry(popup, placeholder_text="Titre du résumé")
+        self.title_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        ctk.CTkLabel(popup, text="Description").pack(padx=20, pady=(5, 0), anchor="w")
+        self.content_entry = ctk.CTkTextbox(popup, height=120)
+        self.content_entry.pack(padx=20, pady=(0, 10), fill="x")
+
+        def confirm():
+            title = self.title_entry.get()
+            content = self.content_entry.get("1.0", "end-1c")#pour récupérer le contenu du Textbox, on utilise la méthode get avec les indices "1.0" (début du texte) et "end-1c" (fin du texte moins un caractère pour éviter d'avoir un saut de ligne en trop)
+            if not title:
+                print("Le titre est requis pour publier un résumé.")
+                return
+            popup.destroy()
+            self.manager.editSummary(title, content, str(datetime.date.today()),True, summId)#WARNING: HARDCODE VISIBILITE
+
+        ctk.CTkButton(popup, text="Publier", command=confirm).pack(padx=20, pady=15, fill="x")
+
