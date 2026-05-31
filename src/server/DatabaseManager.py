@@ -23,6 +23,7 @@ class DatabaseManager:
         self.path_getTransactionHistory = (
             "DB/queries/shop/check_transaction_history.sql"
         )
+        self.path_enough_points = "DB/queries/shop/enough_points.sql"
         self.path_getStore = "DB/queries/shop/check_catalogue.sql"
         self.path_getObjectInfo = "DB/queries/shop/inspect_object.sql"
         self.path_debitPoints = "DB/queries/shop/debit_users_points.sql"
@@ -32,6 +33,7 @@ class DatabaseManager:
         self.path_checkSummary = "DB/queries/summaries/check_summary.sql"
         self.path_checkSummaries = "DB/queries/summaries/check_summaries.sql"
         self.path_deleteSummary = "DB/queries/summaries/delete_summary.sql"
+        self.path_editSummary = "DB/queries/summaries/edit_summary.sql"
         self.path_getSummAverage = "DB/queries/stats/summary_average.sql"
         self.path_getEvaluations = "DB/queries/summaries/get_evaluations.sql"
         self.path_getEval = "DB/queries/summaries/get_eval.sql"
@@ -50,6 +52,8 @@ class DatabaseManager:
             "DB/queries/stats/at_least_three_differents.sql"
         )
         self.path_getBestTenUsers = "DB/queries/stats/ranking_ten_users_points.sql"
+        self.path_getUserNeverPublish="DB/queries/stats/user_never_publish.sql"
+        self.path_getBestRatedSummary = "DB/queries/stats/ranking_summary.sql"
 
     def check_and_upgrade_level(self, idUser: int):
         try:
@@ -73,8 +77,10 @@ class DatabaseManager:
 
             script_sql = fichier.read()
             try:
-                self.cursor.execute(script_sql, params)
-
+                if params:
+                    self.cursor.execute(script_sql, params)
+                else:
+                    self.cursor.execute(script_sql)
                 # Valider les modifications (utile seulement pour INSERT/UPDATE/DELETE)
                 if insert:
                     self.conn.commit()
@@ -124,6 +130,7 @@ class DatabaseManager:
     # Review
     def addReview(self, data):
         res = self.reader_query(self.path_addReview, "one", True, params=data)
+        self.reader_query("DB/queries/summaries/add_summary_points.sql", "None", True, params=data)
         self.check_and_upgrade_level(data.get("idAuthor"))
         return res
 
@@ -165,6 +172,8 @@ class DatabaseManager:
         return self.reader_query(
             self.path_getTransactionHistory, "all", False, params=data
         )
+    def enoughPoints(self,data):
+        return self.reader_query(self.path_enough_points,"one",False,params=data)
 
     def getObjectInfo(self, data):
         return self.reader_query(self.path_getObjectInfo, "all", False, params=data)
@@ -175,6 +184,7 @@ class DatabaseManager:
     # Summaries
     def addSummary(self, data):
         res = self.reader_query(self.path_addSummary, "one", True, params=data)
+        self.reader_query("DB/queries/summaries/add_summary_points.sql", "None", True, params=data)
         self.check_and_upgrade_level(data.get("idAuthor"))
         return res
 
@@ -186,6 +196,9 @@ class DatabaseManager:
 
     def deleteSummary(self, data):
         return self.reader_query(self.path_deleteSummary, "one", True, params=data)
+
+    def editSummary(self,data):
+        return self.reader_query(self.path_editSummary,"one",True,params=data)
 
     def getSummAverage(self, data):
         return self.reader_query(self.path_getSummAverage, "one", False, params=data)
@@ -226,3 +239,9 @@ class DatabaseManager:
 
     def getBestTenUsers(self, data):
         return self.reader_query(self.path_getBestTenUsers, "all", False, params=data)
+    
+    def getUserNeverPublish(self):
+        return self.reader_query(self.path_getUserNeverPublish, "all", False, None)
+    
+    def getBestRatedSummary(self, data):
+        return self.reader_query(self.path_getBestRatedSummary, "all", False, params=data)
