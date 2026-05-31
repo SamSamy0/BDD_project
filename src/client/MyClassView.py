@@ -13,13 +13,13 @@ class MyClassView(View):
         )
         self.title_label.grid(row=0, column=0, padx=20, pady=20)
 
-        # liste des cours
+        # Course List
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Liste des cours")
         self.scroll_frame.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
 
         self.courses = list()
 
-        # btn ajouter cours
+        # btn add course
         self.add_button = ctk.CTkButton(
             self, text="Ajouter un cours", command=self.add_course_action
         )
@@ -27,7 +27,6 @@ class MyClassView(View):
 
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)
         self.back_button.grid(row=3, column=0, padx=20, pady=20)
-
 
     def select_course(self, mnemonique):
         self.controller.current_cours = mnemonique
@@ -44,7 +43,9 @@ class MyClassView(View):
         popup.after(100, popup.lift)
         popup.after(100, lambda: popup.focus_force())
 
-        ctk.CTkLabel(popup, text="Mnémonique du cours").pack(padx=20, pady=(15, 0), anchor="w")
+        ctk.CTkLabel(popup, text="Mnémonique du cours").pack(
+            padx=20, pady=(15, 0), anchor="w"
+        )
         mnemo_entry = ctk.CTkEntry(popup, placeholder_text="INFOH303")
         mnemo_entry.pack(padx=20, pady=(0, 10), fill="x")
 
@@ -55,12 +56,12 @@ class MyClassView(View):
             popup.destroy()
             self.manager.addUserCourse(mnemo, self.manager.user.idUser)
 
-        ctk.CTkButton(popup, text="Rejoindre", command=confirm).pack(padx=20, pady=15, fill="x")
+        ctk.CTkButton(popup, text="Rejoindre", command=confirm).pack(
+            padx=20, pady=15, fill="x"
+        )
 
-    def confirmedAdd(self,course = None):
+    def confirmedAdd(self, course=None):
         self.manager.getUserCourse(self.manager.user.idUser)
-        #self.courses.append(course)
-        #self.refresh()
 
     def refusedAdd(self):
         popup = ctk.CTkToplevel(self)
@@ -68,14 +69,17 @@ class MyClassView(View):
         popup.geometry("300x120")
         popup.after(100, popup.grab_set)
         popup.after(100, popup.lift)
-        ctk.CTkLabel(popup, text="Impossible d'ajouter ce cours.\n(Déjà inscrit ou mnémonique invalide)").pack(padx=20, pady=20)
+        ctk.CTkLabel(
+            popup,
+            text="Impossible d'ajouter ce cours.\n(Déjà inscrit ou mnémonique invalide)",
+        ).pack(padx=20, pady=20)
         ctk.CTkButton(popup, text="OK", command=popup.destroy).pack(pady=5)
 
     def back_action(self):
         self.controller.show_view("MENU")
 
     def refresh(self):
-        #Vide la liste
+        # Vide la liste
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()
 
@@ -97,18 +101,18 @@ class MyClassView(View):
                     m
                 ),  # m=mnemonique capture la valeur
             )
-            btn.grid(row=0, column = 0, padx = 5, pady = 5, sticky = "ew")
+            btn.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
 
             btn_del = ctk.CTkButton(
                 frame,
                 text="Supprimer",
                 fg_color="red",
                 hover_color="darkred",
-                command=lambda c=cours: self.delete_user_course_action(c)
+                command=lambda c=cours: self.delete_user_course_action(c),
             )
-            btn_del.grid(row=0, column = 1, padx = 5, pady = 5)
+            btn_del.grid(row=0, column=1, padx=5, pady=5)
 
-    def displayCourses(self,courses):
+    def displayCourses(self, courses):
         self.courses = courses
         self.refresh()
 
@@ -116,21 +120,20 @@ class MyClassView(View):
         mnemo = course.get("Mnemonique", "Inconnu")
         self.manager.deleteUserCourse(mnemo, self.manager.user.idUser)
 
-    def confirmedDelete(self,course):
+    def confirmedDelete(self, course):
         for obj in self.courses:
             if obj["Mnemonique"] == course["mnemo"]:
                 self.courses.remove(obj)
                 break
         self.refresh()
 
-    def refusedDelete(self,course):
-        #TODO:POP-UP
+    def refusedDelete(self, course):
         pass
 
     def getUserCourse(self, data):
         self.courses = data if data else []
-        self.after(0,self.refresh)
-    
+        self.after(0, self.refresh)
+
     def addUserCourse(self, data):
         if data:
             self.after(0, lambda: self.confirmedAdd(data))
@@ -142,5 +145,3 @@ class MyClassView(View):
             self.after(0, lambda: self.confirmedDelete(data))
         else:
             self.after(0, lambda: self.refusedDelete(None))
-
-

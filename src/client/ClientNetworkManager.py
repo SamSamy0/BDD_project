@@ -9,7 +9,7 @@ from Profil import Profile
 from common.Protocol import Protocol
 
 
-# Intermédiaire entre client et serveur
+# The clients uses ClientNetworkManager to communicate to the server
 class ClientNetworkManager:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -71,7 +71,6 @@ class ClientNetworkManager:
             case Protocol.SIGNIN.value:
                 if data is not None:
                     self.user.initData(data)
-                    # self.current_user = data.get("ID")
                     self.receiver.isAcceptedLogin(connect=True)
                 else:
                     self.receiver.isAcceptedLogin(connect=False)
@@ -168,9 +167,6 @@ class ClientNetworkManager:
 
             case Protocol.CHECK_TRANSACTION_HISTORY.value:
                 self.receiver.showTransactionHistory(data)
-
-
-            # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
 
