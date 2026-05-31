@@ -14,6 +14,7 @@ class ServerNetworkManager:
         print(f"[{protocol}] avec : {data}")
 
         match protocol:
+            #Authentifaction
             case Protocol.SIGNIN.value:
                 result = self.db.signin(data)
                 return {"protocol": protocol, "data": result}
@@ -37,12 +38,12 @@ class ServerNetworkManager:
                 result = self.db.getUserCourse(data)
                 return {"protocol": protocol, "data": result}
 
-            # REVIEW
-            case Protocol.ADD_EVAL.value:
-                result = self.db.addReview(data)
-                return {"protocol": protocol, "data": result}
 
-            # SHOP
+            # Shop
+            case Protocol.ENOUGH_POINTS.value:
+                result = self.db.enoughPoints(data)
+                return {"protocol": protocol, "data": result}
+            
             case Protocol.BUY.value:
                 result = self.db.buyObject(data)
                 return {"protocol": protocol, "data": result}
@@ -59,7 +60,7 @@ class ServerNetworkManager:
                 result = self.db.getObjectInfo(data)
                 return {"protocol": protocol, "data": result}
 
-            # SUMMARIES
+            # Summaries
             case Protocol.GET_STORE.value:
                 result = self.db.getStore(data)
                 return {"protocol": protocol, "data": result}
@@ -85,6 +86,7 @@ class ServerNetworkManager:
             case Protocol.GET_SUMMARY_AVERAGE.value:
                 result = self.db.getSummAverage(data)
                 return {"protocol": protocol, "data": result}
+
             # User
             case Protocol.CHANGE_STATE_OBJ.value:
                 result = self.db.changeStateObj(data)
@@ -96,6 +98,11 @@ class ServerNetworkManager:
 
             case Protocol.GET_USER_OBJECT.value:
                 result = self.db.getUserObjet(data)
+                return {"protocol": protocol, "data": result}
+
+            #Review
+            case Protocol.ADD_EVAL.value:
+                result = self.db.addReview(data)
                 return {"protocol": protocol, "data": result}
 
             case Protocol.GET_EVALUATIONS.value:
@@ -134,16 +141,14 @@ class ServerNetworkManager:
             case Protocol.ADD_USER_COURSE.value:
                 result = self.db.addUserCourse(data)
                 return {"protocol": protocol, "data": result}
-            
+
             case Protocol.GET_BEST_RATED_SUMMARIY.value:
                 result = self.db.getBestRatedSummary(data)
                 return {"protocol": protocol, "data": result}
-            
+
             case Protocol.GET_USER_NEVER_PUBLISH.value:
                 result = self.db.getUserNeverPublish()
                 return {"protocol": protocol, "data": result}
 
-            case Protocol.ENOUGH_POINTS.value:
-                result = self.db.enoughPoints(data)
-                return {"protocol": protocol, "data": result}
-                
+
+

@@ -35,7 +35,7 @@ def getResumeId(mycursor, title, mnemo):
         print(f"L'id du résumé est:  {resume_id}")
         return resume_id
     else:
-        print("on a pas su fetch")
+        print("Résumé non accesible")
 
 
 def initCours(myCursor):
@@ -240,6 +240,7 @@ if __name__ == "__main__":
     initEval(cursor)
     initRew(cursor)
     initUtilisateurObjet(cursor)
+    initCoursUtilisateur(cursor)
     connexion.commit()
     cursor.close()
     connexion.close()
