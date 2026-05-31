@@ -1,9 +1,9 @@
 import time
+from tkinter import messagebox
 
 import customtkinter as ctk
 from object import Object
 from View import View
-from tkinter import messagebox
 
 
 class ShopView(View):
@@ -45,9 +45,6 @@ class ShopView(View):
         )
         self.info_label.pack(padx=15, pady=8)
 
-        print("poiiiiint", self.manager.user.points)
-        print()
-        print()
         self.points_label = ctk.CTkLabel(
             self,
             text=f"Points disponibles :...",
@@ -220,7 +217,6 @@ class ShopView(View):
 
     def buy(self, data: dict):
         if data.get("success"):
-            print(f"!!!! {data.get('msg')}")
             if self.buying is not None:
                 btn = self.buy_buttons.get(self.buying)
                 if btn:
@@ -236,10 +232,8 @@ class ShopView(View):
             self.manager.getUserObject(self.manager.user.idUser)
             self.manager.getPoints(self.manager.user.idUser)
 
-        else:
-            print(f"xxxx{data.get('msg')}xxxx")
     def isBought(self, data):
-        self.after(0, lambda:self.buy(data))
+        self.after(0, lambda: self.buy(data))
 
     def showUserObject(self, data: dict):
         for widget in self.inventory_widgets:
@@ -268,7 +262,6 @@ class ShopView(View):
             o_id = elem.get("ID")
             typ = elem.get("TypeObjet")
             state = elem.get("EstActif")
-            print("STATETATE", state)
 
             lbl_name = ctk.CTkLabel(self.inventory_frame, text=name)
             lbl_name.grid(row=row, column=0, padx=10, pady=5)
@@ -309,23 +302,16 @@ class ShopView(View):
             row += 1
 
     def saveBoughtObject(self, data):
-        print("in save Bought")
         for elem in data:
             o_id = elem.get("ID")
             if not o_id in self.manager.objBought:
-                print("elem not saved", elem)
-                print("appending : ", o_id)
                 self.manager.objBought.append(o_id)
-                print("objbought", self.manager.objBought)
 
     def updatePointsInShop(self, data):
         self.after(0, lambda: self.updatePoints(data))
 
     def updatePoints(self, data):
-        print("updating")
-        print()
         newPoints = data.get("Points")
-        print("NOW USER HAVE: ", newPoints)
         if newPoints is not None:
             self.manager.user.points = newPoints
         self.points_label.configure(
@@ -337,19 +323,21 @@ class ShopView(View):
                 if obj.price > self.manager.user.points:
                     btn.configure(text="Insuffisant", fg_color="gray", state="disabled")
                 else:
-                    btn.configure(text="Acheter", fg_color=("#3B8ED0", "#1F6AA5"), state="normal")
+                    btn.configure(
+                        text="Acheter", fg_color=("#3B8ED0", "#1F6AA5"), state="normal"
+                    )
 
     def objranking(self):
         self.manager.getObRanking()
 
-    def showRanking(self,data):
+    def showRanking(self, data):
         text = str()
         if len(data) == 1:
             for i in data:
-                text += "L'objet le plus vendu: " + "\n" +i.get("Nom") + "\n"
+                text += "L'objet le plus vendu: " + "\n" + i.get("Nom") + "\n"
         else:
             text += "Les objets les plus vendu: \n"
             for i in data:
-                text += "\n"+ "- " +i.get("Nom") + "\n"
+                text += "\n" + "- " + i.get("Nom") + "\n"
 
-        messagebox.showinfo("Objet",text)
+        messagebox.showinfo("Objet", text)

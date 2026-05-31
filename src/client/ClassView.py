@@ -37,7 +37,7 @@ class ClassView(View):
 
     def add_course_action(self, course=None):
         if course is not None:
-            # Appelé depuis le popup avec les vraies valeurs
+            # We fetch the results we "ordered" from the server
             mnemo = course.get("Mnemonique", "Inconnu")
             name = course.get("Nom", "Sans Nom")
             fac = course.get("Fac", "Sans Fac")
@@ -48,14 +48,13 @@ class ClassView(View):
             self.refresh()
             return
 
-        # Ouvre le popup de saisie
+        # Open input window 
         popup = ctk.CTkToplevel(self)
         popup.title("Ajouter un cours")
         popup.geometry("400x500")
-        popup.after(100, popup.grab_set)  # bloque la fenêtre principale
-        #pour fixer le problème de focus du popup, on utilise after pour s'assurer que le popup est au premier plan et reçoit le focus
-        popup.after(100, popup.lift)  # assure que le popup est au premier plan
-        popup.after(100, lambda: popup.focus_force())  # donne le focus au popup
+        popup.after(100, popup.grab_set)  
+        popup.after(100, popup.lift)  
+        popup.after(100, lambda: popup.focus_force())  
 
         ctk.CTkLabel(popup, text="Mnémonique").pack(padx=20, pady=(15, 0), anchor="w")
         mnemo_entry = ctk.CTkEntry(popup, placeholder_text="INFO-H303")
@@ -90,15 +89,6 @@ class ClassView(View):
 
         ctk.CTkButton(popup, text="Confirmer", command=confirm).pack(padx=20, pady=15, fill="x")
 
-    def confirmedAdd(self,course = None):
-        self.courses.append(course)
-        self.refresh()
-
-    def refusedAdd(self):
-        if len(self.courses) > 0:
-            self.courses.pop()
-            self.after(0,self.refresh)
-
 
     def confirmedAdd(self,course = None):
         self.courses.append(course)
@@ -113,7 +103,7 @@ class ClassView(View):
         self.controller.show_view("MENU")
 
     def refresh(self):
-        #Vide la liste
+        # Empty the list
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()
 
@@ -129,14 +119,14 @@ class ClassView(View):
                 text=f"{mnemo} - {name} - {fac} - {utc} - {year}",
                 command=lambda m=mnemo: self.select_course(
                     m
-                ),  # m=mnemonique capture la valeur
+                ),  
             )
             btn.pack(padx=10, pady=5, fill="x")
 
     def setAllCourse(self, courses):
         self.courses = []
         self.courses.extend(courses)
-        self.after(0, self.refresh)  # rafraîchit la liste des cours dans l'interface
+        self.after(0, self.refresh)  # refresh courses lists
         
 
     def rollback_course(self):

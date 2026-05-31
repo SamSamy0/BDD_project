@@ -1,7 +1,6 @@
 from enum import Enum
 
 
-
 class Protocol(Enum):
     SIGNIN = 1
     SIGNUP = 2
@@ -39,8 +38,7 @@ class Protocol(Enum):
     EDIT_SUMMARY = 23
     DELETE_SUMMARY = 24
     ADD_EVAL = 25
-    CHECK_EVALUATIONS = 26  # Not sure
-    READ_SUMMARIES = 34
+    READ_SUMMARIES = 26
     GET_EVALUATIONS = 37
     GET_EVAL = 38
     # Stats
