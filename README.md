@@ -38,13 +38,16 @@ customtkinter==5.2.2
 # Environnement Virtuel et Dépendances Python
 
  ```bash
- # 1. Création de l'environnement virtuel
+ # 1. Installation de pip et venv
+ sudo apt install python3-pip python3.14-venv
+
+ # 2. Création de l'environnement virtuel
 python3 -m venv .venv
 
-# 2. Activation de l'environnement
+ # 3. Activation de l'environnement
 source .venv/bin/activate
 
-# 3. Installation des dépendances
+ # 4. Installation des dépendances
 pip install -r requirements.txt
  ```
 
@@ -52,7 +55,8 @@ pip install -r requirements.txt
 # Importation des données initiales
 
 ```bash
-./src/initData.sh
+cd src
+./initData.sh
 ```
 
 # Lancement de l'application
