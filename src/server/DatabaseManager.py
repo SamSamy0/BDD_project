@@ -6,17 +6,20 @@ class DatabaseManager:
     def __init__(self, cursor):
         self.cursor = cursor.cursor(dictionary=True)
         self.conn = cursor
+        # Authentification
         self.path_signin = "DB/queries/users/signin.sql"
         self.path_signup = "DB/queries/users/signup.sql"
-        # Courses
 
+        # Courses
         self.path_getAllCourses = "DB/queries/courses/list_courses.sql"
         self.path_addCourse = "DB/queries/courses/add_course.sql"
         self.path_addUserCourse = "DB/queries/users/add_usercourse.sql"
         self.path_deleteUserCourse = "DB/queries/users/delete_user_course.sql"
         self.path_getUserCourse = "DB/queries/courses/list_user_cours.sql"
+
         # Review
         self.path_addReview = "DB/queries/reviews/add_evaluation.sql"
+
         # Shop
         self.path_buyObjet = "DB/queries/shop/add_object_to_users.sql"
         self.path_getPoints = "DB/queries/shop/check_points.sql"
@@ -28,6 +31,7 @@ class DatabaseManager:
         self.path_getObjectInfo = "DB/queries/shop/inspect_object.sql"
         self.path_debitPoints = "DB/queries/shop/debit_users_points.sql"
         self.path_addTransaction = "DB/queries/shop/add_transaction.sql"
+
         # Summaries
         self.path_addSummary = "DB/queries/summaries/add_summary.sql"
         self.path_checkSummary = "DB/queries/summaries/check_summary.sql"
@@ -37,12 +41,14 @@ class DatabaseManager:
         self.path_getSummAverage = "DB/queries/stats/summary_average.sql"
         self.path_getEvaluations = "DB/queries/summaries/get_evaluations.sql"
         self.path_getEval = "DB/queries/summaries/get_eval.sql"
+
         # User
         self.path_changeStateObj = "DB/queries/users/change_state_object.sql"
         self.path_getProfile = "DB/queries/users/check_profile.sql"
         self.path_getUserObject = "DB/queries/users/get_user_object.sql"
         self.path_getUserAllPoints = "DB/queries/users/get_alltime_points_user.sql"
         self.path_updateUserLevel = "DB/queries/users/update_level.sql"
+
         # Statistic
         self.path_checkLeaderBoard = "DB/queries/stats/check_leaderboard.sql"
         self.path_getObRanking = "DB/queries/stats/ranking_object.sql"
@@ -67,7 +73,6 @@ class DatabaseManager:
 
             self.cursor.execute(sql_update_level, {"level": level, "idUser": idUser})
             self.conn.commit()
-            print("CONGRATULATIONS, YOU UPGRADED")
 
         except Exception as e:
             print(f"Error when upgrading: {e}")
@@ -81,11 +86,11 @@ class DatabaseManager:
                     self.cursor.execute(script_sql, params)
                 else:
                     self.cursor.execute(script_sql)
-                # Valider les modifications (utile seulement pour INSERT/UPDATE/DELETE)
+                # Use for insert/delete/update
                 if insert:
                     self.conn.commit()
 
-                # Récupérer les résultats directement depuis le curseur
+                # Fetch the data
                 if fetch == "one":
                     results = self.cursor.fetchone()
                     print("results in DM", results)
@@ -95,15 +100,16 @@ class DatabaseManager:
                 else:
                     results = params
 
-                # Retourne sous forme de liste de liste si c'est ce qu'attendait le reste du code
                 return results
 
             except mysql.connector.Error as erreur:
                 print(f"Erreur d'exécution : {erreur}")
                 return None
 
+
+
+    #Authentification
     def signin(self, data):
-        print("DM")
         return self.reader_query(self.path_signin, "one", False, params=data)
 
     def signup(self, data):
@@ -113,7 +119,6 @@ class DatabaseManager:
     def getAllCourses(self, data):
         return self.reader_query(self.path_getAllCourses, "all", False, params=data)
 
-    # Courses
     def addCourse(self, data):
         return self.reader_query(self.path_addCourse, "None", True, params=data)
 
@@ -139,7 +144,6 @@ class DatabaseManager:
         userPoints = int(self.getPoints(data).get("Points"))
         cout = int(data.get("cost"))
         if userPoints < cout:
-            print("Solde Insuffisant")
             return {"success": False, "msg": "Solde Insuffisant"}
 
         try:
@@ -172,6 +176,7 @@ class DatabaseManager:
         return self.reader_query(
             self.path_getTransactionHistory, "all", False, params=data
         )
+
     def enoughPoints(self,data):
         return self.reader_query(self.path_enough_points,"one",False,params=data)
 
@@ -239,9 +244,9 @@ class DatabaseManager:
 
     def getBestTenUsers(self, data):
         return self.reader_query(self.path_getBestTenUsers, "all", False, params=data)
-    
+
     def getUserNeverPublish(self):
         return self.reader_query(self.path_getUserNeverPublish, "all", False, None)
-    
+
     def getBestRatedSummary(self, data):
         return self.reader_query(self.path_getBestRatedSummary, "all", False, params=data)
