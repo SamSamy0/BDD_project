@@ -20,9 +20,7 @@ class LoginView(View):
         self.userName_label = ctk.CTkLabel(self, text="Nom")
         self.userName_label.grid(row=3, column=0, padx=20, pady=(10, 0), sticky="w")
 
-        self.userName_entry = ctk.CTkEntry(
-            self, placeholder_text="alice_dupont"
-        )
+        self.userName_entry = ctk.CTkEntry(self, placeholder_text="alice_dupont")
         self.userName_entry.grid(row=4, column=0, padx=20, pady=(0, 20), sticky="ew")
 
         self.signIn_button = ctk.CTkButton(
@@ -36,8 +34,8 @@ class LoginView(View):
         self.signUp_button.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
 
     def login_action(self):
-        self.manager.signin("alice_dupont", "alice.dupont@univ.be")
-    
+        self.manager.signin(self.userName_entry.get(), self.mail_entry.get())
+
     def isAcceptedLogin(self, connect):
         if connect:
             self.controller.show_view("MENU")
