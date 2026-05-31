@@ -136,7 +136,7 @@ class SummaryView(View):
                 width=60,
                 command=lambda i=id_summ: self.view_action(i),
             )
-            btn.grid(row=0, column=1, padx=5, pady=8)
+            btn.grid(row=0, column=2, padx=5, pady=8)
             btn = ctk.CTkButton(
                 frame,
                 text="supprimer",
@@ -145,7 +145,7 @@ class SummaryView(View):
                 hover_color="darkred",
                 command=lambda f=frame, i=id_summ: self.delete_action(f, i),
             )
-            btn.grid(row=0, column=2, padx=5, pady=8)
+            btn.grid(row=0, column=3, padx=5, pady=8)
             btn_edit = ctk.CTkButton(
                 frame,
                 text="modifier",
@@ -156,7 +156,11 @@ class SummaryView(View):
                     auth, summ, bool(vis)
                 ),
             )
-            btn_edit.grid(row=0, column=3, padx=5, pady=8)
+            btn_edit.grid(row=0, column=4, padx=5, pady=8)
+
+            btn = ctk.CTkButton(frame,text = "Evaluer", width=80, command=lambda t=title, i=id_summ: self.eval_action(t, i))
+            btn.grid(row=0, column=1, padx=5, pady=8)
+
 
     def editSummary(self, userId, summId,current_visibility=True):
         if userId != self.manager.user.idUser:
