@@ -7,8 +7,8 @@ class SummaryView(View):
 
     def initView(self):
 
-        self.average_label = ctk.CTkLabel(self, text="Calcul de la moyenne...", text_color="gray", font=ctk.CTkFont(slant="italic"))
-        self.average_label.grid(row=0, column=0, sticky="e", padx=20)
+        #self.average_label = ctk.CTkLabel(self, text="Calcul de la moyenne...", text_color="gray", font=ctk.CTkFont(slant="italic"))
+        #self.average_label.grid(row=0, column=0, sticky="e", padx=20)
 
         self.grid_columnconfigure(0, weight=1)#dit à la colonne de s'étirer pour remplir l'espace disponible
         self.grid_rowconfigure(1, weight=1)
@@ -109,7 +109,7 @@ class SummaryView(View):
 
     def displaySummaries(self):
 
-        self.average()
+        #self.average()
 
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()
@@ -138,12 +138,12 @@ class SummaryView(View):
             btn_edit.grid(row=0, column=3, padx=5, pady=8)
 
 
-    def average(self):
-        self.manager.getSummAverage()
+    #def average(self):
+        #self.manager.getSummAverage()
 
-    def update_average(self, data):
-        average = data.get("AVG(compteur)","NULL")
-        self.average_label.configure(text=f"Moyenne par étudiant : {average}  résumés")
+    #def update_average(self, data):
+        #average = data.get("AVG(compteur)","NULL")
+        #self.average_label.configure(text=f"Moyenne par étudiant : {average}  résumés")
 
 
     def editSummary(self, userId,summId):
