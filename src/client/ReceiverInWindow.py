@@ -65,6 +65,13 @@ class ReceiverInWindow:
             classView = self.app.frames["CLASS"]
             classView.rollback_course()
 
+    def showTransactionHistory(self, data:dict):
+        self.app.show_view("HISTORY")
+        historyView = self.app.frames["HISTORY"]
+        historyView.update_history(data)
+
+        
+
 
     def checkLeaderboard(self, data: list[dict]):
         leaderView = self.app.frames["LEADERBOARD"]
@@ -83,16 +90,6 @@ class ReceiverInWindow:
     def getObRanking(self,data):
         shopView = self.app.frames["SHOP"]
         shopView.after(0, lambda: shopView.showRanking(data))
-
-    def addCourse(self, data: dict):
-        classView = self.app.frames["CLASS"]
-        if data is not None:
-           classView.after(0, lambda: classView.confirmedAdd(data))
-           print("Cours enregistré avec succès: ",data)
-        else:
-            #TODO: Pop-up cours existe déjà
-            classView = self.app.frames["CLASS"]
-            classView.after(0, lambda: classView.refusedAdd(data))
 
 
     def getUserCourse(self,data):
