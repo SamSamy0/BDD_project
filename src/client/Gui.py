@@ -11,6 +11,7 @@ from ProfilView import ProfilView
 from SummaryView import SummaryView
 from MyClassView import MyClassView
 from EvalView import EvalView
+from HistoryView import HistoryView 
 
 
 class Gui(ctk.CTk):
@@ -38,7 +39,7 @@ class Gui(ctk.CTk):
         self.frames = {}
 
         # Initialisation des vues
-        for F in (IpView,LoginView, MenuView, LeaderBoardView, ShopView, ClassView, ProfilView, SummaryView,MyClassView, EvalView):
+        for F in (IpView,LoginView, MenuView, LeaderBoardView, ShopView, ClassView, ProfilView, SummaryView,MyClassView, EvalView, HistoryView):
             page_name = F.__name__.replace("View", "").upper()
             frame = F(parent=self.container, controller=self, manager=self.manager)
             self.frames[page_name] = frame

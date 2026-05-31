@@ -1,3 +1,3 @@
 SELECT t.ID, t.Date, t.Montant, t.TypeTransaction
 FROM TransactionPoints t
-WHERE t.IdUtilisateur = %(idAuthor)s
+WHERE t.IdUtilisateur = %(idUser)s

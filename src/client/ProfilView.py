@@ -29,7 +29,6 @@ class ProfilView(View):
 
     def back_action(self):
         self.controller.show_view("MENU")
-    
 
     def showProfile(self, data):
         self.after(0, lambda: self.displayStats(data))
@@ -39,8 +38,9 @@ class ProfilView(View):
         level = data.get("Niveau", "Sans Niveau")
         points = data.get("Points", "Pas de Points")
         title = data.get("NomObjet", "Aucun Objet équipé")
-
-        title_text = f"Titre : {title}" if title else "Aucun objet équipé"
+        typeObj = data.get("TypeObjet", "Pas d'objet équipé")
+        string = "Titre" if typeObj == "titre" else "Badge"
+        title_text = f"{string} : {title}" if title else "Aucun objet équipé"
 
         self.name_label.configure(text=f"Nom : {name}")
         self.points_label.configure(text=f"Points : {points}")

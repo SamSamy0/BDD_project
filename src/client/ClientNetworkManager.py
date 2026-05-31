@@ -99,12 +99,20 @@ class ClientNetworkManager:
 
             case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
                 self.receiver.SumInAtLeastThree(data)
+            
+            case Protocol.GET_BEST_TEN_USERS.value:
+                self.receiver.bestTenUsers(data)
+            
+            case Protocol.GET_SUMMARY_AVERAGE.value:
+                self.receiver.summAverage(data)
+            
+            case Protocol.GET_BEST_RATED_SUMMARIY.value:
+                self.receiver.bestRatedSummary(data)
 
             case Protocol.BUY.value:
                 self.receiver.isBought(data)
 
             case Protocol.READ_SUMMARIES.value:
-                print(data)
                 self.receiver.checkSummaries(data)
 
             case Protocol.ADD_COURSE.value:
@@ -136,12 +144,31 @@ class ClientNetworkManager:
 
             case Protocol.GET_RANKING_OBJECT.value:
                 self.receiver.getObRanking(data)
+                
+            case Protocol.GET_SUMMARY_AVERAGE.value:
+                self.receiver.summaryAverage(data)
 
             case Protocol.GET_EVALUATIONS.value:
                 self.receiver.getEvaluations(data)
 
             case Protocol.GET_EVAL.value:
                 self.receiver.getEval(data)
+            
+            case Protocol.GET_USER_NEVER_PUBLISH.value:
+                self.receiver.userNeverPublish(data)
+
+            case Protocol.EDIT_SUMMARY.value:
+                self.receiver.editSummary(data)
+
+            case Protocol.ENOUGH_POINTS.value:
+                self.receiver.enoughPoints(data)
+            
+            case Protocol.GET_RANKING_SPENDER.value:
+                self.receiver.spenderRanking(data)
+
+            case Protocol.CHECK_TRANSACTION_HISTORY.value:
+                self.receiver.showTransactionHistory(data)
+
 
             # case Protocol.
 
@@ -246,7 +273,6 @@ class ClientNetworkManager:
         title: str,
         desc: str,
         date: str,
-        version: int,
         visible: bool,
         mnemo: str,
         idAuthor: int,
@@ -257,7 +283,6 @@ class ClientNetworkManager:
                 "title": title,
                 "desc": desc,
                 "date": date,
-                "version": version,
                 "visible": visible,
                 "mnemo": mnemo,
                 "idAuthor": idAuthor,
@@ -276,8 +301,8 @@ class ClientNetworkManager:
             {"ID": int(idSumm), "IdUtilisateur": idAuthor},
         )
 
-    def getSummAverage(self, idSumm: int):
-        self.send_request(Protocol.GET_SUMMARY_AVERAGE.value, {"idSumm": idSumm})
+    def getSummAverage(self):
+        self.send_request(Protocol.GET_SUMMARY_AVERAGE.value)
 
     """Users Queries"""
 
@@ -318,3 +343,19 @@ class ClientNetworkManager:
 
     def getEval(self, idEval):
         self.send_request(Protocol.GET_EVAL.value, {"ID": idEval})
+    
+    def getGlobalSummAverage(self):
+        self.send_request(Protocol.GET_SUMMARY_AVERAGE.value)
+
+    def getBestRatedSummary(self):
+        self.send_request(Protocol.GET_BEST_RATED_SUMMARIY.value)
+
+    def getUserNeverPublish(self):
+        self.send_request(Protocol.GET_USER_NEVER_PUBLISH.value)
+
+    def editSummary(self, title: str, desc: str, date: str, visible: bool, idSummary: int):
+        self.send_request(Protocol.EDIT_SUMMARY.value,{"title":title,"desc":desc,"date":date,"visible":visible,"idSummary":idSummary})
+
+    def enoughPoints(self,userId, cost):
+        self.send_request(Protocol.ENOUGH_POINTS.value,{"ID":userId,"points" : cost})
+
