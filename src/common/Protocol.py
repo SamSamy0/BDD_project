@@ -2,11 +2,14 @@ from enum import Enum
 
 
 class Protocol(Enum):
+    #Error
+    ERROR = 5
+
+    #Authentification
     SIGNIN = 1
     SIGNUP = 2
     DISCONNECTION = 3
     SUCCESS = 4
-    ERROR = 5
     # Store
     BUY = 6
     GET_STORE = 7
@@ -20,15 +23,14 @@ class Protocol(Enum):
     GET_POINT = 12  # In case we want to just display the points
     CHECK_RANKING = 13
     GET_USER_OBJECT = 14
-    # Course
 
+    # Course
     ADD_COURSE = 15
     DELETE_COURSE = 16
     CHECK_COURSE = 17
     GET_ALL_COURSES = 18
     GET_USER_COURSES = 19
     GET_RESUME_OF_COURSE = 20
-
     ADD_USER_COURSE = 35
     DELETE_USER_COURSE = 36
 
@@ -41,6 +43,7 @@ class Protocol(Enum):
     READ_SUMMARIES = 26
     GET_EVALUATIONS = 37
     GET_EVAL = 38
+    
     # Stats
     GET_LEADERBOARD = 27
     GET_COURSES_MOST_RESUMES = 28

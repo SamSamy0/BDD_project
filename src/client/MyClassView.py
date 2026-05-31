@@ -46,7 +46,7 @@ class MyClassView(View):
         ctk.CTkLabel(popup, text="Mnémonique du cours").pack(
             padx=20, pady=(15, 0), anchor="w"
         )
-        mnemo_entry = ctk.CTkEntry(popup, placeholder_text="INFO-H303")
+        mnemo_entry = ctk.CTkEntry(popup, placeholder_text="INFOH303")
         mnemo_entry.pack(padx=20, pady=(0, 10), fill="x")
 
         def confirm():
@@ -61,8 +61,7 @@ class MyClassView(View):
         )
 
     def confirmedAdd(self, course=None):
-        self.courses.append(course)
-        self.refresh()
+        self.manager.getUserCourse(self.manager.user.idUser)
 
     def refusedAdd(self):
         popup = ctk.CTkToplevel(self)
