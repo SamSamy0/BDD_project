@@ -87,7 +87,7 @@ class Server:
                             self.serve_connection(key, mask)
             except KeyboardInterrupt:
                 print("Server ended")
-
+                
             finally:
                 self.selector.close()
 
@@ -95,7 +95,6 @@ class Server:
 def load_json():
     with open("DB/config.json", "r") as jsonfile:
         data = json.load(jsonfile)
-
     return data
 
 
