@@ -114,6 +114,7 @@ class ReceiverInWindow:
                 summary["Nom"],
                 summary["Moyenne"],
                 summary["IdUtilisateur"],
+                summary["Visibilite"]
             )
             summaries.append(temp)
 

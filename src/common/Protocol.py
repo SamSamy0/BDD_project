@@ -43,7 +43,8 @@ class Protocol(Enum):
     READ_SUMMARIES = 26
     GET_EVALUATIONS = 37
     GET_EVAL = 38
-    
+    CHANGE_VISIBILITY = 42
+
     # Stats
     GET_LEADERBOARD = 27
     GET_COURSES_MOST_RESUMES = 28

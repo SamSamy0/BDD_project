@@ -43,7 +43,7 @@ class ServerNetworkManager:
             case Protocol.ENOUGH_POINTS.value:
                 result = self.db.enoughPoints(data)
                 return {"protocol": protocol, "data": result}
-            
+
             case Protocol.BUY.value:
                 result = self.db.buyObject(data)
                 return {"protocol": protocol, "data": result}
@@ -148,6 +148,10 @@ class ServerNetworkManager:
 
             case Protocol.GET_USER_NEVER_PUBLISH.value:
                 result = self.db.getUserNeverPublish()
+                return {"protocol": protocol, "data": result}
+
+            case Protocol.CHANGE_VISIBILITY.value:
+                result = self.db.changeVisibility(data)
                 return {"protocol": protocol, "data": result}
 
 
