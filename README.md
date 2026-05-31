@@ -9,6 +9,12 @@ sudo mysql < src/DB/init.sql
 
 ```
 
+Installer Tkinter
+
+```bash
+sudo apt install python3-tk
+```
+
 # Dependences
 customtkinter==5.2.2
 

@@ -1,5 +1,5 @@
-SELECT r.ID r.Titre,r.Description, r.Version, r.Mnemonique
-FROM Resume r
-WHERE r.ID = %(idSumm)s and  r.Titre = %(title)s and  r.Description = %s
-    and  r.Version = %(version)s and  r.Mnemonique = %(mnemo)s
-    and r.Version = r.Version +1
+UPDATE Resume
+    SET Titre = %(title)s,
+        Description = %(desc)s,
+        Version = Version + 1
+    WHERE ID = %(idSumm)s AND IdUtilisateur = %(idAuthor)s;
