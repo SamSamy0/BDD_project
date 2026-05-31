@@ -26,5 +26,6 @@ def getUserLevel(points: int):
     elif points < MAXLV8:
         level = 8
     else:
+        print("points ! ", points)
         level = 9
     return level
