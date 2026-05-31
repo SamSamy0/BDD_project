@@ -45,7 +45,7 @@ class MyClassView(View):
         popup.after(100, lambda: popup.focus_force())
 
         ctk.CTkLabel(popup, text="Mnémonique du cours").pack(padx=20, pady=(15, 0), anchor="w")
-        mnemo_entry = ctk.CTkEntry(popup, placeholder_text="INFO-H303")
+        mnemo_entry = ctk.CTkEntry(popup, placeholder_text="INFOH303")
         mnemo_entry.pack(padx=20, pady=(0, 10), fill="x")
 
         def confirm():
@@ -58,8 +58,9 @@ class MyClassView(View):
         ctk.CTkButton(popup, text="Rejoindre", command=confirm).pack(padx=20, pady=15, fill="x")
 
     def confirmedAdd(self,course = None):
-        self.courses.append(course)
-        self.refresh()
+        self.manager.getUserCourse(self.manager.user.idUser)
+        #self.courses.append(course)
+        #self.refresh()
 
     def refusedAdd(self):
         popup = ctk.CTkToplevel(self)
