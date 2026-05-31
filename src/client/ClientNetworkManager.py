@@ -9,7 +9,7 @@ from Profil import Profile
 from common.Protocol import Protocol
 
 
-# Intermédiaire entre client et serveur
+# The clients uses ClientNetworkManager to communicate to the server
 class ClientNetworkManager:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -71,7 +71,6 @@ class ClientNetworkManager:
             case Protocol.SIGNIN.value:
                 if data is not None:
                     self.user.initData(data)
-                    # self.current_user = data.get("ID")
                     self.receiver.isAcceptedLogin(connect=True)
                 else:
                     self.receiver.isAcceptedLogin(connect=False)
@@ -99,13 +98,13 @@ class ClientNetworkManager:
 
             case Protocol.GET_RES_IN_AT_LEAST_THREE_COURSES.value:
                 self.receiver.SumInAtLeastThree(data)
-            
+
             case Protocol.GET_BEST_TEN_USERS.value:
                 self.receiver.bestTenUsers(data)
-            
+
             case Protocol.GET_SUMMARY_AVERAGE.value:
                 self.receiver.summAverage(data)
-            
+
             case Protocol.GET_BEST_RATED_SUMMARIY.value:
                 self.receiver.bestRatedSummary(data)
 
@@ -144,7 +143,7 @@ class ClientNetworkManager:
 
             case Protocol.GET_RANKING_OBJECT.value:
                 self.receiver.getObRanking(data)
-                
+
             case Protocol.GET_SUMMARY_AVERAGE.value:
                 self.receiver.summaryAverage(data)
 
@@ -153,7 +152,7 @@ class ClientNetworkManager:
 
             case Protocol.GET_EVAL.value:
                 self.receiver.getEval(data)
-            
+
             case Protocol.GET_USER_NEVER_PUBLISH.value:
                 self.receiver.userNeverPublish(data)
 
@@ -162,15 +161,12 @@ class ClientNetworkManager:
 
             case Protocol.ENOUGH_POINTS.value:
                 self.receiver.enoughPoints(data)
-            
+
             case Protocol.GET_RANKING_SPENDER.value:
                 self.receiver.spenderRanking(data)
 
             case Protocol.CHECK_TRANSACTION_HISTORY.value:
                 self.receiver.showTransactionHistory(data)
-
-
-            # case Protocol.
 
     """Functions to send messages to ServerNetworkManager"""
 
@@ -293,7 +289,7 @@ class ClientNetworkManager:
         self.send_request(Protocol.READ_SUMMARY.value, {"idSumm": idSumm})
 
     def checkSummaries(self, Mnemonique: str):
-        self.send_request(Protocol.READ_SUMMARIES.value, {"Mnemonique": Mnemonique})
+        self.send_request(Protocol.READ_SUMMARIES.value, {"Mnemonique": Mnemonique,"idUser": self.user.idUser})
 
     def deleteSummary(self, idSumm, idAuthor):
         self.send_request(
@@ -343,7 +339,7 @@ class ClientNetworkManager:
 
     def getEval(self, idEval):
         self.send_request(Protocol.GET_EVAL.value, {"ID": idEval})
-    
+
     def getGlobalSummAverage(self):
         self.send_request(Protocol.GET_SUMMARY_AVERAGE.value)
 
@@ -358,4 +354,7 @@ class ClientNetworkManager:
 
     def enoughPoints(self,userId, cost):
         self.send_request(Protocol.ENOUGH_POINTS.value,{"ID":userId,"points" : cost})
+
+    def changeVisibility(self, idSumm: int, idUser: int):
+        self.send_request(Protocol.CHANGE_VISIBILITY.value, {"idSumm": idSumm,"idAuthor": idUser})
 

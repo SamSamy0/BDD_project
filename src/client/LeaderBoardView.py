@@ -8,7 +8,12 @@ class LeaderBoardView(View):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(2, weight=1)
 
-        self.position_label = ctk.CTkLabel(self, text="Votre position ...", text_color="red", font=ctk.CTkFont(slant="italic"))
+        self.position_label = ctk.CTkLabel(
+            self,
+            text="Votre position ...",
+            text_color="red",
+            font=ctk.CTkFont(slant="italic"),
+        )
         self.position_label.grid(row=0, column=0, sticky="e", padx=20)
 
         self.title_label = ctk.CTkLabel(
@@ -16,64 +21,74 @@ class LeaderBoardView(View):
         )
         self.title_label.grid(row=0, column=0, padx=20, pady=20)
 
-        #frame horizontale pour les boutons de stats
+        # Horizontal frame for stats buttons
         self.stats_boutons_frame = ctk.CTkFrame(self)
-        self.stats_boutons_frame.grid(row=1, column=0, padx=20, pady=(0,10))
+        self.stats_boutons_frame.grid(row=1, column=0, padx=20, pady=(0, 10))
 
-        #btn du classement de base
-        self.btn_leaderboard = ctk.CTkButton(self.stats_boutons_frame,
-                                             text="Classement",
-                                             command=self.displayLeaderboard)
+        self.btn_leaderboard = ctk.CTkButton(
+            self.stats_boutons_frame, text="Classement", command=self.displayLeaderboard
+        )
         self.btn_leaderboard.pack(side="left", padx=5, pady=5)
 
-        #cours ayant le plus de résumés
-        self.btn_most_sum = ctk.CTkButton(self.stats_boutons_frame,
-                                          text="Cours avec le plus de résumés",
-                                          command=self.action_most_summariezed_courses)
+        # Most sumarized course
+        self.btn_most_sum = ctk.CTkButton(
+            self.stats_boutons_frame,
+            text="Cours avec le plus de résumés",
+            command=self.action_most_summariezed_courses,
+        )
         self.btn_most_sum.pack(side="left", padx=5, pady=5)
 
-        #utilisateurs ayant plus de 3 résumés
-        self.btn_at_least_3_sum = ctk.CTkButton(self.stats_boutons_frame,
-                                                text="Uti avec au moins 3 résumés",
-                                                command=self.action_at_least_three)
+        # Users with at least 3 summaries
+        self.btn_at_least_3_sum = ctk.CTkButton(
+            self.stats_boutons_frame,
+            text="Uti avec au moins 3 résumés",
+            command=self.action_at_least_three,
+        )
         self.btn_at_least_3_sum.pack(side="left", padx=5, pady=5)
 
-        #top 10
-        self.btn_top_ten = ctk.CTkButton(self.stats_boutons_frame,
-                                            text="Top 10 (points)",
-                                            command=self.action_topten)
+        # top 10
+        self.btn_top_ten = ctk.CTkButton(
+            self.stats_boutons_frame, text="Top 10 (points)", command=self.action_topten
+        )
         self.btn_top_ten.pack(side="left", padx=5, pady=5)
 
-        #moyenne résumés/utilisateur
-        self.btn_avg = ctk.CTkButton(self.stats_boutons_frame,
-                                     text="Moyenne de résumés par utilisateur",
-                                     command=self.action_summ_avg)
+        # Average (summ/user)
+        self.btn_avg = ctk.CTkButton(
+            self.stats_boutons_frame,
+            text="Moyenne de résumés par utilisateur",
+            command=self.action_summ_avg,
+        )
         self.btn_avg.pack(side="left", padx=5, pady=5)
 
-        #best summary by course
-        self.btn_best_rated = ctk.CTkButton(self.stats_boutons_frame,
-                                            text="Meilleur résumé par cours",
-                                            command=self.action_best_rated)
+        # best summary by course
+        self.btn_best_rated = ctk.CTkButton(
+            self.stats_boutons_frame,
+            text="Meilleur résumé par cours",
+            command=self.action_best_rated,
+        )
         self.btn_best_rated.pack(side="left", padx=5, pady=5)
 
-        #user sans résumé publié
-        self.btn_never_publish = ctk.CTkButton(self.stats_boutons_frame,
-                                                text="Uti sans publication de résumé",
-                                                command=self.action_never_publish)
+        # Users without summaries
+        self.btn_never_publish = ctk.CTkButton(
+            self.stats_boutons_frame,
+            text="Uti sans publication de résumé",
+            command=self.action_never_publish,
+        )
         self.btn_never_publish.pack(side="left", padx=5, pady=5)
 
-        #user total sum dépensé > total points
-        self.btn_spender = ctk.CTkButton(self.stats_boutons_frame,
-                                            text="Util ayant dépense > points",
-                                            command=self.action_spender)
+        # user total sum spent > total points
+        self.btn_spender = ctk.CTkButton(
+            self.stats_boutons_frame,
+            text="Util ayant dépense > points",
+            command=self.action_spender,
+        )
         self.btn_spender.pack(side="left", padx=5, pady=5)
-
 
         self.scroll_frame = ctk.CTkScrollableFrame(self, label_text="Classement")
         self.scroll_frame.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
         self.scroll_frame.grid_columnconfigure((0, 1, 2), weight=1)
 
-        # En-têtes
+        # Headers
         ctk.CTkLabel(
             self.scroll_frame, text="Rang", font=ctk.CTkFont(weight="bold")
         ).grid(row=0, column=0, padx=10, pady=5)
@@ -84,9 +99,8 @@ class LeaderBoardView(View):
             self.scroll_frame, text="Points", font=ctk.CTkFont(weight="bold")
         ).grid(row=0, column=2, padx=10, pady=5)
 
-        # leaderboard vide
+        # Empty leaderboard
         self.leaderboard = []
-
 
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)
         self.back_button.grid(row=3, column=0, padx=20, pady=20)
@@ -95,60 +109,87 @@ class LeaderBoardView(View):
         self.manager.receiver = self.controller.default_receiver
         self.controller.show_view("MENU")
 
-
     def displayTop10(self):
         for widget in self.scroll_frame.winfo_children():
-                widget.destroy()
+            widget.destroy()
 
-        ctk.CTkLabel(self.scroll_frame, text="Utilisateur   -   Points", font=ctk.CTkFont(weight="bold")).pack(pady=(10,5))
+        ctk.CTkLabel(
+            self.scroll_frame,
+            text="Utilisateur   -   Points",
+            font=ctk.CTkFont(weight="bold"),
+        ).pack(pady=(10, 5))
 
         for i, elem in enumerate(self.top_ten, start=1):
             name = elem.get("Nom", "?")
             points = elem.get("Points", 0)
-            ctk.CTkLabel(self.scroll_frame, text=f"{i}. {name} - {points} pts").pack(pady=3)
+            ctk.CTkLabel(self.scroll_frame, text=f"{i}. {name} - {points} pts").pack(
+                pady=3
+            )
 
     def displayMostSumCours(self):
-        #vide le scroll_frame
+        # Empty scroll_frame
         for widget in self.scroll_frame.winfo_children():
-                widget.destroy()
-        #Entêtes
+            widget.destroy()
+        # Heading
         self.scroll_frame.grid_columnconfigure((0, 1), weight=1)
-        ctk.CTkLabel(self.scroll_frame, text="Cours", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, padx=10, pady=5)
-        ctk.CTkLabel(self.scroll_frame, text="Nombre de résumés", font=ctk.CTkFont(weight="bold")).grid(row=0, column=1, padx=10, pady=5)
+        ctk.CTkLabel(
+            self.scroll_frame, text="Cours", font=ctk.CTkFont(weight="bold")
+        ).grid(row=0, column=0, padx=10, pady=5)
+        ctk.CTkLabel(
+            self.scroll_frame, text="Nombre de résumés", font=ctk.CTkFont(weight="bold")
+        ).grid(row=0, column=1, padx=10, pady=5)
 
         for i, elem in enumerate(self.most_um_data, start=1):
             name = elem.get("Mnemonique", "?")
             nb_summ = elem.get("Number")
-            ctk.CTkLabel(self.scroll_frame, text=name).grid(row=i, column=0, padx=10, pady=5)
-            ctk.CTkLabel(self.scroll_frame, text=str(nb_summ)).grid(row=i, column=1, padx=10, pady=5)
+            ctk.CTkLabel(self.scroll_frame, text=name).grid(
+                row=i, column=0, padx=10, pady=5
+            )
+            ctk.CTkLabel(self.scroll_frame, text=str(nb_summ)).grid(
+                row=i, column=1, padx=10, pady=5
+            )
 
     def SumInMoreThanThree(self):
         for widget in self.scroll_frame.winfo_children():
-                widget.destroy()
-        ctk.CTkLabel(self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")).pack(pady=(10,5))
+            widget.destroy()
+        ctk.CTkLabel(
+            self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")
+        ).pack(pady=(10, 5))
         for elem in self.sum_in_at_least_three:
             name = elem.get("Nom", "?")
             ctk.CTkLabel(self.scroll_frame, text=name).pack(pady=3)
 
     def displaySummAvg(self):
-        print(self.avg_data, "HALLO") #pour debug
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()
 
         moyenne = self.avg_data.get("Moyenne", 0) if self.avg_data else 0
-        ctk.CTkLabel(self.scroll_frame, text=f"Moyenne de résumés par utilisateur", font=ctk.CTkFont(weight="bold")).pack(pady=(20,10))
-        ctk.CTkLabel(self.scroll_frame, text=f"{round(float(moyenne), 2)}", font=ctk.CTkFont(size=40, weight="bold")).pack(pady=10)
-
+        ctk.CTkLabel(
+            self.scroll_frame,
+            text=f"Moyenne de résumés par utilisateur",
+            font=ctk.CTkFont(weight="bold"),
+        ).pack(pady=(20, 10))
+        ctk.CTkLabel(
+            self.scroll_frame,
+            text=f"{round(float(moyenne), 2)}",
+            font=ctk.CTkFont(size=40, weight="bold"),
+        ).pack(pady=10)
 
     def displayLeaderboard(self):
         self.getMyPosition()
 
         for widget in self.scroll_frame.winfo_children():
-                widget.destroy()
+            widget.destroy()
 
-        ctk.CTkLabel(self.scroll_frame, text="Rang", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, padx=10, pady=5)
-        ctk.CTkLabel(self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")).grid(row=0, column=1, padx=10, pady=5)
-        ctk.CTkLabel(self.scroll_frame, text="Points", font=ctk.CTkFont(weight="bold")).grid(row=0, column=2, padx=10, pady=5)
+        ctk.CTkLabel(
+            self.scroll_frame, text="Rang", font=ctk.CTkFont(weight="bold")
+        ).grid(row=0, column=0, padx=10, pady=5)
+        ctk.CTkLabel(
+            self.scroll_frame, text="Utilisateur", font=ctk.CTkFont(weight="bold")
+        ).grid(row=0, column=1, padx=10, pady=5)
+        ctk.CTkLabel(
+            self.scroll_frame, text="Points", font=ctk.CTkFont(weight="bold")
+        ).grid(row=0, column=2, padx=10, pady=5)
         for i, entry in enumerate(self.leaderboard, start=1):
             rang = entry[0]
             nom = entry[1]
@@ -162,29 +203,28 @@ class LeaderBoardView(View):
             ctk.CTkLabel(self.scroll_frame, text=str(points)).grid(
                 row=i, column=2, padx=10, pady=5
             )
+
     def checkLeaderboard(self, data):
         self.leaderboard = data if data else []
         self.after(0, self.displayLeaderboard)
-
 
     def getMyPosition(self):
         user_name = self.manager.user.getName()
         for i, entry in enumerate(self.leaderboard, start=1):
             nom = entry[1]
-            if(nom == user_name):
+            if nom == user_name:
                 rang = entry[0]
                 points = entry[2]
-                self.position_label.configure(text=f"Votre position : {rang}  avec {points} de points")
+                self.position_label.configure(
+                    text=f"Votre position : {rang}  avec {points} de points"
+                )
                 break
 
-
     def action_most_summariezed_courses(self):
-        self.manager.receiver = self #réponse reviendra sur cette vue
-        self.manager.getMostSummCours()#envoie la requete au serveur
-        #on pointe le receiver vers soi-même avant  d'envoyer la requete pour que la réponse revienne sur cette vue et pas une autre
+        self.manager.receiver = self
+        self.manager.getMostSummCours()  # Send request to server
 
     def mostSummCours(self, data):
-        #appelé par le handle_reponse quand la réponse du serveur arrive.
         self.most_um_data = data if data else []
         self.after(0, self.displayMostSumCours)
 
@@ -209,7 +249,7 @@ class LeaderBoardView(View):
         self.manager.getGlobalSummAverage()
 
     def summAverage(self, data: dict):
-        self.avg_data = data #une seul ligne contenant la moyenne
+        self.avg_data = data
         self.after(0, self.displaySummAvg)
 
     def action_best_rated(self):
@@ -227,7 +267,7 @@ class LeaderBoardView(View):
         ctk.CTkLabel(
             self.scroll_frame,
             text="Cours  —  Titre  —  Note moyenne",
-            font=ctk.CTkFont(weight="bold")
+            font=ctk.CTkFont(weight="bold"),
         ).pack(pady=(10, 5))
 
         for elem in self.best_rated_data:
@@ -236,7 +276,7 @@ class LeaderBoardView(View):
             note = elem.get("note_moyenne", 0)
             ctk.CTkLabel(
                 self.scroll_frame,
-                text=f"{mnemo}  —  {titre}  —  {round(float(note), 2)}/5"
+                text=f"{mnemo}  —  {titre}  —  {round(float(note), 2)}/5",
             ).pack(pady=3)
 
     def action_never_publish(self):
@@ -251,7 +291,11 @@ class LeaderBoardView(View):
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()
 
-        ctk.CTkLabel(self.scroll_frame, text="Utilisateurs sans publication de résumé", font=ctk.CTkFont(weight="bold")).pack(pady=(10, 5))
+        ctk.CTkLabel(
+            self.scroll_frame,
+            text="Utilisateurs sans publication de résumé",
+            font=ctk.CTkFont(weight="bold"),
+        ).pack(pady=(10, 5))
 
         for elem in self.never_publish_data:
             name = elem.get("Nom", "?")
@@ -272,7 +316,7 @@ class LeaderBoardView(View):
         ctk.CTkLabel(
             self.scroll_frame,
             text="Utilisateur  —  Points actuels  —  Total dépensé",
-            font=ctk.CTkFont(weight="bold")
+            font=ctk.CTkFont(weight="bold"),
         ).pack(pady=(10, 5))
 
         for elem in self.spender_data:
@@ -280,6 +324,5 @@ class LeaderBoardView(View):
             points = elem.get("Points", 0)
             total = elem.get("TotalDepense", 0)
             ctk.CTkLabel(
-                self.scroll_frame,
-                text=f"{nom}  —  {points} pts  —  {total} dépensés"
+                self.scroll_frame, text=f"{nom}  —  {points} pts  —  {total} dépensés"
             ).pack(pady=3)

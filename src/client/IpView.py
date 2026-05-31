@@ -22,6 +22,5 @@ class IpView(View):
         self.connect_button.grid(row=5, column=0, padx=20, pady=10, sticky="ew")
 
     def connectAction(self):
-        # NOTE: IL Y A AUCUNE VERIFICATION SUR L'ENTREE DE L'IP NSM C'EST PAS LE BUT DU COURS
         self.manager.connect(self.ip_entry.get())
         self.controller.show_view("LOGIN")

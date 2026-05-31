@@ -20,7 +20,7 @@ class LoginView(View):
         self.userName_label = ctk.CTkLabel(self, text="Nom")
         self.userName_label.grid(row=3, column=0, padx=20, pady=(10, 0), sticky="w")
 
-        self.userName_entry = ctk.CTkEntry(self, placeholder_text="alice_dupont")
+        self.userName_entry = ctk.CTkEntry(self, placeholder_text="prenom_nom")
 
         self.userName_entry.grid(row=4, column=0, padx=20, pady=(0, 20), sticky="ew")
 
@@ -36,7 +36,6 @@ class LoginView(View):
 
     def login_action(self):
         self.manager.signin(self.userName_entry.get(), self.mail_entry.get())
-
 
     def isAcceptedLogin(self, connect):
         if connect:

@@ -11,7 +11,6 @@ class ReceiverInWindow:
         if connect:
             self.app.show_view("MENU")
         else:
-            # app.showLoginError("Identifiants incorrect")
             pass
 
     def setAllCourse(self, courses: list[dict]):
@@ -19,7 +18,6 @@ class ReceiverInWindow:
         classView = self.app.frames["CLASS"]
 
         classView.after(0, lambda: classView.setAllCourse(courses))
-
 
     def displayStore(self, store: dict):
         self.app.show_view("SHOP")
@@ -47,7 +45,6 @@ class ReceiverInWindow:
         profilView.displayStats(data)
 
     def showUserObject(self, data: dict):
-        # self.app.show_view("SHOP")
         shopView = self.app.frames["SHOP"]
         shopView.after(0, lambda: shopView.saveBoughtObject(data))
         shopView.after(0, lambda: shopView.showUserObject(data))
@@ -56,50 +53,42 @@ class ReceiverInWindow:
         shopView = self.app.frames["SHOP"]
         shopView.buy(data)
 
-
     def addCourse(self, data: dict):
         if data is not None:
             print("Cours enregistré avec succès: ", data)
         else:
-            # TODO: Pop-up cours existe déjà
             classView = self.app.frames["CLASS"]
             classView.rollback_course()
 
-    def showTransactionHistory(self, data:dict):
+    def showTransactionHistory(self, data: dict):
         self.app.show_view("HISTORY")
         historyView = self.app.frames["HISTORY"]
         historyView.update_history(data)
-
-        
-
 
     def checkLeaderboard(self, data: list[dict]):
         leaderView = self.app.frames["LEADERBOARD"]
         leaderView.leaderboard = []
         for user in data:
-            temp = (user["Rang"], user["Nom"],user["Points"])
+            temp = (user["Rang"], user["Nom"], user["Points"])
             leaderView.leaderboard.append(temp)
         leaderView.after(0, lambda: leaderView.displayLeaderboard())
         self.app.show_view("LEADERBOARD")
-
 
     def updatePointsInShop(self, data):
         shopView = self.app.frames["SHOP"]
         shopView.after(0, lambda: shopView.updatePoints(data))
 
-    def getObRanking(self,data):
+    def getObRanking(self, data):
         shopView = self.app.frames["SHOP"]
         shopView.after(0, lambda: shopView.showRanking(data))
 
-
-    def getUserCourse(self,data):
+    def getUserCourse(self, data):
         if data is not None:
             self.app.show_view("MYCLASS")
             myClassView = self.app.frames["MYCLASS"]
             myClassView.after(0, lambda: myClassView.displayCourses(data))
 
-
-    def addUserCourse(self,data):
+    def addUserCourse(self, data):
         self.app.show_view("MYCLASS")
         myClassView = self.app.frames["MYCLASS"]
         if data is not None:
@@ -107,13 +96,11 @@ class ReceiverInWindow:
         else:
             myClassView.after(0, lambda: myClassView.refusedAdd(data))
 
-    def deleteUserCourse(self,data):
+    def deleteUserCourse(self, data):
         self.app.show_view("MYCLASS")
         myClassView = self.app.frames["MYCLASS"]
         if data is not None:
             myClassView.after(0, lambda: myClassView.confirmedDelete(data))
-
-
 
     def checkSummaries(self, data: list[dict]):
         print("on accede au receiver")
@@ -121,58 +108,57 @@ class ReceiverInWindow:
         view.summaries = []
         summaries = view.summaries
         for summary in data:
-            temp = (summary["ID"], summary["Titre"],summary["Nom"],summary["Moyenne"],summary["IdUtilisateur"])
+            temp = (
+                summary["ID"],
+                summary["Titre"],
+                summary["Nom"],
+                summary["Moyenne"],
+                summary["IdUtilisateur"],
+                summary["Visibilite"]
+            )
             summaries.append(temp)
 
         self.app.show_view("SUMMARY")
         view.after(0, lambda: view.displaySummaries())
 
-    def addSummary(self,data):
+    def addSummary(self, data):
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)
 
-
-
-    def getEvaluations(self,data):
+    def getEvaluations(self, data):
         view = self.app.frames["EVAL"]
         view.evaluations = []
         evaluations = view.evaluations
         for eval in data:
-            temp = (eval["Nom"],eval["Note"],eval["ID"])
+            temp = (eval["Nom"], eval["Note"], eval["ID"])
             evaluations.append(temp)
 
         self.app.show_view("EVAL")
         view.after(0, lambda: view.displayEvaluations())
 
-
-
     def getEval(self, data):
         view = self.app.frames["EVAL"]
-        auteur = data.get("Nom","Inconnu")
-        commentaire = data.get("Commentaire","Aucun commentaire")
-        note = data.get("Note",0)
-        view.after(0,view.displayEval(auteur,commentaire,note))
+        auteur = data.get("Nom", "Inconnu")
+        commentaire = data.get("Commentaire", "Aucun commentaire")
+        note = data.get("Note", 0)
+        view.after(0, view.displayEval(auteur, commentaire, note))
 
-
-    def addReview(self,data):
+    def addReview(self, data):
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)
-
 
     def deleteSummary(self, data):
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)
 
-    def summaryAverage(self,data):
+    def summaryAverage(self, data):
         view = self.app.frames["SUMMARY"]
         if data:
             view.after(0, lambda: view.update_average(data))
 
-    def editSummary(self,data):
+    def editSummary(self, data):
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)
 
-    def enoughPoints(self,data):
-        pass #TODO: MIKE
-
-
+    def enoughPoints(self, data):
+        pass
