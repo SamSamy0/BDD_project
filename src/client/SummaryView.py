@@ -6,6 +6,10 @@ import datetime
 class SummaryView(View):
 
     def initView(self):
+
+        self.average_label = ctk.CTkLabel(self, text="Calcul de la moyenne...", text_color="gray", font=ctk.CTkFont(slant="italic"))
+        self.average_label.grid(row=0, column=0, sticky="e", padx=20)
+
         self.grid_columnconfigure(0, weight=1)#dit à la colonne de s'étirer pour remplir l'espace disponible
         self.grid_rowconfigure(1, weight=1)
 
@@ -22,6 +26,9 @@ class SummaryView(View):
 
         self.back_button = ctk.CTkButton(self, text="Retour", command=self.back_action)#crée un bouton "Retour" qui appelle la méthode back_action lorsqu'il est cliqué
         self.back_button.grid(row=3, column=0, padx=20, pady=20)
+
+
+
 
     def back_action(self):
         previous = getattr(self.controller, 'previous_view', 'CLASS')
@@ -58,10 +65,11 @@ class SummaryView(View):
             self.manager.addSummary(title, content, str(datetime.date.today()), True, self.mnemonique, self.manager.user.idUser)#WARNING: HARDCODE VISIBILITE
 
         ctk.CTkButton(popup, text="Publier", command=confirm).pack(padx=20, pady=15, fill="x")
-    
-    
+
+
     def view_action(self, idSummary):
         self.manager.getEvaluations(idSummary)
+
 
     def send_eval(self, title, note, comment, id_summ):
         self.manager.addReview(note,comment,self.manager.user.idUser,id_summ)
@@ -94,17 +102,21 @@ class SummaryView(View):
             note = float(slider.get())
             comment = comment_entry.get()
             popup.destroy()
-            self.send_eval(title, note, comment,id_summ) 
+            self.send_eval(title, note, comment,id_summ)
 
         ctk.CTkButton(popup, text="Soumettre", command=confirm).pack(padx=20, pady=15, fill="x")
-    
+
 
     def displaySummaries(self):
+
+        self.average()
+
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()
 
+
         for id_summ, title, author, note, id_auhtor in self.summaries:
-            
+
             frame = ctk.CTkFrame(self.scroll_frame)
             frame.pack(padx=10, pady=5, fill="x")
             frame.grid_columnconfigure(0, weight=1)
@@ -124,7 +136,15 @@ class SummaryView(View):
             #btn modifier
             btn_edit = ctk.CTkButton(frame, text="modifier", width=80, fg_color="orange", hover_color="darkorange", command=lambda auth= id_auhtor, summ=id_summ: self.editSummary(auth,summ))
             btn_edit.grid(row=0, column=3, padx=5, pady=8)
-            
+
+
+    def average(self):
+        self.manager.getSummAverage()
+
+    def update_average(self, data):
+        average = data.get("AVG(compteur)","NULL")
+        self.average_label.configure(text=f"Moyenne par étudiant : {average}  résumés")
+
 
     def editSummary(self, userId,summId):
         if userId != self.manager.user.idUser:
@@ -156,4 +176,4 @@ class SummaryView(View):
             self.manager.editSummary(title, content, str(datetime.date.today()),True, summId)#WARNING: HARDCODE VISIBILITE
 
         ctk.CTkButton(popup, text="Publier", command=confirm).pack(padx=20, pady=15, fill="x")
-    
+

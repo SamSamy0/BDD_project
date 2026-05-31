@@ -8,6 +8,9 @@ class LeaderBoardView(View):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(2, weight=1)
 
+        self.position_label = ctk.CTkLabel(self, text="Votre position ...", text_color="red", font=ctk.CTkFont(slant="italic"))
+        self.position_label.grid(row=0, column=0, sticky="e", padx=20)
+
         self.title_label = ctk.CTkLabel(
             self, text="LeaderBoard", font=ctk.CTkFont(size=20, weight="bold")
         )
@@ -24,8 +27,8 @@ class LeaderBoardView(View):
         self.btn_leaderboard.pack(side="left", padx=5, pady=5)
 
         #cours ayant le plus de résumés
-        self.btn_most_sum = ctk.CTkButton(self.stats_boutons_frame, 
-                                          text="Cours avec le plus de résumés", 
+        self.btn_most_sum = ctk.CTkButton(self.stats_boutons_frame,
+                                          text="Cours avec le plus de résumés",
                                           command=self.action_most_summariezed_courses)
         self.btn_most_sum.pack(side="left", padx=5, pady=5)
 
@@ -52,13 +55,13 @@ class LeaderBoardView(View):
                                             text="Meilleur résumé par cours",
                                             command=self.action_best_rated)
         self.btn_best_rated.pack(side="left", padx=5, pady=5)
-        
+
         #user sans résumé publié
         self.btn_never_publish = ctk.CTkButton(self.stats_boutons_frame,
                                                 text="Uti sans publication de résumé",
                                                 command=self.action_never_publish)
         self.btn_never_publish.pack(side="left", padx=5, pady=5)
-        
+
         #user total sum dépensé > total points
         self.btn_spender = ctk.CTkButton(self.stats_boutons_frame,
                                             text="Util ayant dépense > points",
@@ -92,12 +95,13 @@ class LeaderBoardView(View):
         self.manager.receiver = self.controller.default_receiver
         self.controller.show_view("MENU")
 
+
     def displayTop10(self):
         for widget in self.scroll_frame.winfo_children():
                 widget.destroy()
-        
+
         ctk.CTkLabel(self.scroll_frame, text="Utilisateur   -   Points", font=ctk.CTkFont(weight="bold")).pack(pady=(10,5))
-        
+
         for i, elem in enumerate(self.top_ten, start=1):
             name = elem.get("Nom", "?")
             points = elem.get("Points", 0)
@@ -125,7 +129,7 @@ class LeaderBoardView(View):
         for elem in self.sum_in_at_least_three:
             name = elem.get("Nom", "?")
             ctk.CTkLabel(self.scroll_frame, text=name).pack(pady=3)
-    
+
     def displaySummAvg(self):
         print(self.avg_data, "HALLO") #pour debug
         for widget in self.scroll_frame.winfo_children():
@@ -135,7 +139,10 @@ class LeaderBoardView(View):
         ctk.CTkLabel(self.scroll_frame, text=f"Moyenne de résumés par utilisateur", font=ctk.CTkFont(weight="bold")).pack(pady=(20,10))
         ctk.CTkLabel(self.scroll_frame, text=f"{round(float(moyenne), 2)}", font=ctk.CTkFont(size=40, weight="bold")).pack(pady=10)
 
+
     def displayLeaderboard(self):
+        self.getMyPosition()
+
         for widget in self.scroll_frame.winfo_children():
                 widget.destroy()
 
@@ -158,49 +165,61 @@ class LeaderBoardView(View):
     def checkLeaderboard(self, data):
         self.leaderboard = data if data else []
         self.after(0, self.displayLeaderboard)
-    
+
+
+    def getMyPosition(self):
+        user_name = self.manager.user.getName()
+        for i, entry in enumerate(self.leaderboard, start=1):
+            nom = entry[1]
+            if(nom == user_name):
+                rang = entry[0]
+                points = entry[2]
+                self.position_label.configure(text=f"Votre position : {rang}  avec {points} de points")
+                break
+
+
     def action_most_summariezed_courses(self):
         self.manager.receiver = self #réponse reviendra sur cette vue
         self.manager.getMostSummCours()#envoie la requete au serveur
         #on pointe le receiver vers soi-même avant  d'envoyer la requete pour que la réponse revienne sur cette vue et pas une autre
-    
+
     def mostSummCours(self, data):
         #appelé par le handle_reponse quand la réponse du serveur arrive.
         self.most_um_data = data if data else []
         self.after(0, self.displayMostSumCours)
-    
+
     def action_at_least_three(self):
         self.manager.receiver = self
         self.manager.getSummInAtLeastThreeCourse()
-    
+
     def SumInAtLeastThree(self, data):
         self.sum_in_at_least_three = data if data else []
         self.after(0, self.SumInMoreThanThree)
-    
+
     def action_topten(self):
         self.manager.receiver = self
         self.manager.getBestTenUsers()
-    
+
     def bestTenUsers(self, data):
         self.top_ten = data if data else []
         self.after(0, self.displayTop10)
-    
+
     def action_summ_avg(self):
         self.manager.receiver = self
         self.manager.getGlobalSummAverage()
-    
+
     def summAverage(self, data: dict):
         self.avg_data = data #une seul ligne contenant la moyenne
         self.after(0, self.displaySummAvg)
-    
+
     def action_best_rated(self):
         self.manager.receiver = self
         self.manager.getBestRatedSummary()
-    
+
     def bestRatedSummary(self, data):
         self.best_rated_data = data if data else []
         self.after(0, self.displayBestRated)
-    
+
     def displayBestRated(self):
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()
@@ -219,15 +238,15 @@ class LeaderBoardView(View):
                 self.scroll_frame,
                 text=f"{mnemo}  —  {titre}  —  {round(float(note), 2)}/5"
             ).pack(pady=3)
-    
+
     def action_never_publish(self):
         self.manager.receiver = self
         self.manager.getUserNeverPublish()
-    
+
     def userNeverPublish(self, data):
         self.never_publish_data = data if data else []
         self.after(0, self.displayNeverPublish)
-    
+
     def displayNeverPublish(self):
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()
@@ -237,15 +256,15 @@ class LeaderBoardView(View):
         for elem in self.never_publish_data:
             name = elem.get("Nom", "?")
             ctk.CTkLabel(self.scroll_frame, text=name).pack(pady=3)
-    
+
     def action_spender(self):
         self.manager.receiver = self
         self.manager.getSpenderRanking()
-    
+
     def spenderRanking(self, data):
         self.spender_data = data if data else []
         self.after(0, self.displaySpender)
-    
+
     def displaySpender(self):
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()

@@ -130,6 +130,7 @@ class DatabaseManager:
     # Review
     def addReview(self, data):
         res = self.reader_query(self.path_addReview, "one", True, params=data)
+        self.reader_query("DB/queries/summaries/add_summary_points.sql", "None", True, params=data)
         self.check_and_upgrade_level(data.get("idAuthor"))
         return res
 
@@ -183,6 +184,7 @@ class DatabaseManager:
     # Summaries
     def addSummary(self, data):
         res = self.reader_query(self.path_addSummary, "one", True, params=data)
+        self.reader_query("DB/queries/summaries/add_summary_points.sql", "None", True, params=data)
         self.check_and_upgrade_level(data.get("idAuthor"))
         return res
 

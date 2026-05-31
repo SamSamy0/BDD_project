@@ -147,7 +147,7 @@ class ReceiverInWindow:
         self.app.show_view("EVAL")
         view.after(0, lambda: view.displayEvaluations())
 
-        
+
 
     def getEval(self, data):
         view = self.app.frames["EVAL"]
@@ -156,7 +156,7 @@ class ReceiverInWindow:
         note = data.get("Note",0)
         view.after(0,view.displayEval(auteur,commentaire,note))
 
-        
+
     def addReview(self,data):
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)
@@ -166,10 +166,16 @@ class ReceiverInWindow:
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)
 
+    def summaryAverage(self,data):
+        view = self.app.frames["SUMMARY"]
+        if data:
+            view.after(0, lambda: view.update_average(data))
+
     def editSummary(self,data):
         view = self.app.frames["SUMMARY"]
         self.app.manager.checkSummaries(view.mnemonique)
-        
+
     def enoughPoints(self,data):
         pass #TODO: MIKE
+
 

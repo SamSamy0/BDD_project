@@ -15,7 +15,7 @@ class MenuView(View):
         self.profil_button.pack(padx=100, pady=20)
 
         self.class_button = ctk.CTkButton(
-            self, text="List de cours", command=self.class_action
+            self, text="Liste de cours", command=self.class_action
         )
         self.class_button.pack(padx=20, pady=20)
 

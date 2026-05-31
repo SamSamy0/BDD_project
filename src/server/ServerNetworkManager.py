@@ -70,7 +70,7 @@ class ServerNetworkManager:
             case Protocol.READ_SUMMARY.value:
                 result = self.db.checkSummary(data)
                 return {"protocol": protocol, "data": result}
-            
+
             case Protocol.READ_SUMMARIES.value:
                 result = self.db.checkSummaries(data)
                 return {"protocol": protocol, "data": result}
