@@ -41,6 +41,7 @@ class DatabaseManager:
         self.path_getSummAverage = "DB/queries/stats/summary_average.sql"
         self.path_getEvaluations = "DB/queries/summaries/get_evaluations.sql"
         self.path_getEval = "DB/queries/summaries/get_eval.sql"
+        self.path_toggleVisibility = "DB/queries/summaries/visibility_summary.sql"
 
         # User
         self.path_changeStateObj = "DB/queries/users/change_state_object.sql"
@@ -213,6 +214,9 @@ class DatabaseManager:
 
     def getEval(self, data):
         return self.reader_query(self.path_getEval, "one", False, params=data)
+
+    def changeVisibility(self, data):
+        return self.reader_query(self.path_toggleVisibility, "None", True, params=data)
 
     # User
     def changeStateObj(self, data):

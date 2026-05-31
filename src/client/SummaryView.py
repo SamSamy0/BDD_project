@@ -66,7 +66,7 @@ class SummaryView(View):
                 True,
                 self.mnemonique,
                 self.manager.user.idUser,
-            )  # WARNING: HARDCODE VISIBILITE
+            )
 
         ctk.CTkButton(popup, text="Publier", command=confirm).pack(
             padx=20, pady=15, fill="x"
@@ -118,7 +118,7 @@ class SummaryView(View):
         for widget in self.scroll_frame.winfo_children():
             widget.destroy()
 
-        for id_summ, title, author, note, id_auhtor in self.summaries:
+        for id_summ, title, author, note, id_auhtor, is_public in self.summaries:
 
             frame = ctk.CTkFrame(self.scroll_frame)
             frame.pack(padx=10, pady=5, fill="x")
@@ -152,13 +152,13 @@ class SummaryView(View):
                 width=80,
                 fg_color="orange",
                 hover_color="darkorange",
-                command=lambda auth=id_auhtor, summ=id_summ: self.editSummary(
-                    auth, summ
+                command=lambda auth=id_auhtor, summ=id_summ, vis=is_public: self.editSummary(
+                    auth, summ, bool(vis)
                 ),
             )
             btn_edit.grid(row=0, column=3, padx=5, pady=8)
 
-    def editSummary(self, userId, summId):
+    def editSummary(self, userId, summId,current_visibility=True):
         if userId != self.manager.user.idUser:
             return
 
@@ -177,6 +177,12 @@ class SummaryView(View):
         self.content_entry = ctk.CTkTextbox(popup, height=120)
         self.content_entry.pack(padx=20, pady=(0, 10), fill="x")
 
+        self.is_public = current_visibility
+
+        self.btn_visibility = ctk.CTkButton(popup, text="", command=self.toggle_visibility)
+        self.btn_visibility.pack(padx=20, pady=(10, 10), fill="x")
+        self.update_btn_visuals()
+
         def confirm():
             title = self.title_entry.get()
             content = self.content_entry.get("1.0", "end-1c")
@@ -185,9 +191,19 @@ class SummaryView(View):
                 return
             popup.destroy()
             self.manager.editSummary(
-                title, content, str(datetime.date.today()), True, summId
+                title, content, str(datetime.date.today()), self.is_public, summId
             )  # WARNING: HARDCODE VISIBILITE
 
         ctk.CTkButton(popup, text="Publier", command=confirm).pack(
             padx=20, pady=15, fill="x"
         )
+
+    def toggle_visibility(self):
+            self.is_public = not self.is_public
+            self.update_btn_visuals()
+
+    def update_btn_visuals(self):
+        if self.is_public:
+            self.btn_visibility.configure(text="Visibilité : Public", fg_color="#1f538d")
+        else:
+            self.btn_visibility.configure(text="Visibilité : Privé", fg_color="gray")
