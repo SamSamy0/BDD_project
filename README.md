@@ -1,32 +1,63 @@
 # BDD_project
 
+Cette application client-serveur permet aux étudiants de partager des résumés de cours, de s'évaluer mutuellement et de gagner des points pour débloquer des objets cosmétiques dans une boutique intégrée. Elle dispose d'une interface graphique moderne basée sur customtkinter et repose sur une base de données MySQL.
+
+
+# Prérequis
+1. Python 3
+
+2. Serveur MySQL (mysql-server)
+
+
+# Installation et configuration
+
 Si MySql Server n'est pas déjà installé , exécuter cette ligne de commande
 
 ```bash
+sudo apt update
 sudo apt install mysql-server
-sudo mysql < src/DB/id.sql
+```
+
+```bash
 sudo mysql < src/DB/init.sql
-./initData.sh
+sudo mysql < src/DB/id.sql
 sudo mysql < src/DB/init_transactions.sql
 
 ```
 
-# Dependences
-customtkinter==5.2.2
+# Environnement Virtuel et Dépendances Python
 
-1. Création d'un environnement virtuel
-```bash
+ ```bash
+ # 1. Création de l'environnement virtuel
 python3 -m venv .venv
-```
-2. Activation de l'environnement
-```bash
+
+# 2. Activation de l'environnement
 source .venv/bin/activate
-```
-3. Installation des dépendences
+
+# 3. Installation des dépendances
+pip install -r requirements.txt
+ ```
+
+
+# Importation des données initiales
 
 ```bash
-pip install -r requirements.txt
-sudo apt install mysql-server
+./src/initData.sh
 ```
 
+# Lancement de l'application
+
+L'application fonctionne avec une architecture Client/Serveur (communication par Sockets et JSON). Vous devez d'abord lancer le serveur, puis le client.
+
+### Démarrer le Serveur
+```bash
+./src/run_server.sh
+```
+Le serveur écoute par défaut sur l'IP 127.0.0.1 au port 8080.
+
+### Démarrer le Client
+Dans un nouveau terminal (en vous assurant d'avoir préalablement activé l'environnement virtuel avec source .venv/bin/activate) :
+```bash
+./src/run_client.sh
+```
 
