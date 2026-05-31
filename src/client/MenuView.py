@@ -34,10 +34,18 @@ class MenuView(View):
         )
         self.mycourse_button.pack(padx=20, pady=20)
 
+        self.history_button = ctk.CTkButton(
+            self, text="Historique transactions", command=self.history_action)
+        self.history_button.pack(padx=20, pady=20)
+        
         self.logout_button = ctk.CTkButton(
             self, text="Déconnexion", command=self.logout_action
         )
         self.logout_button.pack(padx=20, pady=20)
+
+    def history_action(self):
+        self.manager.getTransactionHistory(self.manager.user.idUser)
+        self.controller.show_view("HISTORY")
 
     def shop_action(self):
         self.manager.getUserObject(self.manager.user.idUser)

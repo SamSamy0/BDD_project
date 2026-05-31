@@ -166,6 +166,9 @@ class ClientNetworkManager:
             case Protocol.GET_RANKING_SPENDER.value:
                 self.receiver.spenderRanking(data)
 
+            case Protocol.CHECK_TRANSACTION_HISTORY.value:
+                self.receiver.showTransactionHistory(data)
+
 
             # case Protocol.
 
